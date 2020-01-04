@@ -1,9 +1,11 @@
 <template>
-  <div id="dataCanvas" style="height:100%;width:100%;background-color:white;border:1px solid;border-color:white;border-radius:7px;"></div>
+  <div
+    id="dataCanvas"
+    style="height:100%;width:100%;background-color:white;border:1px solid;border-color:white;border-radius:7px;"
+  ></div>
 </template>
 
 <script>
-import echarts from "echarts";
 import axios from "axios";
 
 export default {
@@ -14,15 +16,17 @@ export default {
       myChart.showLoading();
       axios.get(" http://localhost:3000/data").then(response => {
         let data = response.data[0];
+        console.log(data);
         myChart.hideLoading();
-        echarts.util.each(data.children, function(datum, index) {
-          index % 2 === 0 && (datum.collapsed = true);
+        this.$echarts.util.each(data.children, function(datum, index) {
+          index % 2 === 0 && (datum.collapsed = false);
         });
 
         let option = {
           tooltip: {
             trigger: "item",
-            triggerOn: "mousemove"
+            triggerOn: "mousemove",
+            formatter: "{c}"
           },
           series: [
             {
@@ -64,10 +68,20 @@ export default {
         };
 
         myChart.setOption(option);
+
+        myChart.on("click", function(params) {
+          // 获取点击图例的选中状态
+          // 在控制台中打印
+          console.log(
+            params
+          );
+        });
       });
     }
   },
-  mounted() {this.drawCharts()}
+  mounted() {
+    this.drawCharts();
+  }
 };
 </script>
 
