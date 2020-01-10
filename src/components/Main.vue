@@ -1,8 +1,15 @@
 <template>
   <el-container style="height: 100%;width: 100%;">
-    <el-header style="height:100px;background-color:#fff">
+
+
+
+
+
+    <!--头部   -->
+    <el-header style="height:100px; width:100%; background-color:#fff">
       <img src="../assets/Tower.png" style="position:fixed;left:10px;height:70px;top:10px" />
-      <el-menu
+      <div style="width:1440px">
+        <el-menu
         :default-active="activeIndex2"
         class="el-menu-demo"
         mode="horizontal"
@@ -13,12 +20,12 @@
         router
       >
         <el-menu-item index="/" style="margin-left:70px">主页</el-menu-item>
-        <el-menu-item index="/view" >塔</el-menu-item>
+        <el-menu-item index="/preposition">塔</el-menu-item>
         <el-menu-item index="2" disabled>
           <template slot="title">个人中心(暂定)</template>
         </el-menu-item>
         <el-menu-item index="/AddNewCourse">
-          <a>作者留言</a>
+          <a style="position:relative;top:-2px">作者留言</a>
         </el-menu-item>
         <li class="el-menu-item">
           <el-input v-model="input" placeholder="请输入内容" style="width:400px"></el-input>
@@ -27,13 +34,34 @@
           <el-button type="primary" style="color:#fff;width:70px;font-weight:700">搜索</el-button>
         </li>
       </el-menu>
+      </div>
     </el-header>
+
+
+
+
+
+    <!--中部   -->
     <el-main style="text-align:center">
       <router-view></router-view>
     </el-main>
+
+
+
+    <!--尾部   -->
     <el-footer
       style="height:20px;color:#BCBCBC;font-family:Gilroy,sans-serif;text-align:start;font-weight:700"
-    >知径 诞生于2020年❤️</el-footer>
+    >
+      知径 诞生于2020年❤️
+      <el-tooltip class="item" effect="dark" content="友情链接" placement="top">
+        <a href="http://wuli.wiki//" style="margin:10px">小时物理</a>
+      </el-tooltip>
+    </el-footer>
+
+
+
+
+
   </el-container>
 </template>
 
@@ -44,18 +72,16 @@ export default {
   name: "Main",
   data() {
     return {
-      input:'',
-      activeIndex2:"1"
+      input: "",
+      activeIndex2: "1"
     };
   },
   methods: {
     handleSelect(key, keyPath) {
       console.log(key, keyPath);
-    },
-    
+    }
   },
-  components:{
-  }
+  components: {}
 };
 </script>
 
@@ -86,5 +112,4 @@ a {
   line-height: 90px;
   height: 80px;
 }
-
 </style>

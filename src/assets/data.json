@@ -1,0 +1,32 @@
+{
+    "data":[
+        {
+            "name":"高等数学",
+            "course":[
+                {
+                    "name":"张宇考研数学",
+                    "introduce":"张宇很棒巴拉巴拉巴拉",
+                    "url":"",
+                    "complexity":7,
+                    "grade":7
+                }
+            ],
+            "books":[
+                {
+                "name":"高数18讲",
+                "introduce":"张宇很棒巴拉巴拉巴拉",
+                "url":"",
+                "complexity":7,
+                "grade":7
+                }
+        ],
+            "preposition":[
+                {"name":"高等数学","introduce":"大学理科必修"}
+            ],
+            "postposition":[
+                {"name":"线性代数","introduce":"大学理科必修"}
+            ]
+        },
+        {}
+    ]
+}
