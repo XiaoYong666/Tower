@@ -1,52 +1,52 @@
 <template>
   <el-container style="height: 100%;width: 100%;">
-
-
-
-
-
     <!--头部   -->
     <el-header style="height:100px; width:100%; background-color:#fff">
-      <img src="../assets/Tower.png" style="position:fixed;left:10px;height:70px;top:10px" />
+      <img
+        src="../assets/Tower.png"
+        style="position:fixed;left:10px;height:70px;top:10px"
+      />
       <div style="width:1440px">
         <el-menu
-        :default-active="activeIndex2"
-        class="el-menu-demo"
-        mode="horizontal"
-        @select="handleSelect"
-        text-color="#409eff"
-        active-text-color="#1989fa"
-        style="height:100px;left:100px"
-        router
-      >
-        <el-menu-item index="/" style="margin-left:70px">主页</el-menu-item>
-        <el-menu-item index="/preposition">塔</el-menu-item>
-        <el-menu-item index="2" disabled>
-          <template slot="title">个人中心(暂定)</template>
-        </el-menu-item>
-        <el-menu-item index="/AddNewCourse">
-          <a style="position:relative;top:-2px">作者留言</a>
-        </el-menu-item>
-        <li class="el-menu-item">
-          <el-input v-model="input" placeholder="请输入内容" style="width:400px"></el-input>
-        </li>
-        <li class="el-menu-item">
-          <el-button type="primary" style="color:#fff;width:70px;font-weight:700">搜索</el-button>
-        </li>
-      </el-menu>
+          :default-active="activeIndex2"
+          class="el-menu-demo"
+          mode="horizontal"
+          @select="handleSelect"
+          text-color="#409eff"
+          active-text-color="#1989fa"
+          style="height:100px;left:100px"
+          router
+        >
+          <el-menu-item index="/" style="margin-left:70px">主页</el-menu-item>
+          <el-menu-item index="/preposition">塔</el-menu-item>
+          <el-menu-item index="2" disabled>
+            <template slot="title">个人中心(暂定)</template>
+          </el-menu-item>
+          <el-menu-item index="/AddNewCourse">
+            <a style="position:relative;top:-2px">作者留言</a>
+          </el-menu-item>
+          <li class="el-menu-item">
+            <el-input
+              v-model="input"
+              placeholder="请输入内容"
+              style="width:400px"
+            ></el-input>
+          </li>
+          <li class="el-menu-item">
+            <el-button
+              type="primary"
+              style="color:#fff;width:70px;font-weight:700"
+              >搜索</el-button
+            >
+          </li>
+        </el-menu>
       </div>
     </el-header>
 
-
-
-
-
     <!--中部   -->
-    <el-main style="text-align:center">
+    <el-main style="text-align:center;width:100%;margin:0 auto;height:auto">
       <router-view></router-view>
     </el-main>
-
-
 
     <!--尾部   -->
     <el-footer
@@ -57,11 +57,6 @@
         <a href="http://wuli.wiki//" style="margin:10px">小时物理</a>
       </el-tooltip>
     </el-footer>
-
-
-
-
-
   </el-container>
 </template>
 
@@ -111,5 +106,9 @@ a {
 .el-menu--horizontal > .el-menu-item {
   line-height: 90px;
   height: 80px;
+}
+
+.el-main::-webkit-scrollbar {
+  display: none;
 }
 </style>
