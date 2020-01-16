@@ -1,15 +1,10 @@
-import FrontKnowShow from '../components/FrontKnowShow'
 //import Main from '../components/Main'
-import HomePage from '../components/HomePage'
-import AddNewCourse from '../components/AddNewCourse'
-import Prepostion from '../components/Preposition'
+import Main from "../components/SubjectDetail/Main";
+import Tower from "../components/Tower/Tower";
 
 const routes = [
-    {path:'/',component:HomePage},
-    {path:'/view',component:FrontKnowShow},
-    {path:'/addNewCourse',component:AddNewCourse},
-    {path:'/preposition',component:Prepostion}
-    
-  ]
+  { path: "/", component: Main },
+  { path: "/preposition", component: Tower }
+];
 
-  export default routes
+export default routes;

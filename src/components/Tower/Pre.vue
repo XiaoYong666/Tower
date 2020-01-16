@@ -8,7 +8,7 @@
         icon="el-icon-edit"
         round
         style="margin-top:20px"
-        @click="addEdge"
+        @click="addFormVisible = true"
         >添加知识点</el-button
       >
       <el-button
@@ -20,6 +20,21 @@
       >
     </div>
     <div id="mynetwork" style="float:right"><div></div></div>
+
+    <el-dialog title="添加新节点" :visible.sync="addFormVisible">
+      <el-form :model="form">
+        <el-form-item label="根节点" :label-width="formLabelWidth">
+          <el-input v-model="form.root" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="子节点" :label-width="formLabelWidth">
+          <el-input v-model="form.son" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addEdge">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -29,6 +44,12 @@ import vis from "vis-network/dist/vis-network.min.js";
 export default {
   data() {
     return {
+      formLabelWidth: "120px",
+      addFormVisible: false,
+      form: {
+        root: "",
+        son: ""
+      },
       vueNodes: [
         { id: 1, label: "高等数学", color: "#F6212D", font: { color: "#fff" } },
         { id: 2, label: "初中数学" },
@@ -96,8 +117,22 @@ export default {
     },
     addEdge() {
       console.log("add");
-      this.vueEdges.push({ from: 1, to: 7 });
+      let sonId = this.vueNodes[this.vueNodes.length - 1].id + 1;
+      let rootId =
+        this.vueNodes.findIndex(el => {
+          return el.label == this.form.root;
+        }) + 1;
+
+      let edge = { from: rootId, to: sonId };
+      this.vueNodes.push({ id: sonId, label: this.form.son });
+      this.vueEdges.push(edge);
       this.renderCav();
+      this.addFormVisible = false;
+    },
+    deleteEdge() {
+      this.vueNodes = this.vueNodes.filter(el => {
+        return el.label != this.from.value;
+      });
     }
   },
   mounted() {

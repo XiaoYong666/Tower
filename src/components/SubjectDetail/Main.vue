@@ -4,7 +4,7 @@
       <div
         style="font-size:27px;font-weight:700;margin:20px 0 20px 0;padding-top:20px"
       >
-        摄影
+        {{ this.title }}
       </div>
       <div style="margin:0 auto;">
         <el-tabs
@@ -15,12 +15,14 @@
             label="介绍"
             name="first"
             style="margin-left:10px;font-weight:700"
-            >介绍</el-tab-pane
-          >
+            ><subjectDetail></subjectDetail
+          ></el-tab-pane>
           <el-tab-pane label="教程" name="second">
             <courseContent></courseContent>
           </el-tab-pane>
-          <el-tab-pane label="其他相关" name="third">其他相关</el-tab-pane>
+          <el-tab-pane label="其他相关" name="third" disabled
+            >其他相关</el-tab-pane
+          >
         </el-tabs>
       </div>
     </div>
@@ -29,18 +31,21 @@
 
 <script>
 import courseContent from "./CourseContent";
+import subjectDetail from "./Introduce";
 
 export default {
   name: "HomePage",
   data() {
     return {
+      title: "机械原理",
       activeName: "second",
       activeIndex: "1"
     };
   },
   methods: {},
   components: {
-    courseContent
+    courseContent,
+    subjectDetail
   }
 };
 </script>
