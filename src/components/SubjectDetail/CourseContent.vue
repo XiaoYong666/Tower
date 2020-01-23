@@ -36,6 +36,7 @@
               >{{ item.score }}
             </div>
             <div style="float:right;" class="mybutton">
+              <el-button type="text" class="zan">赞</el-button>
               <el-button type="text">评分</el-button>
               <el-button type="text">修改</el-button>
             </div>

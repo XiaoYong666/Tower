@@ -17,7 +17,9 @@
           style="height:100px;left:100px"
           router
         >
-          <el-menu-item index="/" style="margin-left:70px">主页</el-menu-item>
+          <el-menu-item index="/welcome" style="margin-left:70px"
+            >主页</el-menu-item
+          >
           <el-menu-item index="/preposition">塔</el-menu-item>
           <el-menu-item index="2" disabled>
             <template slot="title">个人中心(暂定)</template>

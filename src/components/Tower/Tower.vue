@@ -1,5 +1,5 @@
 <template>
-  <div style="width:100%">
+  <div style="width:80%;margin:0 auto;">
     <el-tabs :tab-position="tabPosition">
       <el-tab-pane label="前置知识点"><Pre></Pre></el-tab-pane>
       <el-tab-pane label="后置知识点">后置知识点</el-tab-pane>
