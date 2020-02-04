@@ -1,12 +1,16 @@
 //import Main from '../components/Main'
-import Main from "../components/SubjectDetail/Main";
-import Welcome from "../components/Welcome/Main";
-import NewTower from "../components/Tower/NewTower";
+import Main from "../components/Main";
+import BricksMain from "../components/bricks/Main";
+import bricksDetails from "../components/bricks/Details/Main";
+import construction from "../components/construction/Main";
 
 const routes = [
-  { path: "/welcome", component: Welcome },
   { path: "/", component: Main },
-  { path: "/preposition", component: NewTower }
+  { path: "/bricks", component: BricksMain },
+  { path: "/brickDetails", component: bricksDetails },
+  { path: "/construction", component: construction }
+  //  { path: "/", component: Main },
+  //  { path: "/preposition", component: NewTower }
 ];
 
 export default routes;

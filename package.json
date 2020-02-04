@@ -11,7 +11,6 @@
     "axios": "^0.19.0",
     "core-js": "^3.4.3",
     "element-ui": "^2.13.0",
-    "lodash": "^4.17.15",
     "mavon-editor": "^2.7.7",
     "vis-network": "^6.5.2",
     "vue": "^2.6.10",

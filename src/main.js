@@ -6,7 +6,7 @@ import Axios from "axios";
 import VueAxios from "vue-axios";
 import routes from "./router/router";
 import VueRouter from "vue-router";
-import mavonEditor from "mavon-editor";
+//import mavonEditor from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
 import "vis-network/dist/vis-network.min.css";
 
@@ -14,7 +14,6 @@ Vue.config.productionTip = false;
 Vue.use(Element);
 Vue.use(VueAxios, Axios);
 Vue.use(VueRouter);
-Vue.use(mavonEditor);
 
 const router = new VueRouter({
   routes,

@@ -1,116 +1,70 @@
 <template>
-  <el-container style="height: 100%;width: 100%;">
-    <!--头部   -->
-    <el-header style="height:100px; width:100%; background-color:#fff">
-      <img
-        src="../assets/Tower.png"
-        style="position:fixed;left:10px;height:70px;top:10px"
-      />
-      <div style="width:1440px">
-        <el-menu
-          :default-active="activeIndex2"
-          class="el-menu-demo"
-          mode="horizontal"
-          @select="handleSelect"
-          text-color="#409eff"
-          active-text-color="#1989fa"
-          style="height:100px;left:100px"
-          router
-        >
-          <el-menu-item index="/welcome" style="margin-left:70px"
-            >主页</el-menu-item
-          >
-          <el-menu-item index="/preposition">塔</el-menu-item>
-          <el-menu-item index="2" disabled>
-            <template slot="title">个人中心(暂定)</template>
-          </el-menu-item>
-          <el-menu-item index="/AddNewCourse">
-            <a style="position:relative;top:-2px">作者留言</a>
-          </el-menu-item>
-          <li class="el-menu-item">
-            <el-input
-              v-model="input"
-              placeholder="请输入内容"
-              style="width:400px"
-            ></el-input>
-          </li>
-          <li class="el-menu-item">
-            <el-button
-              type="primary"
-              style="color:#fff;width:70px;font-weight:700"
-              >搜索</el-button
-            >
-          </li>
-        </el-menu>
+  <div>
+    <div style="position:relative">
+      <img src="../assets/background_1.png" alt="" class="mybackground" />
+      <div class="huany">欢迎来到</div>
+      <div class="tongtianta">通天塔</div>
+      <div class="myname">Created by liu</div>
+      <div class="items">
+        <div style="color:rgba(0,0,0,0.6);margin-left:700px;">众塔 ></div>
+        <div style="color:rgba(64,169,255,100)">塔 ></div>
+        <div style="color:rgba(255,77,79,100)">结构 ></div>
+        <div style="color:rgba(250,140,22,100)">砖石 ></div>
+        <div style="color:rgba(0,0,0,0.6)">沙海 ></div>
       </div>
-    </el-header>
-
-    <!--中部   -->
-    <el-main style="text-align:center;width:100%;margin:0 auto;height:auto">
-      <router-view></router-view>
-    </el-main>
-
-    <!--尾部   -->
-    <el-footer
-      style="height:20px;color:#BCBCBC;font-family:Gilroy,sans-serif;text-align:start;font-weight:700"
-    >
-      知径 诞生于2020年❤️
-      <el-tooltip class="item" effect="dark" content="友情链接" placement="top">
-        <a href="http://wuli.wiki//" style="margin:10px">小时物理</a>
-      </el-tooltip>
-    </el-footer>
-  </el-container>
+      <div class="question">什么是通天塔？</div>
+    </div>
+  </div>
 </template>
-
 <script>
-//import HomePage from './HomePage'
-
-export default {
-  name: "Main",
-  data() {
-    return {
-      input: "",
-      activeIndex2: "1"
-    };
-  },
-  methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
-    }
-  },
-  components: {}
-};
+export default {};
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-.el-menu-item {
-  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
-    Microsoft YaHei, SimSun, sans-serif;
+.question {
+  position: absolute;
+  font-weight: bold;
+  top: 700px;
+  color: rgba(0, 0, 0, 0.4);
   font-size: 16px;
-  height: 80px;
+  right: 150px;
+}
+.items div {
+  font-size: 28px;
+  font-weight: bold;
+  margin-left: 50px;
+}
+.items {
+  display: flex;
+  flex-direction: row;
+  margin-top: 30px;
+  position: absolute;
+  top: 600px;
 }
 
-.el-menu--horizontal > .el-menu-item {
-  line-height: 90px;
-  height: 80px;
+.mybackground {
+  width: 100%;
 }
-
-.el-main::-webkit-scrollbar {
-  display: none;
+.huany {
+  font-size: 48px;
+  color: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  top: 250px;
+  left: 490px;
+}
+.tongtianta {
+  font-weight: bold;
+  font-size: 72px;
+  color: #41a7fa;
+  position: absolute;
+  top: 310px;
+  left: 660px;
+}
+.myname {
+  font-size: 14px;
+  color: rgba(16, 16, 16, 0.6);
+  position: absolute;
+  top: 410px;
+  left: 788px;
 }
 </style>
