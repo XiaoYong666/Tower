@@ -2,7 +2,7 @@
   <div>
     <div class="header">
       <div class="zhuanshi">砖石</div>
-      <div class="more"></div>
+      <div class="more"><i class="el-icon-more"></i></div>
       <Search></Search>
       <el-button class="feedback">问题反馈</el-button>
     </div>
@@ -37,7 +37,9 @@ export default {
 }
 .more {
   position: absolute;
-  left: 50px;
+  left: 200px;
+  top:40px;
+  font-size: 20px;
 }
 .feedback {
   background-color: rgba(64, 169, 255, 100);
