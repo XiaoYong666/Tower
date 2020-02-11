@@ -1,21 +1,32 @@
 <template>
-  <div class="itembox">
-    <div class="title">高等数学</div>
+  <div class="itembox" v-on:click="pushToDetail">
+    <div class="title">{{item.name}}</div>
     <div class="introduce">
-      数学殿堂的钥匙
+      {{item.introduce}}
     </div>
     <el-popover
       placement="right-end"
-      title="理科"
+      v-bind:title="item.label.title"
       trigger="hover"
-      content="这代表其中传统理科的内容偏多"
-      ><el-button slot="reference" class="detype"></el-button>
+      v-bind:content="item.label.introduce"
+      ><el-button slot="reference" class="detype" :class="item.label.color"></el-button>
     </el-popover>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  name:"brick",
+  props:{
+    item:Object
+  },
+  methods:{
+    pushToDetail(){
+      this.$store.commit('changeBrickState',this.item.name)
+      this.$router.push({path:"brickDetails"})
+    }
+  }
+};
 </script>
 
 <style scoped>
@@ -24,7 +35,6 @@ export default {};
   height: 14px;
   border-radius: 7px;
   border-width: 0px;
-  background: rgba(64, 169, 255, 100);
   padding: 0px;
   position: absolute;
   top: 7px;

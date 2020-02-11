@@ -1,74 +1,144 @@
 <template>
   <div>
-      <div class="header">
+    <div class="header">
       <div class="tower">塔</div>
-      <div class="more"><i class="el-icon-more"></i></div>
+      <div class="more">
+        <el-dropdown @command="handleCommand">
+          <span class="el-dropdown-link">
+            <i class="el-icon-more"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="addTower">添加一个塔</el-dropdown-item>
+            <!--             <el-dropdown-item command="changeBrick"
+              >修改一块砖石</el-dropdown-item
+            > -->
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
       <Search></Search>
       <el-button class="feedback">问题反馈</el-button>
+      <el-button class="rule" @click="openRule">规则</el-button>
     </div>
     <el-divider></el-divider>
     <div class="towerbox">
-        <div class="itembox">
-    <div class="title">数学</div>
-    <div class="introduce">
-      数学是通向真理的必由之路
+      <TowerItem 
+      v-for="tower in towers"
+      :key="tower.name"
+      :towerItem="tower" 
+      @click.native="routerToTowerDetails(tower.name)"></TowerItem>
     </div>
-    <div class="time">2020-1-31</div>
-    <div class="see"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="svg-icon svg-md-visibility" width="20" height="20" viewBox="0 0 24 24" style="fill: rgb(255, 77, 79);"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" ></path></svg>2130
-    </div>
-  </div>
-    </div>
+    <el-dialog title="增加一块塔" :visible.sync="addFormVisible">
+      <el-form :model="addform" :rules="rules" ref="addform">
+        <el-form-item prop="name" label="塔的名称" :label-width="formLabelWidth">
+          <el-input v-model="addform.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item
+          prop="introduce"
+          label="塔的简介"
+          :label-width="formLabelWidth"
+        >
+          <el-input v-model="addform.introduce" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitForm('addform')"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import Search from "../component_common/search";
+import TowerItem from "../component_common/toweritem"
+let htmlRules =
+  "<ul><li>默认不能修改塔的内容和简介，只有<strong>管理员</strong>可以修改,<strong>没错只有我一个人</strong>，因为塔的内容和简介关联塔内层级，不方便修改。请谨慎添加。</li><li>当然，可以联系QQ1610156666更改。</li><li>后期开放注册账号了以后就会启用。</li></ul>";
 export default {
-components:{
-  Search
-}
-}
+  data() {
+    return {
+      formLabelWidth:'120px',
+      addFormVisible: false,
+      addform:{
+        name:"",
+        introduce:""
+      },
+      rules: {
+        name: [
+          { required: true, message: "请输入塔的名称", trigger: "blur" },
+          { min: 2, max: 6, message: "长度在2到6个字符", trigger: "blur" }
+        ],
+        introduce: [
+          { required: true, message: "请输入塔介绍", trigger: "blur" },
+          { min: 3, max: 20, message: "长度在3到20个字符", trigger: "blur" }
+        ]
+      }
+    };
+  },
+  components: {
+    Search,
+    TowerItem
+  },
+  methods: {
+    openRule() {
+      this.$alert(htmlRules, "规则", {
+        confirmButtonText: "确定",
+        dangerouslyUseHTMLString: true,
+        callback: () => {
+          this.$message({
+            type: "info",
+            message: "好好记住哦~"
+          });
+        }
+      });
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          alert("submit!");
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    handleCommand(command) {
+      if (command == "addTower") {
+        this.addFormVisible = true;
+      }
+    },
+    routerToTowerDetails(name){
+      console.log("点击了")
+      for(let item of this.towers){
+        if(item.name == name){
+          this.$store.commit('changeTowerState',name)
+          this.$router.push(
+          {path:"towerDetail"}
+          )
+        }
+      }
+    }
+  },
+  computed: {
+    selectTower() {
+      return this.$store.state.selectTower;
+    },
+    towers(){
+      return this.$store.state.towers
+    }
+  }
+};
 </script>
 
 <style scoped>
-.itembox {
-  width: 250px;
-  height: 150px;
-  border-radius: 7px;
-  background-color: white;
-  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.25);
-  position: relative;
-  margin-left: 20px;
-  margin-top: 20px;
-  cursor: pointer;
-}
-.itembox .title {
-  position: absolute;
-  left: 23px;
-  top: 15px;
-  font-size: 20px;
-  font-weight: bold;
-}
 
-.itembox .introduce {
-  position: absolute;
-  font-size: 12px;
-  top: 55px;
-  left: 23px;
-  text-align: left;
-  color: rgba(0, 0, 0, 0.5);
-  width: 150px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
 
-.towerbox{
+.towerbox {
   width: 100%;
   display: flex;
   flex-flow: wrap;
 }
-
 
 .header {
   margin-top: 20px;
@@ -79,7 +149,7 @@ components:{
 .tower {
   font-size: 48px;
   font-weight: bold;
-  color: rgba(64,169,255,100);
+  color: rgba(64, 169, 255, 100);
   position: absolute;
   top: 0px;
   left: 20px;
@@ -87,7 +157,7 @@ components:{
 .more {
   position: absolute;
   left: 200px;
-  top:40px;
+  top: 40px;
   font-size: 20px;
 }
 .feedback {
@@ -100,29 +170,15 @@ components:{
   width: 120px;
 }
 
-.time{
-position: absolute;
-left:23px;
-font-size: 13px;
-bottom: 10px;
-color:rgba(0, 0, 0, 0.5)
-}
 
-.see{
+.rule {
   position: absolute;
-  right: 15px;
-  bottom: 10px;
-  font-size:13px;
-  color:rgba(255,77,79,100);
-}
-
-.svg-icon{
-  position: relative;
-  top:5px;
-  margin-right:7px;
-  font-size: 16px;
-  color:rgba(255,77,79,100);
-}
-
-</style>>
-
+  top: 40px;
+  left: 90px;
+  padding: 0;
+  border-width: 0px;
+  padding: 2px;
+  font-weight: bold;
+  color: red;
+}</style
+>>

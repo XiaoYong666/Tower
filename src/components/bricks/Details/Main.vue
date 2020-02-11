@@ -1,39 +1,39 @@
 <template>
   <div>
     <div class="header">
-      <div class="title-header">高等数学</div>
+      <div class="title-header">{{brickSingle.name}}</div>
       <div class="decorate"></div>
-      <el-button class="rule">规则</el-button>
-      <el-button class="feedback">问题反馈</el-button>
+      <el-button class="rule" @click="openRule">规则</el-button>
+      <el-button class="feedback" @click=openFeedback>问题反馈</el-button>
     </div>
     <div class="main">
       <div class="nav">
-        <el-button type="text" class="item">教程</el-button>
-        <el-button type="text" class="item">实践</el-button>
-        <el-button type="text" class="item">人物</el-button>
-        <el-button type="text" class="item">社区</el-button>
-        <el-button type="text" class="item">工具</el-button>
-        <el-button type="text" class="item">书</el-button>
-        <el-button type="text" class="item shuati">刷题</el-button>
+        <el-button type="text" class="item" @click="contentState='courses'">教程</el-button>
+        <el-button type="text" class="item" @click="contentState='realDone'">实践</el-button>
+        <el-button type="text" class="item" @click="contentState='characters'">人物</el-button>
+        <el-button type="text" class="item" @click="contentState='forums'">社区</el-button>
+        <el-button type="text" class="item" @click="contentState='tools'">工具</el-button>
+        <el-button type="text" class="item" @click="contentState='books'">书</el-button>
+        <el-button type="text" class="item shuati" @click="contentState=courses">刷题</el-button>
       </div>
       <div class="content">
-        <div class="card">
-          <div class="title"><a href="http://">张宇高数</a></div>
-          <div class="introduce"><p>张宇高数没人质疑吧?</p></div>
-          <div class="jiesuo">解锁码：2E6Y</div>
-          <div class="time">2019-10-19</div>
+        <div class="card" v-for="item in brickSingle.content[contentState]" :key=item.name>
+          <div class="title"><a  :href="item.url" target="_blank">{{item.name}}</a></div>
+          <div class="introduce"><p>{{item.introduce}}</p></div>
+          <div class="jiesuo">解锁码：{{item.jiesuo}}</div>
+          <div class="time">{{item.updateTime}}</div>
           <div class="zan">
             <el-button type="text" class="button-zan" v-on:click="log"
               ><img class="dianzan" src="../../../assets/zan.png" alt="点赞按钮"
             /></el-button>
-            <div class="number">431</div>
+            <div class="number">{{item.great}}</div>
           </div>
           <el-popover
             placement="right-end"
-            title="理科"
+            :title="item.label.title"
             trigger="hover"
-            content="这代表其中传统理科的内容偏多"
-            ><el-button slot="reference" class="state"></el-button>
+            :content="item.label.introduce"
+            ><el-button slot="reference" :class="[state,item.label.color]"></el-button>
           </el-popover>
         </div>
       </div>
@@ -43,10 +43,50 @@
 </template>
 
 <script>
+import htmlRules from '../../component_common/rulesforBrick'
+
 export default {
+  data(){
+    return{
+      feedback:"<ul><li>因为我懒得做自己的反馈页面了，所以你即将跳转到市面上最常见的问卷调查中。</li><li>顺便一提，私人QQ1610156666</li></ul>",
+      state:"state",
+      contentState:"courses"
+    }
+  },
   methods: {
     log() {
       console.log("dianji");
+    },
+    openRule() {
+        this.$alert(htmlRules, '规则', {
+          confirmButtonText: '确定',
+          dangerouslyUseHTMLString:true,
+          callback: () => {
+            this.$message({
+              type: 'info',
+              message: "好好记住哦~"
+            });
+           
+          }
+        });
+      },
+      openFeedback() {
+        this.$alert(this.feedback, '反馈', {
+          confirmButtonText: '确定',
+          dangerouslyUseHTMLString:true,
+          callback: () => {
+            this.$message({
+              type: 'info',
+              message: "谢谢反馈~"
+            });
+             window.open("https://www.wenjuan.com/s/InAZBb2/")
+          }
+        });
+      }
+  },
+  computed:{
+    brickSingle(){
+      return this.$store.state.selectBrick
     }
   }
 };
@@ -66,7 +106,6 @@ export default {
   position: absolute;
   right: 15px;
   top: 15px;
-  background-color: rgba(255, 77, 79, 100);
   padding: 0px;
 }
 
@@ -92,7 +131,7 @@ export default {
   position: absolute;
   color: rgba(0, 0, 0, 0.5);
   left: 30px;
-  bottom: 23px;
+  bottom: 27px;
   font-size: 12px;
 }
 .jiesuo {
@@ -124,7 +163,7 @@ export default {
 .title a:hover {
   color: rgba(255, 77, 79, 100);
 }
-a:link {
+.title>a {
   color: black;
 }
 
@@ -137,7 +176,7 @@ a:link {
 }
 
 .card {
-  width: 330px;
+  width: 320px;
   height: 400px;
   border-radius: 7px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
@@ -151,6 +190,7 @@ a:link {
   flex-flow: wrap;
   margin: 0 auto;
   width: 90%;
+  justify-content: space-around;
 }
 
 .nav .item {
@@ -207,8 +247,11 @@ a:link {
   width: 100%;
   margin-bottom: 40px;
 }
-
-* {
-  cursor: default;
+.introduce a:visited{
+  color:#40a9ff;
 }
+a{
+  text-decoration: none;
+}
+
 </style>

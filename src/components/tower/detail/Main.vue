@@ -1,35 +1,369 @@
 <template>
   <div>
-      <div class="header">
-        <div class="titleoftower">数学</div>
-        <div class="attention">
-            <el-button type="danger">注意</el-button>
+    <div class="header">
+      <div class="titleoftower">{{ selectTower.name }}</div>
+      <div class="attention">
+        <el-button type="danger">规则</el-button>
+        <div class="more">
+          <el-dropdown @command="handleCommand">
+            <span class="el-dropdown-link">
+              <i class="el-icon-more"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="addBrick"
+                >添加一块砖石</el-dropdown-item
+              >
+              <el-dropdown-item command="changeBrick"
+                >修改一块砖石</el-dropdown-item
+              >
+              <el-dropdown-item command="addFloor">添加一层</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
       </div>
-      <div class="main">
-          <div class="ceng">
-              <div class="decorate"></div>
-              <div class="grade">第一层</div>
-              <div class="label"><i class="el-icon-warning-outline"></i></div>
-              <div class="reminder">第一层通常是一些非常基础的学科，有些学科甚至看似与本塔无关，但实则非常重要。</div>
-              <div class="more"><i class="el-icon-more"></i></div>
-              <el-divider></el-divider>
-          </div>
-          <div class="zhuanshibox">
-              <Brick></Brick>
-          </div>
+    </div>
+    <div class="main">
+      <div
+        class="ceng"
+        v-for="(ceng, index) in selectTower.brickList"
+        :key="index"
+      >
+        <div class="decorate"></div>
+        <div class="grade">第{{ index + 1 }}层</div>
+        <div class="label"><i class="el-icon-warning-outline"></i></div>
+        <div class="reminder">{{ ceng.introduce }}</div>
+
+        <el-divider></el-divider>
+        <div class="zhuanshibox">
+          <Brick
+            v-for="data in brickData[index].ceng"
+            :key="data.name"
+            :item="data"
+          ></Brick>
+        </div>
       </div>
-      <div class="footer"></div>
+    </div>
+    <div class="footer"></div>
+
+    <el-dialog title="增加一块砖石" :visible.sync="addFormVisible">
+      <el-form :model="addform" :rules="rules" ref="addform">
+        <el-form-item prop="name" label="名称" :label-width="formLabelWidth">
+          <el-input v-model="addform.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item
+          prop="introduce"
+          label="砖石简介"
+          :label-width="formLabelWidth"
+        >
+          <el-input v-model="addform.introduce" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item prop="index" label="层数" :label-width="formLabelWidth">
+          <el-select v-model="addform.index" placeholder="请选择层数">
+            <el-option
+              v-for="i in selectTower.brickList.length"
+              :key="i"
+              :label="i"
+              :value="i"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="label" label="标签" :label-width="formLabelWidth">
+          <el-select
+            value-key="title"
+            v-model="addform.label"
+            placeholder="请选择标签"
+          >
+            <el-option
+              v-for="i in labels"
+              :key="i.title"
+              :label="i.title"
+              :value="i"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addBrick(addform.index, addform)"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
+    <el-dialog title="修改一块砖石" :visible.sync="changeFormVisible">
+      <el-form :model="changeForm" :rules="rules" ref="changeForm">
+        <el-form-item prop="name" label="原名称" :label-width="formLabelWidth">
+          <el-input v-model="changeForm.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item
+          prop="rename"
+          label="修改到"
+          :label-width="formLabelWidth"
+        >
+          <el-input v-model="changeForm.rename" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item
+          prop="introduce"
+          label="砖石简介"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="changeForm.introduce"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="index" label="层数" :label-width="formLabelWidth">
+          <el-select v-model="changeForm.index" placeholder="请选择层数">
+            <el-option
+              v-for="i in selectTower.brickList.length"
+              :key="i"
+              :label="i"
+              :value="i"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="label" label="标签" :label-width="formLabelWidth">
+          <el-select
+            value-key="title"
+            v-model="changeForm.label"
+            placeholder="请选择标签"
+          >
+            <el-option
+              v-for="i in labels"
+              :key="i.title"
+              :label="i.title"
+              :value="i"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="changeFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="changeBrick">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import Brick from "../../component_common/brick"
+import Brick from "../../component_common/brick";
+import Labels from "../../component_common/label";
 export default {
-components:{
+  data() {
+    return {
+      labels: Labels,
+      addform: {
+        name: "",
+        introduce: "",
+        label: {},
+        index: 1
+      },
+      changeForm: {
+        name: "",
+        rename: "",
+        introduce: "",
+        label: {},
+        reindex: 1
+      },
+      addFormVisible: false,
+      changeFormVisible: false,
+      formLabelWidth: "120px",
+      rules: {
+        name: [
+          { required: true, message: "请输入砖石名称", trigger: "blur" },
+          { min: 1, max: 6, message: "长度在2到6个字符", trigger: "blur" }
+        ],
+        introduce: [
+          { required: true, message: "请输入砖石介绍", trigger: "blur" },
+          { min: 3, max: 20, message: "长度在3到20个字符", trigger: "blur" }
+        ],
+        label: [{ required: true, message: "请输入砖石标签", trigger: "blur" }],
+        index: [
+          {
+            required: true,
+            message: "请输入你想将砖石加入第几层",
+            trigger: "blur"
+          }
+        ],
+        rename: [
+          { min: 1, max: 6, message: "长度在2到6个字符", trigger: "blur" }
+        ]
+      }
+    };
+  },
+  components: {
     Brick
-}
-}
+  },
+  methods: {
+
+    //处理三个选项
+    handleCommand(command) {
+      if (command == "addBrick") {
+        this.addFormVisible = true;
+        //this.addBrick(this.addform.index,this.addform)
+      } else if(command == "changeBrick"){
+        this.changeFormVisible = true;
+      }else{
+        this.addFloor()
+      }
+    },
+
+    //向塔中添加砖石
+    addBrick(index, form) {
+      //检查砖石是否已在塔中存在
+      let check_1 = this.checkRepetitionOfBrickinTower(form.name,this.selectTower)
+      //检查砖石是否已在bricks中存在
+      let check_2 = this.checkRepetitionOfBrickinBricks(form.name,this.Bricks)
+      form.index = index;
+      
+      if(check_1==0&&check_2==0){
+        let poly = {
+        name: this.selectTower.name,
+        index: index,
+        brickname: form.name
+      }; 
+      this.$store.commit("addBrick", form);
+      this.$store.commit("addBrickToTower", poly);
+      this.$store.commit("changeTowerState",this.selectTower.name);
+      this.addFormVisible = false;
+      }else if(check_1==0){
+        let poly = {
+        name: this.selectTower.name,
+        index: index,
+        brickname: form.name
+      };
+      this.$store.commit("addBrickToTower", poly);
+      this.$store.commit("changeTowerState",this.selectTower.name);
+      this.addFormVisible = false;
+
+      //告知用户Brick在砖石列表中已存在
+      this.$notify({
+          title: "警告",
+          type: 'warning',
+          message: "你要加的砖石在砖石堆中已经存在，已经加入塔中，但你的介绍会无效化,如果想要修改介绍请点修改按钮"
+        });
+
+      }else{
+        this.$notify.error({
+          title: "错误",
+          message: "你要加的砖石在塔中已经存在了"
+        });
+      }
+
+      
+    },
+
+    //更改塔中的砖石
+    changeBrick() {
+      let rename = this.changeForm.rename;
+      let name = this.changeForm.name;
+
+      if (name == rename) {
+        this.$notify.error({
+          title: "错误",
+          message: "如果不需要需要修改名称，空着就好"
+        });
+        return;
+      }
+
+      let state = 2;
+      //检查是rename否跟本页面重复
+      for (let ceng of this.selectTower.brickList) {
+        for (let item of ceng.items) {
+          if (item == rename) {
+            state = 0;
+          }
+          //检查name是否存在
+          if (item == name) {
+            state = 1;
+          }
+        }
+      }
+
+      if (state == 1) {
+        this.$store.commit("changeBrick", this.changeForm);
+        this.$store.commit("changeTowerItemName", this.changeForm);
+
+        this.changeFormVisible = false;
+      } else if (state == 0) {
+        this.$notify.error({
+          title: "错误",
+          message: "要修改的名字与本页面的其他砖石重复了"
+        });
+      } else {
+        this.$notify.error({
+          title: "错误",
+          message: "没找到你要修改的砖石"
+        });
+      }
+    },
+    //向塔中添加一层
+    addFloor(){
+      this.$store.commit('addFloor',this.selectTower)
+    },
+    //检测是否塔中已有重复砖石
+    checkRepetitionOfBrickinTower(name,tower){
+      let exit =0
+         //检测是否在列表中已存在
+         for(let items of  tower.brickList){
+          for(let item of items){
+            if(item==name){
+              exit=1
+              console.log("砖石在列表中已经存在")
+            }
+          }
+           
+         }
+         return exit
+    },
+    checkRepetitionOfBrickinBricks(name,bricks){
+      let res =0
+      for(let brick of bricks){
+        if(brick.name==name){
+          res=1
+          break
+        }
+      }
+      return res
+    }
+  },
+  computed: {
+    selectTower() {
+      return this.$store.state.selectTower;
+    },
+    towers() {
+      return this.$store.state.towers;
+    },
+    Bricks() {
+      return this.$store.state.bricks;
+    },
+    brickData() {
+      let data = [];
+      let cengdata = { ceng: [] };
+
+      for (let ceng of this.$store.state.selectTower.brickList) {
+        let length = ceng.items.length;
+        let count = 0;
+        for (let brick of this.$store.state.bricks) {
+          for (let item of ceng.items) {
+            if (item == brick.name) {
+              cengdata.ceng.push(brick);
+              count++;
+            }
+          }
+          if (count == length) break;
+        }
+        data.push(cengdata);
+        cengdata = { ceng: [] };
+      }
+
+      return data;
+    }
+  }
+};
 </script>
 
 <style scoped>
@@ -39,73 +373,77 @@ components:{
   height: 60px;
   width: 100%;
 }
-.titleoftower{
-font-size: 48px;
-font-weight: bold;
-color:rgba(64,169,255,100);
+.titleoftower {
+  font-size: 48px;
+  font-weight: bold;
+  color: rgba(64, 169, 255, 100);
 }
-.attention{
-position: absolute;
-right:100px;
-top:24px;
+.attention {
+  position: absolute;
+  right: 100px;
+  top: 24px;
+}
+.el-button {
+  font-weight: bold;
+}
+.main {
+  display: flex;
+  flex-wrap: wrap;
+  width: 80%;
+  margin-top: 30px;
+}
+.ceng {
+  width: 100%;
+  position: relative;
+}
+.decorate {
+  position: absolute;
+  height: 30px;
+  background-color: #fa8c16;
+  width: 5px;
+  border-radius: 2px;
+}
+.grade {
+  font-size: 20px;
+  font-weight: bold;
+  left: 15px;
+  position: absolute;
+}
+.label {
+  position: absolute;
+  left: 90px;
+  top: 7px;
+}
+.reminder {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 13px;
+  position: absolute;
+  top: 7px;
+  left: 110px;
+}
+.zhuanshibox {
+  padding-top: 50px;
+  padding-bottom: 30px;
+  display: flex;
+  flex-wrap: wrap;
 
+  width: 120%;
+  height: auto;
 }
-.el-button{
-    font-weight: bold;
+.itembox {
+  margin-top: 5px;
 }
-.main{
-    display: flex;
-    flex-wrap: wrap;
-    width: 80%;
-    margin-top:30px;
+.more {
+  position: absolute;
+  right: 90px;
+  top: 9px;
+  font-size: 20px;
 }
-.ceng{
-    width:100%;
-    height: 50px;
-    position: relative;
+.el-divider {
+  position: absolute;
+  top: 17px;
 }
-.decorate{
-    position: absolute;
-    height: 30px;
-    background-color: #fa8c16;
-    width: 5px;
-    border-radius: 2px;
+.el-icon-more {
+  font-size: 20px;
 }
-.grade{
-    font-size:20px;
-    font-weight: bold;
-    left:15px;
-    position: absolute;
-}
-.label{
-    position: absolute;
-    left:90px;
-    top:7px;
-
-}
-.reminder{
-    color:rgba(0,0,0,.5);
-    font-size:13px;
-    position: absolute;
-    top:7px;
-    left:110px;
-}
-.zhuanshibox{
-    width:80%;
-    height: auto;
-}
-.itembox{
-    margin-top:5px;
-}
-.more{
-    position: absolute;
-    right:30px;
-    top:5px;
-    font-size: 20px;
-}
-.el-divider{
-    position: absolute;
-    top:17px;
-}
-
 </style>

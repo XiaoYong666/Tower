@@ -3,25 +3,28 @@
     <div class="header">
       <div class="header-title-1">结构</div>
       <img src="../../assets/red_of.png" alt="of" class="of" />
-      <div class="header-title-2">高等数学</div>
+      <div class="header-title-2">{{ Brick.name }}</div>
       <Search></Search>
     </div>
     <div class="main">
       <div class="behind">
         <div class="more"><i class="el-icon-more"></i></div>
         <div class="items">
+          <Brick :item="br" v-for="br in BehindItems" :key="br.name"></Brick>
         </div>
       </div>
       <div class="label-1">▲想要学更多嘛！┗|｀O′|┛ 嗷~~</div>
       <div class="middle">
         <div class="decorate-1"></div>
-        <Brick></Brick>
+        <Brick :item="Brick"></Brick>
         <div class="decorate-2"></div>
       </div>
       <div class="label-2">▼下面的都是很重要的知识哦！( •̀ ω •́ )✧</div>
       <div class="front">
         <div class="more"><i class="el-icon-more"></i></div>
-        <div class="item"></div>
+        <div class="items">
+          <Brick :item="br" v-for="br in FrontItems" :key="br.name"></Brick>
+        </div>
       </div>
     </div>
     <div class="footer">
@@ -33,20 +36,62 @@
 <script>
 import Search from "../component_common/search";
 import Brick from "../component_common/brick";
-import Rec from "../component_common/recommand"
+import Rec from "../component_common/recommand";
 export default {
   components: {
     Search,
     Brick,
     Rec
+  },
+  computed: {
+    Brick() {
+      return this.$store.state.selectBrick;
+    },
+    FrontItems() {
+      let length = this.Brick.front.length;
+      let count = 0;
+      let frontitems = [];
+      for (let item of this.$store.state.bricks) {
+        for (let name of this.$store.state.selectBrick.front) {
+          if (name == item.name) {
+            count++;
+            frontitems.push(item);
+          }
+          if (count == length){
+            count = 0;
+          break;
+          }
+        }
+      }
+      return frontitems;
+    },
+   BehindItems() {
+      let length = this.Brick.behind.length;
+      let count = 0;
+      let behinditems = [];
+      for (let item of this.$store.state.bricks) {
+        for (let name of this.$store.state.selectBrick.behind) {
+          if (name == item.name) {
+            count++;
+            behinditems.push(item);
+          }
+          if (count == length){
+            count = 0;
+          break;
+          }
+        }
+      }
+      return behinditems;
+    }
   }
 };
 </script>
 
 <style scoped>
-.footer
-{width:100%;}
-.front{
+.footer {
+  width: 100%;
+}
+.front {
   min-height: 500px;
   width: 100%;
   border-width: 1px;
@@ -57,52 +102,50 @@ export default {
   margin-bottom: 70px;
 }
 
-
-.label-2{
+.label-2 {
   width: 100%;
   height: 20px;
-  font-size:13px;
+  font-size: 13px;
   color: rgba(0, 0, 0, 0.5);
-  margin-top:5px;
+  margin-top: 5px;
 }
 
-
-.itembox{
+.middle > .itembox {
   position: absolute;
-  left:450px;
-  margin-top:0px;
+  left: 450px;
+  margin-top: 0px;
   width: 500px;
 }
 
-.decorate-2{
-  right:0px;
+.decorate-2 {
+  right: 0px;
   position: absolute;
   width: 30%;
-  background-image: linear-gradient(to left, #e2e1e1 0%, #BFBFBF 100%);
+  background-image: linear-gradient(to left, #e2e1e1 0%, #bfbfbf 100%);
   height: 90px;
   border-radius: 7px;
 }
-.decorate-1{
+.decorate-1 {
   position: absolute;
   width: 30%;
-  background-image: linear-gradient(to right, #e2e1e1 0%, #BFBFBF 100%);
+  background-image: linear-gradient(to right, #e2e1e1 0%, #bfbfbf 100%);
   height: 90px;
   border-radius: 7px;
 }
 
-.middle{
+.middle {
   width: 100%;
   position: relative;
   height: 100px;
- /*  background-color: rgba(0, 0, 0, 0.25); */
+  /*  background-color: rgba(0, 0, 0, 0.25); */
 }
 
-.label-1{
+.label-1 {
   width: 100%;
   height: 20px;
-  font-size:13px;
+  font-size: 13px;
   color: rgba(0, 0, 0, 0.5);
-  margin-top:5px;
+  margin-top: 5px;
 }
 
 .header-title-1 {

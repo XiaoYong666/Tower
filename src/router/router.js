@@ -7,6 +7,7 @@ import tower from "../components/tower/Main.vue"
 import towerdetail from "../components/tower/detail/Main.vue"
 
 const routes = [
+  {path:"*",component:Main},
   { path: "/", component: Main },
   { path: "/bricks", component: BricksMain },
   { path: "/brickDetails", component: bricksDetails },
