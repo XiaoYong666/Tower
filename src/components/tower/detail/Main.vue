@@ -86,9 +86,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="addFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addBrick(addform.index, addform)"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="addBrick('addform')">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog title="修改一块砖石" :visible.sync="changeFormVisible">
@@ -142,7 +140,9 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="changeFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="changeBrick">确 定</el-button>
+        <el-button type="primary" @click="changeBrick('changeform')"
+          >确 定</el-button
+        >
       </div>
     </el-dialog>
   </div>
@@ -198,136 +198,186 @@ export default {
     Brick
   },
   methods: {
-
     //处理三个选项
     handleCommand(command) {
       if (command == "addBrick") {
         this.addFormVisible = true;
         //this.addBrick(this.addform.index,this.addform)
-      } else if(command == "changeBrick"){
+      } else if (command == "changeBrick") {
         this.changeFormVisible = true;
-      }else{
-        this.addFloor()
+      } else {
+        this.addFloor();
       }
     },
 
     //向塔中添加砖石
-    addBrick(index, form) {
-      //检查砖石是否已在塔中存在
-      let check_1 = this.checkRepetitionOfBrickinTower(form.name,this.selectTower)
-      //检查砖石是否已在bricks中存在
-      let check_2 = this.checkRepetitionOfBrickinBricks(form.name,this.Bricks)
-      form.index = index;
-      
-      if(check_1==0&&check_2==0){
-        let poly = {
-        name: this.selectTower.name,
-        index: index,
-        brickname: form.name
-      }; 
-      this.$store.commit("addBrick", form);
-      this.$store.commit("addBrickToTower", poly);
-      this.$store.commit("changeTowerState",this.selectTower.name);
-      this.addFormVisible = false;
-      }else if(check_1==0){
-        let poly = {
-        name: this.selectTower.name,
-        index: index,
-        brickname: form.name
-      };
-      this.$store.commit("addBrickToTower", poly);
-      this.$store.commit("changeTowerState",this.selectTower.name);
-      this.addFormVisible = false;
+    async addBrick(form) {
+      this.$refs[form].validate(async valid => {
+        if (valid) {
+          this.$request.getSelectTower(this.selectTower.name).then(res => {
+            this.$store.commit("refreshSelectTower", res.tower);
+          });
+          //检查砖石是否已在塔中存在
+          let check_1 = this.checkRepetitionOfBrickinTower(
+            this.addform.name,
+            this.selectTower
+          );
+          //检查砖石是否已在bricks中存在
+          let check_2 = this.checkRepetitionOfBrickinBricks(
+            this.addform.name,
+            this.Bricks
+          );
+          this.addform.index = this.addform.index;
 
-      //告知用户Brick在砖石列表中已存在
-      this.$notify({
-          title: "警告",
-          type: 'warning',
-          message: "你要加的砖石在砖石堆中已经存在，已经加入塔中，但你的介绍会无效化,如果想要修改介绍请点修改按钮"
-        });
+          if (check_1 == 0 && check_2 == 0) {
+            let poly = {
+              name: this.selectTower.name,
+              index: this.addform.index,
+              brickname: this.addform.name
+            };
+            this.$store.commit("addBrick", this.addform);
+            this.$request.addbrickByform(this.addform);
+            this.$store.commit("addBrickToTower", poly);
+            this.$store.commit("changeTowerState", this.selectTower.name);
+            let tower = this.selectTower;
+            tower.rename = tower.name;
+            this.$request.changetower(tower);
+            this.addFormVisible = false;
+          } else if (check_1 == 0) {
+            let poly = {
+              name: this.selectTower.name,
+              index: this.addform.index,
+              brickname: this.addform.name
+            };
+            this.$store.commit("addBrickToTower", poly);
+            this.$store.commit("changeTowerState", this.selectTower.name);
+            let tower = this.selectTower;
+            tower.rename = tower.name;
+            this.$request.changetower(tower);
+            this.addFormVisible = false;
 
-      }else{
-        this.$notify.error({
-          title: "错误",
-          message: "你要加的砖石在塔中已经存在了"
-        });
-      }
-
-      
+            //告知用户Brick在砖石列表中已存在
+            this.$notify({
+              title: "警告",
+              type: "warning",
+              message:
+                "你要加的砖石在砖石堆中已经存在，已经加入塔中，但你的介绍会无效化,如果想要修改介绍请点修改按钮"
+            });
+          } else {
+            this.$notify.error({
+              title: "错误",
+              message: "你要加的砖石在塔中已经存在了"
+            });
+          }
+        } else {
+          console.log("submit error!");
+        }
+      });
     },
 
-    //更改塔中的砖石
-    changeBrick() {
-      let rename = this.changeForm.rename;
-      let name = this.changeForm.name;
-
-      if (name == rename) {
-        this.$notify.error({
-          title: "错误",
-          message: "如果不需要需要修改名称，空着就好"
-        });
-        return;
-      }
-
-      let state = 2;
-      //检查是rename否跟本页面重复
-      for (let ceng of this.selectTower.brickList) {
-        for (let item of ceng.items) {
-          if (item == rename) {
-            state = 0;
-          }
-          //检查name是否存在
-          if (item == name) {
-            state = 1;
-          }
+    getyourbrick(rename, name) {
+      let brick = {};
+      for (let item of this.Bricks) {
+        if (item.name == rename) {
+          brick = item;
         }
       }
+      brick.name = name;
+      brick.rename = rename;
+      return brick;
+    },
+    getyourtower(rename, name) {
+      let tower = this.selectTower;
+      tower.name = name;
+      tower.rename = rename;
+    },
+    //更改塔中的砖石
+    changeBrick(form) {
+      this.$refs[form].validate(async valid => {
+        if (valid) {
+          this.$request.getAll().then(res => {
+            this.$store.commit("refreshBrick", res.bricks);
+            this.$store.commit("refreshTower", res.towers);
+          });
 
-      if (state == 1) {
-        this.$store.commit("changeBrick", this.changeForm);
-        this.$store.commit("changeTowerItemName", this.changeForm);
+          let check_1 = this.checkRepetitionOfBrickinTower(
+            this.changeForm.name,
+            this.selectTower
+          );
+          let check_2 = this.changeForm.rename == "" ? 1 : 0;
+          let check_3 = this.checkRepetitionOfBrickinTower(
+            this.changeForm.rename,
+            this.selectTower
+          );
 
-        this.changeFormVisible = false;
-      } else if (state == 0) {
-        this.$notify.error({
-          title: "错误",
-          message: "要修改的名字与本页面的其他砖石重复了"
-        });
-      } else {
-        this.$notify.error({
-          title: "错误",
-          message: "没找到你要修改的砖石"
-        });
-      }
+          let check_4 = this.checkRepetitionOfBrickinBricks(
+            this.changeForm.name,
+            this.Bricks
+          );
+          if (check_1 == 0) {
+            console.log("要修改的砖石不再塔内");
+          } else if (check_2 == 1) {
+            this.$store.commit("changeBrick", this.changeForm);
+            this.$store.commit("changeTowerItemName", this.changeForm);
+            this.$request.changebrick(
+              this.getyourbrick(this.changeForm.rename, this.changeForm.name)
+            );
+            this.$request.changetower(
+              this.getyourtower(this.selectTower.name, this.selectTower.name)
+            );
+          } else if (check_3 == 1) {
+            console.log("要修改的名字与塔内元素重复了");
+          } else if (check_4 == 1) {
+            this.$store.commit("changeTowerItemName", this.changeForm);
+            this.$request.changetower(
+              this.getyourtower(this.selectTower.name, this.selectTower.name)
+            );
+          } else {
+            this.$store.commit("addBrick", this.changeForm);
+            this.$store.commit("addBrickToTower", this.changeForm);
+            this.$request.addbrick(
+              this.getyourbrick(
+                this.selectTower.rename,
+                this.selectTower.rename
+              )
+            );
+            this.$request.changetower(
+              this.getyourtower(this.selectTower.name, this.selectTower.name)
+            );
+          }
+        } else {
+          console.log("submit error!");
+        }
+      });
     },
     //向塔中添加一层
-    addFloor(){
-      this.$store.commit('addFloor',this.selectTower)
+    addFloor() {
+      this.$store.commit("addFloor", this.selectTower);
+      this.$request.changetower(this.getyourtower(this.selectTower.name,this.selectTower.name))
     },
     //检测是否塔中已有重复砖石
-    checkRepetitionOfBrickinTower(name,tower){
-      let exit =0
-         //检测是否在列表中已存在
-         for(let items of  tower.brickList){
-          for(let item of items){
-            if(item==name){
-              exit=1
-              console.log("砖石在列表中已经存在")
-            }
+    checkRepetitionOfBrickinTower(name, tower) {
+      let exit = 0;
+      //检测是否在列表中已存在
+      for (let items of tower.brickList) {
+        for (let item of items.items) {
+          if (item == name) {
+            exit = 1;
+            console.log("砖石在列表中已经存在");
           }
-           
-         }
-         return exit
-    },
-    checkRepetitionOfBrickinBricks(name,bricks){
-      let res =0
-      for(let brick of bricks){
-        if(brick.name==name){
-          res=1
-          break
         }
       }
-      return res
+      return exit;
+    },
+    checkRepetitionOfBrickinBricks(name, bricks) {
+      let res = 0;
+      for (let brick of bricks) {
+        if (brick.name == name) {
+          res = 1;
+          break;
+        }
+      }
+      return res;
     }
   },
   computed: {
@@ -362,6 +412,12 @@ export default {
 
       return data;
     }
+  },
+  created() {
+    this.$request.getAll().then(res => {
+      this.$store.commit("refreshBrick", res.bricks);
+      this.$store.commit("refreshTower", res.towers);
+    });
   }
 };
 </script>

@@ -7,11 +7,13 @@ import Axios from "axios";
 import routes from "./router/router";
 import VueRouter from "vue-router";
 import Vuex from 'vuex'
-import lodash from 'lodash'
 //import mavonEditor from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
 import "vis-network/dist/vis-network.min.css";
 import storedata from "./store/data"
+import request from "./request/main"
+
+
 Vue.config.productionTip = false;
 Vue.use(Element);
 Vue.use(VueRouter);
@@ -27,8 +29,9 @@ const router = new VueRouter({
 
 const store = new Vuex.Store(storedata)
 
-Vue.prototype._ = lodash
-Vue.prototype.axios = Axios
+
+Vue.prototype.$axios = Axios
+Vue.prototype.$request = request
 
 new Vue({
   router,

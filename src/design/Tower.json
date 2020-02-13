@@ -1,7 +1,7 @@
 {
     "name": "数学",
     "introduce": "数学是通向世界真理的必经之路。",
-    "updatetime": "2020-1-31",
+    "updateTime": "2020-1-31",
     "see": 31,
     "brickList": [{
         "items":["小学数学","大学数学"]
