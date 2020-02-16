@@ -13,8 +13,8 @@
         <div style="color:rgba(0,0,0,0.6)">沙海 ></div>
       </div>
       <a class="question" href="https://shimo.im/docs/vhTRyG3PTjHx8Vx8/" target="_blank">什么是通天塔？</a>
-    </template>
-  </template>
+    </div>
+  </div>
 </template>
 <script>
 import request from '../request/main'
