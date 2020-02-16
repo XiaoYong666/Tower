@@ -4,7 +4,7 @@
       <img src="../assets/background_1.png" alt="" class="mybackground" />
       <div class="huany">欢迎来到</div>
       <div class="tongtianta">通天塔</div>
-      <div class="myname">Created by lius</div>
+      <div class="myname">Created by liuss</div>
       <div class="items">
         <div style="color:rgba(0,0,0,0.6);margin-left:700px;">众塔 ></div>
         <div style="color:rgba(64,169,255,100)" ><a class="ta" @click="navTo('tower')">塔 ></a></div>
@@ -13,8 +13,8 @@
         <div style="color:rgba(0,0,0,0.6)">沙海 ></div>
       </div>
       <a class="question" href="https://shimo.im/docs/vhTRyG3PTjHx8Vx8/" target="_blank">什么是通天塔？</a>
-    </div>
-  </div>
+    </template>
+  </template>
 </template>
 <script>
 import request from '../request/main'
