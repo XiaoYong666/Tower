@@ -1,12 +1,81 @@
 <template>
   <div class="search">
-    <el-input class="searchbox" placeholder="搜索"></el-input>
-    <el-button class="searchbutton"><i class="el-icon-search"></i></el-button>
+    
+      <el-autocomplete
+      class="inline-input searchbox"
+      v-model="state1"
+      :fetch-suggestions="querySearch"
+      placeholder="搜索"
+      @select="handleSelect"
+    ></el-autocomplete>
+    
+    <!-- <el-button class="searchbutton"><i class="el-icon-search"></i></el-button> -->
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props:{
+    state:String
+  },
+  data(){
+    return{
+      state1:"",
+      arr:[]
+    }
+  },
+  methods:{
+    querySearch(queryString, cb) {
+      let S = this.arr
+        
+      let results = queryString ? S.filter(this.createFilter(queryString)) : S;
+        // 调用 callback 返回建议列表的数据
+        cb(results);
+      },
+    createFilter(queryString) {
+        return (i) => {
+          return (i.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+        };
+      },
+    handleSelect(item) {
+       let hand = this.state
+      if(hand =="bricks"){
+        this.$store.commit('changeBrickState',item.value)
+        this.$router.push({path:"brickDetails"}) 
+      }else{
+        this.$store.commit('changeTowerState',item.value)
+        this.$router.push({path:"towerDetail"}) 
+      }
+       
+      },
+    loadAll(){
+      if(this.state=='tower'){
+        let arr =this.towers.map(item=>{
+        return {value:item.name}
+      })
+      return arr
+      }else{
+        let arr =this.bricks.map(item=>{
+        return {value:item.name}
+      })
+      return arr
+      }
+    }
+
+  },
+  mounted(){
+    this.arr = this.loadAll()
+  },
+
+  computed:{
+    towers(){
+      return this.$store.state.towers
+    },
+    bricks(){
+      return this.$store.state.bricks
+    }
+  }
+};
 </script>
 
 <style scoped>

@@ -15,7 +15,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-      <Search></Search>
+      <Search :state="'bricks'"></Search>
       <el-button class="feedback">问题反馈</el-button>
     </div>
     <el-divider></el-divider>
@@ -116,25 +116,25 @@ export default {
       rules: {
         name: [
           { required: true, message: "请输入砖石名称", trigger: "blur" },
-          { min: 2, max: 6, message: "长度在2到6个字符", trigger: "blur" }
+          { min: 2, max: 20, message: "长度在2到20个字符", trigger: "blur" }
         ],
         introduce: [
           { required: true, message: "请输入砖石介绍", trigger: "blur" },
-          { min: 3, max: 20, message: "长度在3到20个字符", trigger: "blur" }
+          { min: 3, max: 30, message: "长度在3到30个字符", trigger: "blur" }
         ],
         label: [{ required: true, message: "请输入砖石标签", trigger: "blur" }]
       },
       rulesofchange:{
         name: [
           { required: true, message: "请输入砖石名称", trigger: "blur" },
-          { min: 2, max: 6, message: "长度在2到6个字符", trigger: "blur" }
+          { min: 2, max: 20, message: "长度在2到20个字符", trigger: "blur" }
         ],
         rename:[
-          { min: 2, max: 6, message: "长度在2到6个字符", trigger: "blur" }
+          { min: 2, max: 20, message: "长度在2到20个字符", trigger: "blur" }
         ],
         introduce: [
           { required: true, message: "请输入砖石介绍", trigger: "blur" },
-          { min: 3, max: 20, message: "长度在3到20个字符", trigger: "blur" }
+          { min: 3, max: 30, message: "长度在3到30个字符", trigger: "blur" }
         ],
         label: [{ required: true, message: "请输入砖石标签", trigger: "blur" }]
       },
@@ -173,15 +173,35 @@ export default {
       }
       return exit
     },
-    async addBrick(form) {
-      this.$refs[form].validate(async valid => {
+    getyourbrick(rename, name) {
+      let brick = {};
+      for (let item of this.Bricks) {
+        if (item.name == rename) {
+          brick = item;
+          break
+        }
+      }
+      brick.name = name;
+      brick.rename = rename;
+            console.log(brick)
+      return brick;
+    },
+    getyourtower(rename, name) {
+      let tower = this.selectTower;
+      tower.name = name;
+      tower.rename = rename;
+
+      return tower
+    },
+    addBrick(form) {
+      this.$refs[form].validate(valid => {
         if (valid) {
           this.$request.getAll()
           .then((res)=>{
         this.$store.commit('refreshBrick',res.bricks)
         this.$store.commit('refreshTower',res.towers)
-      })
-          //检查砖石是否已经存在
+
+        //检查砖石是否已经存在
           let check_1 = this.checkBrickExit()
           if(check_1 ==0){
             this.$store.commit('addBrick',this.addform)
@@ -217,38 +237,52 @@ export default {
               message:"你想添加的砖石已经存在啦"
             })
           }
+      })
+          
         } else {
           console.log("error submit!!");
           return false;
         }
       });
     },
-    async changeBrick(form){
-      this.$refs[form].validate(async valid => {
+    changeBrick(form){
+      this.$refs[form].validate(valid => {
         if (valid) {
 
           this.$request.getAll()
           .then((res)=>{
         this.$store.commit('refreshBrick',res.bricks)
         this.$store.commit('refreshTower',res.towers)
-      })
-          //检查砖石是否存在
+
+        //检查砖石是否存在
           let check_1 = this.checkBrickExit(this.changeform.name)
-          if(check_1==1){
-            this.$store.commit('changeBrick',this.changeform)
-            for(let i=0;i<this.Bricks.length;i++){
-        //找到砖石并修改其名字
-              if(this.Bricks[i].name == name){
-                  this.$request.changebrick(Brick[i])
-                }
-      }
-            this.changeFormVisible = false
-          }else{
+          let check_2 = this.changeform.rename==''?1:0
+          let check_3 = this.checkBrickExit(this.changeform.rename)
+          if(check_1==0){
             this.$notify.error({
               title:"错误",
               message:"你要修改的砖石不存在"
             })
+          }else if(check_2==1){         
+            this.changeform.rename = this.changeform.name
+            this.$store.commit('changeBrick',this.changeform)
+            let brick = this.getyourbrick(this.changeform.rename,this.changeform.name)
+            this.$store.commit('mergebrick',brick)
+            this.$request.changebrick(brick)
+            this.changeFormVisible = false
+          }else if(check_3==1){
+            this.$notify.error({
+              title:"错误",
+              message:"你要修改的砖石与已有砖石重复啦"
+            })
+          }else{
+            this.$store.commit('changeBrick',this.changeform)
+            let brick = this.getyourbrick(this.changeform.rename,this.changeform.name)
+            this.$request.changebrick(brick)
+            this.changeFormVisible = false
           }
+      })
+          
         } else {
           console.log("error submit!!");
           return false;
@@ -260,13 +294,6 @@ export default {
     Bricks(){
       return this.$store.state.bricks
     }
-  },
-  created(){
-    this.$request.getAll()
-      .then((res)=>{
-        this.$store.commit('refreshBrick',res.bricks)
-        this.$store.commit('refreshTower',res.towers)
-      })
   }
 };
 </script>

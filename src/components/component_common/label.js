@@ -29,6 +29,12 @@ let labels=[
             title:"其他",
         introduce:"不知道怎么分类就选了其他",
             color:"white"
+    },
+    {
+
+            title:"入门",
+        introduce:"适合入门的知识点或课程/非常简单",
+            color:"orange"
     }
 ]
 

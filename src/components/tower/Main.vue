@@ -15,7 +15,7 @@
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-      <Search></Search>
+      <Search :state="'towers'"></Search>
       <el-button class="feedback">问题反馈</el-button>
       <el-button class="rule" @click="openRule">规则</el-button>
     </div>
@@ -71,7 +71,7 @@ export default {
       rules: {
         name: [
           { required: true, message: "请输入塔的名称", trigger: "blur" },
-          { min: 2, max: 6, message: "长度在2到6个字符", trigger: "blur" }
+          { min: 2, max: 20, message: "长度在2到6个字符", trigger: "blur" }
         ],
         introduce: [
           { required: true, message: "请输入塔介绍", trigger: "blur" },
@@ -142,9 +142,10 @@ export default {
         if (item.name == name) {
           this.$store.commit("changeTowerState", name);
           this.$router.push({ path: "towerDetail" });
-          //锚点，给服务器发消息，see++
           this.$store.commit("TowerSeeadd");
           this.$store.commit("mergetower");
+          console.log('塔的关注数')
+          this.$request.seeadd(this.selectTower.name)
           break
         }
       }
@@ -166,13 +167,6 @@ export default {
     towers() {
       return this.$store.state.towers;
     }
-  },
-  created(){
-    this.$request.getAll()
-      .then((res)=>{
-        this.$store.commit('refreshBrick',res.bricks)
-        this.$store.commit('refreshTower',res.towers)
-      })
   }
 };
 </script>

@@ -3,7 +3,7 @@
     <div class="header">
       <div class="titleoftower">{{ selectTower.name }}</div>
       <div class="attention">
-        <el-button type="danger">规则</el-button>
+        <el-button type="danger" @click="openRule">规则</el-button>
         <div class="more">
           <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
@@ -17,6 +17,7 @@
                 >修改一块砖石</el-dropdown-item
               >
               <el-dropdown-item command="addFloor">添加一层</el-dropdown-item>
+              <el-dropdown-item command="changeFloor">修改层介绍</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -140,7 +141,39 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="changeFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="changeBrick('changeform')"
+        <el-button type="primary" @click="changeBrick('changeForm')"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
+    <el-dialog title="修改层的介绍" :visible.sync="changeFloorVisible">
+      <el-form :model="changeFloor" :rules="floorRules" ref="changeFloor">
+        
+        <el-form-item
+          prop="introduce"
+          label="层简介"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="changeFloor.introduce"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="index" label="层数" :label-width="formLabelWidth">
+          <el-select v-model="changeFloor.index" placeholder="请选择层数">
+            <el-option
+              v-for="i in selectTower.brickList.length"
+              :key="i"
+              :label="i"
+              :value="i"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="changeFloorVisible = false">取 消</el-button>
+        <el-button type="primary" @click="changeFloormethod('changeFloor')"
           >确 定</el-button
         >
       </div>
@@ -168,17 +201,28 @@ export default {
         label: {},
         reindex: 1
       },
+      changeFloor:{
+        introduce:'',
+        index:1
+      },
       addFormVisible: false,
       changeFormVisible: false,
+      changeFloorVisible:false,
       formLabelWidth: "120px",
+      floorRules:{
+        introduce:[
+          { required: true, message: "请输入介绍", trigger: "blur" },
+          { min: 1, max: 40, message: "长度在2到40个字符", trigger: "blur" }
+        ]
+      },
       rules: {
         name: [
           { required: true, message: "请输入砖石名称", trigger: "blur" },
-          { min: 1, max: 6, message: "长度在2到6个字符", trigger: "blur" }
+          { min: 1, max: 20, message: "长度在1到20个字符", trigger: "blur" }
         ],
         introduce: [
           { required: true, message: "请输入砖石介绍", trigger: "blur" },
-          { min: 3, max: 20, message: "长度在3到20个字符", trigger: "blur" }
+          { min: 3, max: 30, message: "长度在3到30个字符", trigger: "blur" }
         ],
         label: [{ required: true, message: "请输入砖石标签", trigger: "blur" }],
         index: [
@@ -189,7 +233,7 @@ export default {
           }
         ],
         rename: [
-          { min: 1, max: 6, message: "长度在2到6个字符", trigger: "blur" }
+          { min: 1, max: 20, message: "长度在2到20个字符", trigger: "blur" }
         ]
       }
     };
@@ -198,6 +242,18 @@ export default {
     Brick
   },
   methods: {
+    openRule() {
+      this.$alert('<div>没想好</div>', "规则", {
+        confirmButtonText: "确定",
+        dangerouslyUseHTMLString: true,
+        callback: () => {
+          this.$message({
+            type: "info",
+            message: "好好记住哦~"
+          });
+        }
+      });
+    },
     //处理三个选项
     handleCommand(command) {
       if (command == "addBrick") {
@@ -205,18 +261,38 @@ export default {
         //this.addBrick(this.addform.index,this.addform)
       } else if (command == "changeBrick") {
         this.changeFormVisible = true;
-      } else {
+      } else if(command =="changeFloor"){
+        this.changeFloorVisible =true
+      }else{
         this.addFloor();
       }
     },
-
-    //向塔中添加砖石
-    async addBrick(form) {
-      this.$refs[form].validate(async valid => {
+    changeFloormethod(form){
+        this.$refs[form].validate(async valid => {
         if (valid) {
           this.$request.getSelectTower(this.selectTower.name).then(res => {
             this.$store.commit("refreshSelectTower", res.tower);
-          });
+            let tower = this.selectTower
+            tower.brickList[this.changeFloor.index-1].introduce = this.changeFloor.introduce
+            this.changeFloorVisible = false
+            this.$store.commit('refreshTower',tower)
+            this.$store.commit('mergetower',tower)
+            tower.rename=tower.name
+            this.$request.changetower(tower)
+          })
+        }else{
+          console.log('submit error!')
+        }
+        })
+    },
+    //向塔中添加砖石
+    addBrick(form) {
+      this.$refs[form].validate(valid => {
+        if (valid) {
+          this.$request.getSelectTower(this.selectTower.name).then(res => {
+            
+          this.$store.commit("refreshSelectTower", res.tower);
+          
           //检查砖石是否已在塔中存在
           let check_1 = this.checkRepetitionOfBrickinTower(
             this.addform.name,
@@ -228,7 +304,7 @@ export default {
             this.Bricks
           );
           this.addform.index = this.addform.index;
-
+        //如果砖石不在塔中而且不在砖石堆中
           if (check_1 == 0 && check_2 == 0) {
             let poly = {
               name: this.selectTower.name,
@@ -269,6 +345,8 @@ export default {
               message: "你要加的砖石在塔中已经存在了"
             });
           }
+          });
+          
         } else {
           console.log("submit error!");
         }
@@ -290,6 +368,7 @@ export default {
       let tower = this.selectTower;
       tower.name = name;
       tower.rename = rename;
+      return tower
     },
     //更改塔中的砖石
     changeBrick(form) {
@@ -298,18 +377,21 @@ export default {
           this.$request.getAll().then(res => {
             this.$store.commit("refreshBrick", res.bricks);
             this.$store.commit("refreshTower", res.towers);
-          });
 
+
+            //检查是否在塔内
           let check_1 = this.checkRepetitionOfBrickinTower(
             this.changeForm.name,
             this.selectTower
           );
+          //检查是否修改本砖石
           let check_2 = this.changeForm.rename == "" ? 1 : 0;
+          //检查是否与其他塔内砖石重复
           let check_3 = this.checkRepetitionOfBrickinTower(
             this.changeForm.rename,
             this.selectTower
           );
-
+          //检查是否与塔外砖石重复
           let check_4 = this.checkRepetitionOfBrickinBricks(
             this.changeForm.name,
             this.Bricks
@@ -317,10 +399,12 @@ export default {
           if (check_1 == 0) {
             console.log("要修改的砖石不再塔内");
           } else if (check_2 == 1) {
+            this.changeForm.rename=this.changeForm.name
             this.$store.commit("changeBrick", this.changeForm);
             this.$store.commit("changeTowerItemName", this.changeForm);
+            this.changeFormVisible=false
             this.$request.changebrick(
-              this.getyourbrick(this.changeForm.rename, this.changeForm.name)
+            this.getyourbrick(this.changeForm.rename, this.changeForm.name)
             );
             this.$request.changetower(
               this.getyourtower(this.selectTower.name, this.selectTower.name)
@@ -328,11 +412,13 @@ export default {
           } else if (check_3 == 1) {
             console.log("要修改的名字与塔内元素重复了");
           } else if (check_4 == 1) {
+            this.changeFormVisible=false
             this.$store.commit("changeTowerItemName", this.changeForm);
             this.$request.changetower(
               this.getyourtower(this.selectTower.name, this.selectTower.name)
             );
           } else {
+            this.changeFormVisible=false
             this.$store.commit("addBrick", this.changeForm);
             this.$store.commit("addBrickToTower", this.changeForm);
             this.$request.addbrick(
@@ -345,6 +431,8 @@ export default {
               this.getyourtower(this.selectTower.name, this.selectTower.name)
             );
           }
+          });
+          
         } else {
           console.log("submit error!");
         }
@@ -353,6 +441,7 @@ export default {
     //向塔中添加一层
     addFloor() {
       this.$store.commit("addFloor", this.selectTower);
+      console.log(this.getyourtower(this.selectTower.name,this.selectTower.name))
       this.$request.changetower(this.getyourtower(this.selectTower.name,this.selectTower.name))
     },
     //检测是否塔中已有重复砖石
@@ -412,12 +501,6 @@ export default {
 
       return data;
     }
-  },
-  created() {
-    this.$request.getAll().then(res => {
-      this.$store.commit("refreshBrick", res.bricks);
-      this.$store.commit("refreshTower", res.towers);
-    });
   }
 };
 </script>

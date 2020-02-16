@@ -1,8 +1,8 @@
 const Axios = require('axios')
 
 let app =new Axios.create({
-    baseURL: 'http://localhost:7865',
-    timeout:3000,
+    baseURL: 'http://47.100.193.107:7865',
+    timeout:7000,
     headers: {'X-Custom-Header': 'stranger',
             "Content-Type":"application/json"
         }
@@ -71,6 +71,15 @@ let getSelectBrick =async function(name){
     return res.data
 }
 
+let seeadd =async function(name){
+    let res = await app.get('/api/seeadd',{
+        params:{
+            name:name
+        }
+    })
+    return res
+}
+
 let addbrickByform = async function(form){
     let brick ={
         name: form.name,
@@ -93,7 +102,7 @@ let addbrickByform = async function(form){
         front: [],
         behind: []
       }
-      addTower(brick)
+    addbrick(brick)
 }
 
 
@@ -107,7 +116,8 @@ let request={
     changetower,
     getSelectTower,
     getSelectBrick,
-    addbrickByform
+    addbrickByform,
+    seeadd
 }
 
 module.exports=request

@@ -39,7 +39,6 @@
       </div>
     </div>
     <div class="footer">
-      <Rec></Rec>
     </div>
 
     <el-dialog title="增加一块砖石" :visible.sync="addFormVisible">
@@ -157,7 +156,6 @@
 <script>
 import Search from "../component_common/search";
 import Brick from "../component_common/brick";
-import Rec from "../component_common/recommand";
 import Labels from "../component_common/label";
 export default {
   data() {
@@ -173,7 +171,7 @@ export default {
       rules: {
         name: [
           { required: true, message: "请输入砖石名称", trigger: "blur" },
-          { min: 2, max: 6, message: "长度在2到6个字符", trigger: "blur" }
+          { min: 2, max: 10, message: "长度在2到6个字符", trigger: "blur" }
         ],
         introduce: [
           { required: true, message: "请输入砖石介绍", trigger: "blur" },
@@ -187,7 +185,7 @@ export default {
       rulesofchange: {
         name: [
           { required: true, message: "请输入砖石名称", trigger: "blur" },
-          { min: 2, max: 6, message: "长度在2到6个字符", trigger: "blur" }
+          { min: 2, max: 10, message: "长度在2到6个字符", trigger: "blur" }
         ],
         rename: [
           { min: 2, max: 6, message: "长度在2到6个字符", trigger: "blur" }
@@ -218,8 +216,7 @@ export default {
   },
   components: {
     Search,
-    Brick,
-    Rec
+    Brick
   },
   methods: {
     async add(add) {
@@ -237,10 +234,10 @@ export default {
             } else {
               if (check_2 == 0) {
                 this.addconstructionAndCreateNewBrick();
-                this.addform.addFormVisible = false
+                this.addFormVisible = false
               } else {
                 this.addconstruction();
-                this.addform.addFormVisible = false
+                this.addFormVisible = false
               }
             }
           } else if (this.addform.position == "behind") {
@@ -251,10 +248,10 @@ export default {
             } else {
               if (check_2 == 0) {
                 this.addconstructionAndCreateNewBrick();
-                this.addform.addFormVisible = false
+                this.addFormVisible = false
               } else {
                 this.addconstruction();
-                this.addform.addFormVisible = false
+                this.addFormVisible = false
               }
             }
           } else {
@@ -468,13 +465,6 @@ export default {
     Bricks(){
        return this.$store.state.bricks;
     }
-  },
-  created(){
-    this.$request.getAll()
-      .then((res)=>{
-        this.$store.commit('refreshBrick',res.bricks)
-        this.$store.commit('refreshTower',res.towers)
-      })
   }
 };
 </script>

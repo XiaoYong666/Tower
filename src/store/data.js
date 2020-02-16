@@ -262,12 +262,17 @@ const store = {
     },
     //切换选择塔的状态，切换到对于名字的塔上
     changeTowerState(state, name) {
+      let res=0
       for(let item of state.towers){
         if(item.name == name){
           state.selectTower=item
-        }else{
-          console.log('在切换塔状态的时候出现意外')
+          res=1
         }
+      }
+      if(res==0){
+      
+          console.log('在切换塔状态的时候出现意外')
+        
       }
     },
     //添加砖石,默认无冲突
@@ -298,10 +303,15 @@ const store = {
 
     //向塔中添加砖石，默认塔中没有重复砖石
     addBrickToTower(state,poly){
-      for(let tower of state.towers){
+      let res=0
+      for(let tower of state.towers){                                          
         if (tower.name == poly.name){
           tower.brickList[poly.index-1].items.push(poly.brickname)
-        }else{console.log('在addBrickToTower中没找到塔的存在')}
+          res=1
+        }
+      }
+      if(res==0){
+        console.log('在addBrickToTower中没找到塔的存在')
       }
     },
 
@@ -309,12 +319,12 @@ const store = {
     addFloor(state,data){
       let name = data.name
       let floor={
-        "items":[],
-        "introduce":"第一层通常是一些非常基础的学科，有些学科甚至看似与本塔无关，但实则非常重要。"
+        items:[],
+        introduce:data.introduce
     }
-      for(let tower = 0;tower<state.towers.length;tower++){
-        if(state.towers[tower].name == name){
-          state.towers[tower].brickList.push(floor)
+      for(let i = 0;i<state.towers.length;i++){
+        if(state.towers[i].name == name){
+          state.towers[i].brickList.push(floor)
           break
         }
       }
@@ -395,9 +405,9 @@ const store = {
     //将现有状态合并到塔堆中
     mergetower(state){
       let name=state.selectTower.name
-      for(let tower=0;tower<state.towers.length;tower++){
-        if (state.towers[tower].name==name){
-          state.towers[tower] = state.selectTower
+      for(let i=0;i<state.towers.length;i++){
+        if (state.towers[i].name==name){
+          state.towers[i] = state.selectTower
         }
       }
     },
@@ -541,18 +551,6 @@ const store = {
       state.selectTower = data
     }
     
-  },
-  getters: {
-    indexBricks: state => {
-      return state.bricks.map(item => {
-        return { name: item.name };
-      });
-    },
-    indexTower: state => {
-      return state.towers.map(item => {
-        return { name: item.name };
-      });
-    }
   },
   plugins:[createVuexAlong()]
 };

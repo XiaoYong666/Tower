@@ -3,6 +3,7 @@
     <div class="header">
       <div class="title-header">{{ selectBrick.name }}</div>
       <div class="decorate"></div>
+      <el-button class="construction" @click="pushToconstruction">结构</el-button>
       <el-button class="rule" @click="openRule">规则</el-button>
       <el-button class="feedback" @click="openFeedback">问题反馈</el-button>
     </div>
@@ -221,11 +222,11 @@ export default {
       rules: {
         name: [
           { required: true, message: "请输入卡片名称", trigger: "blur" },
-          { min: 1, max: 6, message: "长度在1到6个字符", trigger: "blur" }
+          { min: 1, max: 20, message: "长度在1到20个字符", trigger: "blur" }
         ],
         introduce: [
           { required: true, message: "请输入砖石介绍", trigger: "blur" },
-          { min: 3, max: 20, message: "长度在3到20个字符", trigger: "blur" }
+          { min: 3, max: 30, message: "长度在3到30个字符", trigger: "blur" }
         ],
         label: [{ required: true, message: "请输入砖石标签", trigger: "blur" }],
         url_form:[{ required: true, message: "请输入链接", trigger: "blur" }]
@@ -233,14 +234,14 @@ export default {
       rulesofchange: {
         name: [
           { required: true, message: "请输入砖石名称", trigger: "blur" },
-          { min: 1, max: 6, message: "长度在1到6个字符", trigger: "blur" }
+          { min: 1, max: 20, message: "长度在1到20个字符", trigger: "blur" }
         ],
         rename: [
-          { min: 1, max: 6, message: "长度在1到6个字符", trigger: "blur" }
+          { min: 1, max: 20, message: "长度在1到20个字符", trigger: "blur" }
         ],
         introduce: [
           { required: true, message: "请输入砖石介绍", trigger: "blur" },
-          { min: 3, max: 20, message: "长度在3到20个字符", trigger: "blur" }
+          { min: 3, max: 30, message: "长度在3到30个字符", trigger: "blur" }
         ],
         label: [{ required: true, message: "请输入砖石标签", trigger: "blur" }],
         url_form:[{ required: true, message: "请输入链接", trigger: "blur" }]
@@ -295,7 +296,7 @@ export default {
     openFeedback() {
       window.open("https://www.wenjuan.com/s/InAZBb2/");
     },
-    async addCard(add) {
+    addCard(add) {
       this.$refs[add].validate(valid => {
         if (valid) {
           this.$request.getSelectBrick(this.selectBrick.name).then(brick => {
@@ -423,6 +424,9 @@ export default {
       } else if (command == "changeCard") {
         this.changeFormVisible = true;
       }
+    },
+    pushToconstruction(){
+      this.$router.push('construction')
     }
   },
   computed: {
@@ -432,13 +436,6 @@ export default {
     Bricks(){
       return this.$store.state.bricks;
     }
-  },
-  created(){
-    this.$request.getAll()
-      .then((res)=>{
-        this.$store.commit('refreshBrick',res.bricks)
-        this.$store.commit('refreshTower',res.towers)
-      })
   }
 };
 </script>
@@ -578,6 +575,16 @@ export default {
   right: 200px;
   color: white;
 }
+.construction {
+  background-color: #fa8c16;
+  width: 80px;
+  height: 42px;
+  border-radius: 14px;
+  position: absolute;
+  top: 20px;
+  right: 300px;
+  color: white;
+}
 
 .decorate {
   width: 100px;
@@ -615,4 +622,9 @@ a {
 .active {
   color: red;
 }
+.el-button{
+  border-width: 0px;
+  font-weight: bold;
+}
+
 </style>
