@@ -8,16 +8,35 @@ import routes from "./router/router";
 import VueRouter from "vue-router";
 import Vuex from 'vuex'
 //import mavonEditor from "mavon-editor";
-import "mavon-editor/dist/css/index.css";
-import "vis-network/dist/vis-network.min.css";
+/* import "mavon-editor/dist/css/index.css";
+import "vis-network/dist/vis-network.min.css"; */
 import storedata from "./store/data"
 import request from "./request/main"
+/* import lazyload from 'vue-lazyload' */
+import Contextmenu from "vue-contextmenujs"
+import hljs from 'highlight.js'
 
+Vue.use(Contextmenu);
+
+
+Vue.directive('highlight',function (el) {
+  let blocks = el.querySelectorAll('pre code');
+  blocks.forEach((block)=>{
+    hljs.highlightBlock(block)
+  })
+})
 
 Vue.config.productionTip = false;
 Vue.use(Element);
 Vue.use(VueRouter);
 Vue.use(Vuex)
+/* Vue.use(lazyload,{
+  preLoad:4,
+  error:'./assets/error.gif',
+  loading:'./assets/waitingg.gif',
+  attemp:3
+}) */
+
 
 
 
