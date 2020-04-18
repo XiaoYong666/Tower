@@ -12,6 +12,14 @@
             创建文章
           </button>
         </div>
+        <div class="buttonRight">
+          <button class=" addModule cancel" @click="watchingAdd">
+            关注 <small>{{watching}}</small>
+          </button>
+          <button class=" addModule cancel" @click="desVisble = true">
+            添加描述
+          </button>
+        </div>
       </div>
       <div class="contentContainer">
         <draggable
@@ -102,7 +110,7 @@
         </button>
       </div>
     </el-dialog>
-    <el-dialog title="修改文章名称" :visible.sync="changeArticleVisble">
+    <el-dialog title="修改文章描述" :visible.sync="changeArticleVisble">
       <el-form :model="changeArticleNameForm" label-position="top">
         <el-form-item label="文章名称" :label-width="formLabelWidth">
           <el-input
@@ -116,6 +124,25 @@
           取 消
         </button>
         <button class="mybutton confirm" @click="changeParaName">
+          确 定
+        </button>
+      </div>
+    </el-dialog>
+    <el-dialog title="修改砖石描述" :visible.sync="desVisble">
+      <el-form :model="description" label-position="top">
+        <el-form-item label="描述" :label-width="formLabelWidth">
+          <el-input
+          type="textarea"
+            v-model="description.des"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <button class="mybutton cancel" @click="desVisble = false">
+          取 消
+        </button>
+        <button class="mybutton confirm" @click="descriptionAdd">
           确 定
         </button>
       </div>
@@ -147,6 +174,7 @@ export default {
       addModuleVisble: false,
       addArticleVisble: false,
       changeModuleVisble: false,
+      desVisble:false,
       changeModuleNameId: "",
       changeParaNameId: "",
       changeArticleVisble: false,
@@ -164,7 +192,11 @@ export default {
         name: ""
       },
       articleDrag: true,
-      modulesDrag: true
+      modulesDrag: true,
+      watching:0,
+      description:{
+        des:""
+      }
     };
   },
   components: {
@@ -174,10 +206,12 @@ export default {
   },
 
   async mounted() {
-    let { brickData } = await request.getBrick(this.id);
-    this.title = brickData.title;
-    this.modules = brickData.modules;
+    let { res} = await request.getBrick(this.id);
+    this.title = res.title;
+    this.modules = res.modules;
     this.articleData = this.modules[this.select].content;
+    this.watching = res.watching,
+    this.description.des = res.description
   },
   methods: {
     async addModule() {
@@ -185,7 +219,6 @@ export default {
         this.moduleAddform.name,
         this.id
       );
-      console.log(brickData);
       this.modules = brickData.modules;
       if (this.modules != undefined) {
         this.$notify({
@@ -206,16 +239,14 @@ export default {
       }
     },
     async addPara() {
-      let { ok, brickData } = await request.createNewParagraph(
+      let { ok, res } = await request.createNewParagraph(
         this.articleAddForm.name,
         this.id,
         this.modules[this.select]._id,
-        "",
-        ""
       );
       if (ok == 1) {
-        this.title = brickData.title;
-        this.modules = brickData.modules;
+        this.title = res.title;
+        this.modules = res.modules;
         this.articleData = this.modules[this.select].content;
         this.addArticleVisble = false;
       } else {
@@ -371,6 +402,14 @@ export default {
         this.changeParaNameId = signal;
         this.changeArticleVisble = true;
       }
+    },
+    async watchingAdd(){
+      await request.watchingAdd(this.id)
+      this.watching+=1
+    },
+    async descriptionAdd(){
+      await request.descriptionAdd(this.id,this.description.des)
+      this.desVisble = false
     }
   }
 };
@@ -382,7 +421,7 @@ export default {
   background-image: url("https://s1.ax1x.com/2020/04/04/G0l0nP.png");
   background-attachment: fixed;
   background-repeat: no-repeat;
-  background-size: 100vw 100%;
+  background-size: 100vw auto;
 }
 
 .el-input {
@@ -427,7 +466,7 @@ export default {
 }
 .contentContainer {
   display: flex;
-  width: 100vw;
+  width: 100%;
   height: 85vh;
   flex-direction: row;
 }
@@ -468,7 +507,8 @@ export default {
 }
 .menuItemsSelect {
   
-  color: #ff4d4f;
+  color: #52c41a;
+  font-weight: bold;
 }
 
 .leftMenu::-webkit-scrollbar {
@@ -484,6 +524,14 @@ export default {
   margin-right:5vw;
   border-radius: 0 5px 5px 0;
 }
+
+.buttonRight{
+  position: absolute;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
 @media screen and (max-width: 1024px) {
   .contentContainer {
     flex-direction: column;

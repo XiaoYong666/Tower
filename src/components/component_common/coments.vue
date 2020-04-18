@@ -72,9 +72,12 @@ export default {
     }
   },
   mounted(){
-      let coment=document.getElementById(this.commentData._id)
-        coment.style.left = this.commentData.positionX+'px'
-        coment.style.top = this.commentData.positionY +'px'
+      let comment=document.getElementById(this.commentData._id)
+        //console.log("comment"+comment.toString())
+        if(comment!=null){
+          comment.style.left = this.commentData.positionX+'px'
+          comment.style.top = this.commentData.positionY +'px'
+        }
   }
 };
 </script>

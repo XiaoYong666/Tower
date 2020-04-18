@@ -171,14 +171,17 @@ export default {
       //获取本页markdown数据
       this.loadding = true;
       let res = await request.getPara(this.$route.params.id);
-      this.content = res.para.content;
-      this.articleData = res.para;
-      this.like = res.para.like;
-      this.updateTime = res.para.updateTime;
-      this.articleId = res.para._id;
+      this.content = res.res.content;
+      this.articleData = res.res;
+      this.like = res.res.like;
+      this.updateTime = res.res.updateTime;
+      this.articleId = res.res._id;
 
       let res2 = await request.getComment(this.$route.params.id);
-      this.commentData = res2;
+      console.log(res2)
+      if(res2.res != []){
+        this.commentData = res2.res;
+      }
 
       let count = document.getElementsByClassName("autosize").length;
       let items = document.getElementsByClassName("autosize");
@@ -212,9 +215,9 @@ export default {
         this.displayState = "true";
       }
     },
+    //mouseDown的行为
     async handleMouseDown(e) {
       e.preventDefault();
-      console.log("1");
       let res = await request.createComment(
         this.$route.params.id,
         this.addCommentform.type,
@@ -222,7 +225,6 @@ export default {
         e.pageX,
         e.pageY
       );
-      console.log(res);
       this.commentData.push(res);
       document.body.removeEventListener("mousedown", this.handleMouseDown);
     },
@@ -262,6 +264,7 @@ export default {
   background-image: url("https://s1.ax1x.com/2020/04/15/JCfW1x.jpg");
   background-attachment: fixed;
   background-size: 100% auto;
+  min-height: 100vh;
 
 }
 
@@ -354,6 +357,7 @@ img {
   flex-direction: column;
   width: 100%;
   position: relative;
+  min-height: 100vh;
 }
 .MathJax {
   padding: 1px;

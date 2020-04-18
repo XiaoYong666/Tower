@@ -1,116 +1,125 @@
 <template>
   <div>
-      <navbar></navbar>
-      <div class="loginPanel">
-          <form id="form" class="form">
+    <navbar></navbar>
+    <div class="loginPanel">
+      <form id="form" class="form">
         <h2>登录</h2>
         <small>若无账号则会自动创建账号</small>
         <div class="form-control">
           <label for="email">邮箱</label>
-          <input type="text" id="email" placeholder="请输入邮箱" />
+          <input type="text" id="email" placeholder="请输入邮箱" v-model="email" />
           <small>错误提示</small>
         </div>
         <div class="form-control">
           <label for="password">密码</label>
-          <input type="password" id="password" placeholder="请输入密码" />
+          <input type="password" id="password" placeholder="请输入密码" v-model="password" />
           <small>错误提示</small>
         </div>
-        <button>登录/注册</button>
+        <button @click="login">登录/注册</button>
       </form>
-      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import navbar from "../component_common/selfnavbar"
-import requestV2 from "../../request/requestV2"
-
-
-
+import navbar from "../component_common/selfnavbar";
+import request from '../../request/requestV2';
 
 export default {
-components:{
-    navbar
-},
-mounted(){
-let email = document.getElementById("email");
-let password = document.getElementById("password");
-let form = document.getElementById("form");
-
-// show input error message
-function showError(input, message) {
-  const formControl = input.parentElement;
-  formControl.className = "form-control error";
-  const small = formControl.querySelector("small");
-  small.innerText = message;
-}
-
-// show success
-function showSuccess(input) {
-  const formControl = input.parentElement;
-  formControl.className = "form-control success";
-}
-
-// check email is valid
-function checkEmail(input) {
-  const re = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+.([A-Za-z]{2,4})$/;
-  if (re.test(input.value.trim())) {
-    showSuccess(input);
-  } else {
-    showError(input, "邮箱格式错误");
-  }
-}
-
-//checkLength
-function checkLength(input, min, max) {
-  if (input.value.length < min) {
-    showError(input, `${getKeyWords(input)}至少${min}个字符`);
-  } else if (input.value.length > max) {
-    showError(input, `${getKeyWords(input)}少于${max}个字符`);
-  } else {
-    showSuccess(input);
-  }
-}
-function getKeyWords(input) {
-  return input.placeholder.slice(3);
-}
-
-// checkRequired input
-function checkRequired(inputArr) {
-  inputArr.forEach(function(input) {
-    if (input.value.trim() === "") {
-      showError(input, `${getKeyWords(input)}为必填项`);
-    } else {
-      showSuccess(input);
+  components: {
+    navbar,
+  },
+  data(){
+    return{
+      email:"",
+      password:""
     }
-  });
-}
+  },
+  mounted() {
+    let email = document.getElementById("email");
+    let password = document.getElementById("password");
+    let form = document.getElementById("form");
 
-
-form.addEventListener("submit", function(e){
-    e.preventDefault();
-    let state = false
-    checkRequired([email, password]);
-    checkLength(password, 6, 12);
-    checkEmail(email);
-    state = requestV2.getToken(email,password)
-    if(state==true){
-        this.$router.push({path:'/'})
-    }else{
-        alert('密码错误')
+    // show input error message
+    function showError(input, message) {
+      const formControl = input.parentElement;
+      formControl.className = "form-control error";
+      const small = formControl.querySelector("small");
+      small.innerText = message;
     }
 
+    // show success
+    function showSuccess(input) {
+      const formControl = input.parentElement;
+      formControl.className = "form-control success";
+    }
 
-})
+    // check email is valid
+    function checkEmail(input) {
+      const re = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+.([A-Za-z]{2,4})$/;
+      if (re.test(input.value.trim())) {
+        showSuccess(input);
+      } else {
+        showError(input, "邮箱格式错误");
+      }
+    }
 
-}
-}
+    //checkLength
+    function checkLength(input, min, max) {
+      if (input.value.length < min) {
+        showError(input, `${getKeyWords(input)}至少${min}个字符`);
+      } else if (input.value.length > max) {
+        showError(input, `${getKeyWords(input)}少于${max}个字符`);
+      } else {
+        showSuccess(input);
+      }
+    }
+    function getKeyWords(input) {
+      return input.placeholder.slice(3);
+    }
+
+    // checkRequired input
+    function checkRequired(inputArr) {
+      inputArr.forEach(function(input) {
+        if (input.value.trim() === "") {
+          showError(input, `${getKeyWords(input)}为必填项`);
+        } else {
+          showSuccess(input);
+        }
+      });
+    }
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      let state = false;
+      checkRequired([email, password]);
+      checkLength(password, 6, 12);
+      checkEmail(email);
+      state = request.getToken(email, password);
+      if (state == true) {
+        this.$router.push({ path: "/" });
+      } else {
+        alert("密码错误");
+      }
+    });
+  },
+  methods:{
+    async login(){
+      let state = request.getToken(this.email,this.password)
+      if(state){
+        localStorage.setItem('userEmail', this.email);
+        this.$router.push('/')
+
+      }
+    }
+  }
+};
 </script>
 
 <style scoped>
-.loginPanel{
-    width: 50vw;
-    margin:auto;
+.loginPanel {
+  width: 50vw;
+  margin: auto;
 }
 
 h2 {
@@ -182,10 +191,9 @@ h2 {
   width: 100%;
 }
 
-@media screen and (max-width:1024px) {
-  .loginPanel{
+@media screen and (max-width: 1024px) {
+  .loginPanel {
     width: 90%;
   }
-  
 }
 </style>

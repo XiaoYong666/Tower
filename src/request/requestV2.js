@@ -1,35 +1,38 @@
 import Axios from 'axios';
+import md5 from "md5"
 
 let app =new Axios.create({
-    //baseURL: 'http://47.100.193.107:7865',
-    baseURL: 'http://localhost:7865',
+    baseURL: 'http://47.100.193.107:7865',
+    //baseURL: 'http://localhost:7865',
     timeout:7000,
     headers: {
-            "Content-Type":"application/json"
+            "Content-Type":"application/json",
+            "Access-Control-Allow-Origin":"*"
         }
 })
 
 
-Axios.interceptors.request.use(config => {
+app.interceptors.request.use(config => {
     const token = localStorage.getItem('token');
-    config.headers.common['Authorization'] = 'Bearer ' + token;
+    /* console.log(token) */
+    config.headers.Authorization = `Bearer ${token}`;
     return config;
 })
 
-/**新建一个砖石
+/**新建一个砖石√
  * @param {String} title 砖石名称
  * @param {String} user 砖石创造者
  * @returns {Object} 接受状态和砖石的数据
  */
-let createNewBrick = async function(title,user){
+let createNewBrick = async function(title){
 
-    let {data} = await app.post('/api/createNewBrick',{title,user})
-    let {ok,brickData}=data
-    return {ok,brickData}
+    let {data} = await app.post('/danger/createNewBrick',{title})
+    let {ok,res}=data
+    return {ok,res}
 }
 
 
-/**新建一个模块
+/**新建一个模块√
  *
  *
  * @param {String} name
@@ -38,14 +41,14 @@ let createNewBrick = async function(title,user){
  */
 let createNewModule = async function(name,id){
     //{title:"",time:"这个不用，服务器自己来","user":""}
-    let {data} = await app.post('/api/createNewModule',{name,id})
+    let {data} = await app.post('/danger/createNewModule',{name,id})
     
-    return data
+    return data.res
 }
 
 
 
-/**新建一篇文章
+/**新建一篇文章√
  *
  *
  * @param {String} title
@@ -56,11 +59,11 @@ let createNewModule = async function(name,id){
  * @param {Object} creator
  * @return 
  */
-let createNewParagraph = async function(title,topicId,moduleId,content,creator){
+let createNewParagraph = async function(title,topicId,moduleId){
 
-    let {data} = await app.post('/api/createNewParagraph',{title,topicId,moduleId,content,creator})
-    let {ok,brickData}=data
-    return {ok,brickData}
+    let {data} = await app.post('/danger/createNewParagraph',{title,topicId,moduleId})
+    let {ok,res}=data
+    return {ok,res}
     //要返回文章自己的id,
 }
 
@@ -72,14 +75,14 @@ let createNewParagraph = async function(title,topicId,moduleId,content,creator){
  */
 let createWatching = async function(paragraphId){
 
-    let {data} = await app.post('/api/createWatching ',{paragraphId})
+    let {data} = await app.post('/danger/createWatching ',{paragraphId})
     let {ok}=data
     return {ok}
 }
 
 
 
-/**修改一个砖石的名字
+/**修改一个砖石的名字√
  *
  *
  * @param {*} id
@@ -88,12 +91,12 @@ let createWatching = async function(paragraphId){
  */
 let changeBrickName = async function(id,name){
     //{id:"",time:"这个不用，服务器自己来","user":"",title:""}
-    let {data} = await app.post('/api/changeBrickName',{id,name})
+    let {data} = await app.post('/danger/changeBrickName',{id,name})
     let {ok}=data
     return {ok}
 }
 
-/**修改一个模块的名字
+/**修改一个模块的名字√
  *
  *
  * @param {string} id
@@ -102,12 +105,12 @@ let changeBrickName = async function(id,name){
  */
 let changeModuleName = async function(id,moduleId,name){
     //{id:"",time:"这个不用，服务器自己来","user":"",title:""}
-    let {data} = await app.post('/api/changeModuleName',{id,moduleId,name})
+    let {data} = await app.post('/danger/changeModuleName',{id,moduleId,name})
     let {ok}=data
     return {ok}
 }
 
-/**修改模块的排序
+/**修改模块的排序√
  *
  *
  * @param {string} id
@@ -116,12 +119,12 @@ let changeModuleName = async function(id,moduleId,name){
  */
 let changeModuleSort = async function(id,modules){
     //{id:"",time:"这个不用，服务器自己来","user":"",title:""}
-    let {data} = await app.post('/api/changeModuleSort',{id,modules})
+    let {data} = await app.post('/danger/changeModuleSort',{id,modules})
     let {ok}=data
     return {ok}
 }
 
-/**修改文章的名字
+/**修改文章的名字√
  *
  *
  * @param {string} id
@@ -129,14 +132,14 @@ let changeModuleSort = async function(id,modules){
  * @returns
  */
 let changeParaName = async function(id,paraId,moduleId,name){
-    console.log({id,paraId,moduleId,name})
+    /* console.log({id,paraId,moduleId,name}) */
     //{id:"",time:"这个不用，服务器自己来","user":"",title:""}
-    let {data} = await app.post('/api/changeParaName',{id,paraId,moduleId,name})
+    let {data} = await app.post('/danger/changeParaName',{id,paraId,moduleId,name})
     let {ok}=data
     return {ok}
 }
 
-/**修改文章的排序
+/**修改文章的排序√
  *
  *
  * @param {string} id
@@ -145,12 +148,12 @@ let changeParaName = async function(id,paraId,moduleId,name){
  */
 let changeParaSort = async function(id,moduleId,content){
     //{id:"",time:"这个不用，服务器自己来","user":"",title:""}
-    let {data} = await app.post('/api/changeParaSort',{id,moduleId,content})
+    let {data} = await app.post('/danger/changeParaSort',{id,moduleId,content})
     let {ok}=data
     return {ok}
 }
 
-/**修改一篇文章内容
+/**修改一篇文章内容√
  *
  *
  * @param {string} id
@@ -159,7 +162,7 @@ let changeParaSort = async function(id,moduleId,content){
  */
 let changePara = async function(id,content){
     //{id:"",paragraph:"",time:"这个不用，服务器自己来","user":""}
-    let {data} = await app.post('/api/changePara',{id,content})
+    let {data} = await app.post('/danger/changePara',{id,content})
     let {ok} = data
     return {ok}
 }
@@ -192,9 +195,7 @@ let likePara = async function(id){
 let getPara = async function(id){
     //{id:"",paragraph:"",time:"这个不用，服务器自己来","user":""}
     let {data} = await app.get('/api/getPara',{
-        params:{
-            id
-        }
+        params:{id}
     })
     
     return data
@@ -241,9 +242,9 @@ let deleteComment = async function(bindId,id){
  * @param {*} id
  * @returns
  */
-let createComment = async function(id,type,content,positionX,positionY){
-    //{id:"",paragraph:"",time:"这个不用，服务器自己来","user":""}
-    let {data} = await app.post('/api/createComment',{id,type,content,positionX,positionY})
+let createComment = async function(bindId,type,content,positionX,positionY){
+    //{bindID:"",paragraph:"",time:"这个不用，服务器自己来","user":""}
+    let {data} = await app.post('/danger/createComment',{bindId,type,content,positionX,positionY})
     
     return data
 }
@@ -258,14 +259,15 @@ let createComment = async function(id,type,content,positionX,positionY){
  * @returns
  */
 let getBrick = async function(id){
-    //{id:"",paragraph:"",time:"这个不用，服务器自己来","user":""}
+    
     let {data} = await app.get('/api/getBrick',{
         params:{
             id
         }
     })
-    let {ok,brickData}= data
-    return {ok,brickData}
+    //console.log(data)
+    let {ok,res}= data
+    return {ok,res}
 }
 
 /**获取一个人的个人信息get
@@ -342,24 +344,65 @@ let delePara = async function(id){
  * @returns
  */
 let getToken = async function(email,password){
-    let res = await app.post('/login', {
+
+    let {data} = await app.post('/login', {
 		email: email,
-		password: password
+		password: md5(password)
 	})
-    if(res.code === '000001'){
-        localStorage.setItem('token', res.data);
-        localStorage.setItem('token_exp', new Date().getTime());
+    if(data.code == 1){
+        localStorage.setItem('token', data.token);
         return true
-    }else{
-        alert(res.msg);
+    }else if(data.code==2 || data.code==4){
+        alert(data.message);
         return false
+    }else if(data.code==3){
+        alert(data.message);
+        localStorage.setItem('token', data.token);
+        return true
     }
+}
+
+/**搜索
+ *
+ *
+ * @param {*} query
+ * @returns
+ */
+let search =async function(query){
+    let {data} = await app.get('/search',{
+        params:{
+            query
+        }
+    })
+    return data
+}
+
+let getSomeBrick =async function(){
+    let {data} = await app.get('/api/getSomeBrick')
+    return data
+}
+
+let watchingAdd =async function(id){
+    let {data} = await app.get('/api/watchingAdd',{
+        params:{
+            id
+        }
+    })
+    return data
+}
+
+let descriptionAdd =async function(id,description){
+    let {data} = await app.post('/danger/descriptionAdd',{
+id,description
+    })
+    return data
 }
 
 
 
 
 let request={
+    descriptionAdd,
     createNewBrick,
     createNewModule,
     createNewParagraph,
@@ -380,7 +423,10 @@ let request={
     getToken,
     getComment,
     deleteComment,
-    createComment
+    createComment,
+    search,
+    getSomeBrick,
+    watchingAdd
 }
 
 export default request

@@ -3,9 +3,9 @@
     <navbar></navbar>
     <div class="title">数据库</div>
     <div class="subtitle">DataBase</div>
+
     <div class="selector">
-      <div class="select" @click="getThreePara()">头条</div>
-      <div class="select" @click="getHotest()">上榜</div>
+      <div class="select" @click="getThreePara()">随便看看</div>
       <div class="select" @click="addBrickVisble=true">创建一个砖石</div>
     </div>
     <div class="dataContainer">
@@ -17,18 +17,18 @@
               </ul>
             </div> -->
       <div class="view">
-        <div class="card" v-for="item in baseData" :key="item.title">
-          <div class="smallTitle">{{ item.title }}</div>
-          <div class="content">{{ item.content }}</div>
+        <div class="card" v-for="item in baseData" :key="item._id" @click="jumpTo(item)">
+          <div class="smallTitle" >{{ item.title }}</div>
+          <div class="content">{{ item.description }}</div>
           <div class="info">
             <div class="like">
-              喜爱<span class="num">{{ item.like }}</span>
+              关注<span class="num">{{ item.watching }}</span>
             </div>
             <div class="comment">
-              评论<span class="num">{{ item.comment }}</span>
+              模块数<span class="num">{{ item.modules.length }}</span>
             </div>
             <div class="share">
-              分享<span class="num">{{ item.share }}</span>
+              浏览历史<span class="num">{{ item.seeTimes }}</span>
             </div>
           </div>
         </div>
@@ -72,17 +72,28 @@ export default {
   components: {
     navbar
   },
-
+  created(){
+    this.getSome()
+  },
   methods: {
     toBrick() {
       this.$router.push({ path: "brickviewv2" });
     },
-    getThreePara() {},
+    getThreePara() {
+      this.getSome()
+    },
     getHotest() {},
     async createBrick() {
       this.addBrickVisble = false;
-      let res = await request.createNewBrick(this.form.name,"")
-      this.$router.push(`/brickviewv2/${res.brickData._id}`)
+      let res = await request.createNewBrick(this.form.name)
+      this.$router.push(`/brickviewv2/${res.res._id}`)
+    },
+    async getSome(){
+      let res = await request.getSomeBrick()
+      this.baseData = res.res
+    },
+    jumpTo(item){
+      this.$router.push("/brickviewv2/"+item._id)
     }
   },
   data() {
@@ -109,6 +120,31 @@ export default {
 </script>
 
 <style scoped>
+
+
+.search{
+  height: 20vh;
+  width: 100%;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+.search input{
+ width:70%;
+ height: 3rem;
+ border-radius: 5px;
+ box-shadow: 1px 1px 5px 0px #f5f5f5;
+ border:0px;
+}
+.search button{
+ width:20%;
+ height: 3rem;
+ background-color:#fa541c ;
+ margin-left:10px ;
+ border-radius: 5px;
+ border: 0px;
+ color: white;
+}
 
 .el-input{
   width:100%;
@@ -217,6 +253,7 @@ button {
   margin: 10px;
   position: relative;
   background-color: white;
+  cursor: pointer;
 }
 
 .card .smallTitle {
