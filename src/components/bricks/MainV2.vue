@@ -16,7 +16,7 @@
           <button class=" addModule cancel" @click="watchingAdd">
             关注 <small>{{watching}}</small>
           </button>
-          <button class=" addModule cancel" @click="desVisble = true">
+          <button class=" addModule cancel" @click="desVisble=true">
             添加描述
           </button>
         </div>
@@ -175,9 +175,10 @@ export default {
       addArticleVisble: false,
       changeModuleVisble: false,
       desVisble:false,
+      changeArticleVisble: false,
       changeModuleNameId: "",
       changeParaNameId: "",
-      changeArticleVisble: false,
+
       formLabelWidth: "200px",
       moduleAddform: {
         name: ""
@@ -215,6 +216,7 @@ export default {
   },
   methods: {
     async addModule() {
+      this.addModuleVisble = false;
       let brickData = await request.createNewModule(
         this.moduleAddform.name,
         this.id
@@ -226,7 +228,7 @@ export default {
           message: "成功创建一个新的模块",
           type: "success"
         });
-        this.addModuleVisble = false;
+        
       } else {
         this.$notify({
           title: "失败",
@@ -239,6 +241,7 @@ export default {
       }
     },
     async addPara() {
+      this.addArticleVisble = false;
       let { ok, res } = await request.createNewParagraph(
         this.articleAddForm.name,
         this.id,
@@ -248,10 +251,9 @@ export default {
         this.title = res.title;
         this.modules = res.modules;
         this.articleData = this.modules[this.select].content;
-        this.addArticleVisble = false;
+        
       } else {
         console.log("获取砖石数据失败");
-        this.addArticleVisble = false;
       }
     },
     async sortModule() {
@@ -293,6 +295,7 @@ export default {
       }
     },
     async changeModuleName() {
+      this.changeModuleVisble = false;
       let res = await request.changeModuleName(
         this.id,
         this.changeModuleNameId,
@@ -309,17 +312,17 @@ export default {
             item.name = this.changeModuleNameForm.name;
           }
         });
-        this.changeModuleVisble = false;
+        
       } else {
         this.$notify({
           title: "失败",
           message: "更新模块名称失败",
           type: "warning"
         });
-        this.changeModuleVisble = false;
       }
     },
     async changeParaName() {
+      this.changeArticleVisble = false;
       let res = await request.changeParaName(
         this.id,
         this.changeParaNameId,
@@ -337,14 +340,13 @@ export default {
             item.name = this.changeArticleNameForm.name;
           }
         });
-        this.changeArticleVisble = false;
+        
       } else {
         this.$notify({
           title: "失败",
           message: "更新模块名称失败",
           type: "warning"
         });
-        this.changeArticleVisble = false;
       }
     },
 
@@ -394,8 +396,7 @@ export default {
     reciveSig(signal) {
       if (signal == 2) {
         this.articleDrag = false;
-      }
-      if (signal == 3) {
+      }else if (signal == 3) {
         this.sortArticle();
         this.articleDrag = true;
       } else {
@@ -408,8 +409,9 @@ export default {
       this.watching+=1
     },
     async descriptionAdd(){
-      await request.descriptionAdd(this.id,this.description.des)
       this.desVisble = false
+      await request.descriptionAdd(this.id,this.description.des)
+      
     }
   }
 };
