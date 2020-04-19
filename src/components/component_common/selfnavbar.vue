@@ -6,7 +6,7 @@
               <li><a href="/dataBase">数据库</a></li>
               <li><a href="/search">搜索</a></li>
               <li><a href="/saySomething">提建议</a></li>
-              <li><a  class="howToUse" href="/howToUse">如何使用？</a></li>
+              <li><a  class="howToUse" href="/brickviewv2/5e9b4d8828490c2f9ebf9064">如何使用？</a></li>
               <li class="login" v-if="userEmail==null"><a href="/login">登录</a></li>
               <li class="user" v-if="userEmail!=null">{{userEmail}}</li>
           </ul>
@@ -18,7 +18,15 @@
 export default {
 name:'selfnavbar',
 created(){
-    this.userEmail = localStorage.getItem('userEmail')
+    let loseToken = localStorage.getItem('loseToken')
+    let timeInterval = Math.abs(new Date()-new Date(loseToken))
+    if(timeInterval/1000/60/60/24<=6){
+        this.userEmail = localStorage.getItem('userEmail')
+    }else{
+        this.userEmail = null
+    }
+
+    
 },
 data(){
     return{

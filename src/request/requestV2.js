@@ -1,6 +1,8 @@
 import Axios from 'axios';
 import md5 from "md5"
 
+let mydate = new Date()
+
 let app =new Axios.create({
     baseURL: 'http://47.100.193.107:7865',
     //baseURL: 'http://localhost:7865',
@@ -351,6 +353,8 @@ let getToken = async function(email,password){
 	})
     if(data.code == 1){
         localStorage.setItem('token', data.token);
+        localStorage.setItem('loseToken',mydate.toLocaleDateString())
+        
         return true
     }else if(data.code==2 || data.code==4){
         alert(data.message);
@@ -358,6 +362,8 @@ let getToken = async function(email,password){
     }else if(data.code==3){
         alert(data.message);
         localStorage.setItem('token', data.token);
+        localStorage.setItem('loseToken',mydate.toLocaleDateString())
+        
         return true
     }
 }
