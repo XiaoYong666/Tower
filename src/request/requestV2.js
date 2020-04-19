@@ -4,7 +4,7 @@ import md5 from "md5"
 let mydate = new Date()
 
 let app =new Axios.create({
-    baseURL: 'http://47.100.193.107:7865',
+    baseURL: 'https://backside.liuzhengdong.top:7865',
     //baseURL: 'http://localhost:7865',
     timeout:7000,
     headers: {
