@@ -72,7 +72,9 @@ export default {
       let res = await request.getPara(this.$route.params.id)
       //console.log(res.para.content)
       this.content = res.res.content
+
     }
+    
   },
 
   computed:{

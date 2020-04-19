@@ -6,8 +6,29 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <link rel="icon" href="<%= BASE_URL %>logo.png" />
-  <link href="./font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<!--   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
+<link rel="dns-prefetch" href="//cdn.mathjax.org" /> 
+<script type="text/javascript" src="http://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
+<script type="text/x-mathjax-config">
+  if(MathJax){
+    MathJax.Hub.Config({
+      jax: ["input/TeX","output/HTML-CSS", "output/PreviewHTML"],  //输出格式配置：latex 解析为 DOM结构
+      tex2jax: {
+        inlineMath: [['$','$']],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+      },
+      "HTML-CSS": {
+        showMathMenu: true,            // 隐藏右键菜单展示
+        linebreaks: {
+          automatic: true,  //超长公式换行处理（默认是false不换行）
+          width: "80%"      //设置换行的点，默认是遇到等号=换行
+        }
+      },
+    });
+  }
+</script>
   <title>通天塔</title>
 
 </head>
@@ -23,6 +44,10 @@
 
 </html>
 <style>
+
+#articleThere p{
+  text-indent: 2rem;
+}
   html {
     margin: 0;
   }
@@ -106,10 +131,12 @@
     float: left;
     cursor: text;
   }
+p img {
+  width:auto;
+  height: 500px;
+  margin: 0 auto;
 
-  img {
-    max-width: 100%;
-  }
+}
   a {
   word-break: break-word;
 }
@@ -139,5 +166,11 @@
   .catalog{
     display: none;
   }
+  p img {
+  width:80%;
+  height: auto;
+  margin: 0 auto;
+
+}
 }
 </style>

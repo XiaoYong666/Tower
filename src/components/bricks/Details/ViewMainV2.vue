@@ -7,7 +7,7 @@
     </div> -->
     <div class="backgroundImage">
       <navbar></navbar>
-      
+
       <div class="tools">
         <div class="back button" @click="backToBrick">返回</div>
         <div class="edit button" @click="GoToEditMode">编辑</div>
@@ -19,12 +19,16 @@
           喜欢 <small>{{ like }}</small>
         </div>
       </div>
-      
-      <div class ="viewer">
-        <div id="articleThere"  v-html="convertHtml" v-highlight></div>
+
+      <div class="viewer">
+        <div
+            id="articleThere"
+            v-html="convertHtml"
+            v-highlight
+          ></div
+        >
       </div>
 
-      
       <div class="divider">- 全文完 -</div>
       <div class="updateTime">最后修改时间：{{ updateTime }}</div>
       <div class="edithistory">
@@ -85,12 +89,14 @@
 import "../../../assets/misty-light-windows.css";
 import "highlight.js/styles/atom-one-dark.css";
 import marked from "marked";
-import "mathjax/es5/tex-svg-full";
+//import "mathjax/es5/tex-svg-full"
 import navbar from "../../component_common/selfnavbar";
 import request from "../../../request/requestV2";
 import commentelement from "../../component_common/coments";
-import {catalog, getCatalog} from "vue-catalog"
+import { catalog, getCatalog } from "vue-catalog";
 /* import request from "../../../request/requestV2" */
+
+
 
 export default {
   components: {
@@ -103,22 +109,22 @@ export default {
       addCommentVisble: false,
       addCommentform: {
         content: "",
-        type: ""
+        type: "",
       },
       formLabelWidth: "200px",
       edithistory: [
         {
           name: "王宝宝",
           id: "12923912391",
-          time: "2020-10-15 9:20"
-        }
+          time: "2020-10-15 9:20",
+        },
       ],
       content: "",
       people: [
         {
           name: "",
-          id: ""
-        }
+          id: "",
+        },
       ],
       history: {
         lastTime: "",
@@ -126,7 +132,7 @@ export default {
         day: "",
         week: "",
         month: "",
-        year: ""
+        year: "",
       },
       articleData: {},
       like: 0,
@@ -137,31 +143,54 @@ export default {
       catalog: {
         levels: [], // 有层级关系的目录结构数组
         noLevels: [], // 没有层级关系的目录结构数组
-      }
+      },
+      convertHtml:''
     };
   },
   mounted() {
-    //添加聊天节点函数
-    /* document.onmousedown = function(e){
-  console.log(e.pageX)
-  let talkPoint =  document.createElement('div')
-  
-  talkPoint.classList.add('talkPoint')
-  talkPoint.style.left = e.pageX+'px'
-  talkPoint.style.top = e.pageY +'px'
-  console.log(talkPoint.style)
-  document.body.appendChild(talkPoint)
+/*     this.$nextTick().then(()=> {
+        setTimeout(()=> {
+        
+        console.log(document.getElementById('articleThere'))
+        console.log("mathjax开始加载")
+        console.log(window.MathJax)
+        
+      },3000)
+    }) */
 
-  //console.log($('.talkPoint').css({left:e.pageX,top:e.pageY}))
-} */
-    //document.getElementById("autosize").height=document.getElementById("autosize").scrollWidth*0.56+"px";
+
+let _this = this;
+setTimeout(function () {
+     if(_this.commonsVariable.isMathjaxConfig){//判断是否初始配置，若无则配置。
+            _this.commonsVariable.initMathjaxConfig();
+     }
+     _this.commonsVariable.MathQueue("articleThere");//传入组件id，让组件被MathJax渲染
+
+
+     let count = document.getElementsByClassName("autosize").length;
+      let items = document.getElementsByClassName("autosize");
+      for (let i = 0; i < count; i++) {
+        items[i].width = "80%";
+        items[i].height = items[i].scrollWidth * 0.8 + "px";
+        items[i].style.margin = "auto";
+      }
+      
+      let article = document.getElementById("articleThere");
+      console.log(article)
+      let { levels, noLevels } = getCatalog(article);
+      _this.catalog = {
+        levels,
+        noLevels,
+      };
+},500);
   },
+
   created() {
     this.fetchData();
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
-    $route: "fetchData"
+    $route: "fetchData",
   },
   methods: {
     backToBrick() {
@@ -178,28 +207,11 @@ export default {
       this.articleId = res.res._id;
 
       let res2 = await request.getComment(this.$route.params.id);
-      console.log(res2)
-      if(res2.res != []){
+      //console.log(res2);
+      if (res2.res != []) {
         this.commentData = res2.res;
       }
-
-      let count = document.getElementsByClassName("autosize").length;
-      let items = document.getElementsByClassName("autosize");
-      for (let i = 0; i < count; i++) {
-        items[i].width = "80%";
-        items[i].height = items[i].scrollWidth * 0.8 + "px";
-        items[i].style.margin = "auto";
-
-        
-
-        
-        }
-      let article = document.getElementById('articleThere')
-      let {levels, noLevels} = getCatalog(article)
-      this.catalog = {
-      levels,
-      noLevels
-    }
+      this.convertHtml = marked(this.content)
     },
     //跳转回主页
     backToMainPage() {},
@@ -218,7 +230,8 @@ export default {
     //mouseDown的行为
     async handleMouseDown(e) {
       e.preventDefault();
-      let res = await request.createComment(
+      if(e.type=="mousedown"){
+        let res = await request.createComment(
         this.$route.params.id,
         this.addCommentform.type,
         this.addCommentform.content,
@@ -226,11 +239,25 @@ export default {
         e.pageY
       );
       this.commentData.push(res);
+      }else{
+        let res = await request.createComment(
+        this.$route.params.id,
+        this.addCommentform.type,
+        this.addCommentform.content,
+        e.touches[0].pageX,
+        e.touches[0].pageY)
+        this.commentData.push(res);
+      }
+
+      
+      
       document.body.removeEventListener("mousedown", this.handleMouseDown);
+      document.body.removeEventListener("touchstart", this.handleMouseDown);
     },
     //开启评论
     async openComment() {
       document.body.addEventListener("mousedown", this.handleMouseDown);
+      document.body.addEventListener("touchstart", this.handleMouseDown);
       this.addCommentVisble = false;
       this.displayState = "true";
     },
@@ -243,33 +270,21 @@ export default {
         this.$notify({
           title: "失败",
           message: "未知原因点赞失败",
-          type: "warning"
+          type: "warning",
         });
       }
     }
-  },
-  computed: {
-    convertHtml: function() {
-      return marked(this.content);
-    }
-    
+  
   }
 };
 </script>
 
 <style scoped>
-
-
-.backgroundImage{
+.backgroundImage {
   background-image: url("https://s1.ax1x.com/2020/04/15/JCfW1x.jpg");
   background-attachment: fixed;
   background-size: 100% auto;
   min-height: 100vh;
-
-}
-
-img {
-  width: 80vw;
 }
 
 .el-divider {
@@ -302,7 +317,6 @@ img {
   display: none;
 }
 
-
 .tools .button {
   font-size: 1rem;
   border: 2px solid #e6f7ff;
@@ -317,23 +331,21 @@ img {
   color: white;
   background-color: #40a9ff;
   font-weight: 700;
-  border:2px solid #40a9ff;
+  border: 2px solid #40a9ff;
 }
 
-.catalog{
+.catalog {
   position: fixed;
   background-color: white;
-  font-size:0.7rem;
+  font-size: 0.7rem;
   border-radius: 5px;
-  right:10px;
-  top:30vh;
-  width:15%;
+  right: 10px;
+  top: 30vh;
+  width: 15%;
   min-height: 30vh;
 }
 
-
-
-#articleThere{
+#articleThere {
   width: 100%;
 }
 
@@ -344,9 +356,9 @@ img {
   width: 80%;
   background-color: white;
   border-radius: 5px;
-  padding:2rem;
-  margin-left:1rem;
-  margin-top:10px;
+  padding: 2rem;
+  margin-left: 1rem;
+  margin-top: 10px;
 }
 .viewer pre {
   border-radius: 5px;
@@ -384,17 +396,16 @@ img {
 }
 
 @media screen and (max-width: 1024px) {
-  .backgroundImage{
-  background-image: url("https://s1.ax1x.com/2020/04/15/JCfW1x.jpg");
-  background-attachment: fixed;
-  background-size: auto 100vh;
-  background-position: center;
-
-}
-.viewer{
-  width: 90%;
-  margin:0 auto
-}
+  .backgroundImage {
+    background-image: url("https://s1.ax1x.com/2020/04/15/JCfW1x.jpg");
+    background-attachment: fixed;
+    background-size: auto 100vh;
+    background-position: center;
+  }
+  .viewer {
+    width: 90%;
+    margin: 0 auto;
+  }
   /* .container {
     display: flex;
     position: relative;

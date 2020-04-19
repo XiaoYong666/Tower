@@ -15,7 +15,8 @@ import request from "./request/main"
 /* import lazyload from 'vue-lazyload' */
 import Contextmenu from "vue-contextmenujs"
 import hljs from 'highlight.js'
-
+import globalVariable from './global';
+Vue.prototype.commonsVariable = globalVariable;
 Vue.use(Contextmenu);
 
 
@@ -25,6 +26,7 @@ Vue.directive('highlight',function (el) {
     hljs.highlightBlock(block)
   })
 })
+
 
 Vue.config.productionTip = false;
 Vue.use(Element);
