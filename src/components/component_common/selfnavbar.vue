@@ -5,8 +5,8 @@
               <li><a href="/">首页</a></li>
               <li><a href="/dataBase">数据库</a></li>
               <li><a href="/search">搜索</a></li>
-              <li><a href="/saySomething">提建议</a></li>
-              <li><a  class="howToUse" href="/brickviewv2/5e9b4d8828490c2f9ebf9064">如何使用？</a></li>
+              <li><a href="/article/5ea06dbc6fa9d76d3afd0bd9">提建议</a></li>
+              <li><a  class="howToUse" href="/brick/5e9b4d8828490c2f9ebf9064">如何使用？</a></li>
               <li class="login" v-if="userEmail==null"><a href="/login">登录</a></li>
               <li class="user" v-if="userEmail!=null">{{userEmail}}</li>
           </ul>

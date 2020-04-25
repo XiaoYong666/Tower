@@ -55,7 +55,7 @@ export default {
       return false;
     },
     toDetial(){
-      this.$router.push({path:"/brickviewmainv2/"+this.articleData.article})
+      this.$router.push({path:"/article/"+this.articleData.article})
     }
   }
 

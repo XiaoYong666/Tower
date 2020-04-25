@@ -6,6 +6,7 @@ let mydate = new Date()
 let app =new Axios.create({
     baseURL: 'https://backside.liuzhengdong.top:7865',
     //baseURL: 'http://localhost:7865',
+    //baseURL: 'http://localhost:7865',
     timeout:7000,
     headers: {
             "Content-Type":"application/json",

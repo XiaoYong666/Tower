@@ -25,7 +25,7 @@
               关注<span class="num">{{ item.watching }}</span>
             </div>
             <div class="comment">
-              模块数<span class="num">{{ item.modules.length }}</span>
+              模块数<span class="num">{{ item.modules==undefined?0:item.modules.length }}</span>
             </div>
             <div class="share">
               浏览历史<span class="num">{{ item.seeTimes }}</span>
@@ -77,7 +77,7 @@ export default {
   },
   methods: {
     toBrick() {
-      this.$router.push({ path: "brickviewv2" });
+      this.$router.push({ path: "brick" });
     },
     getThreePara() {
       this.getSome()
@@ -86,14 +86,14 @@ export default {
     async createBrick() {
       this.addBrickVisble = false;
       let res = await request.createNewBrick(this.form.name)
-      this.$router.push(`/brickviewv2/${res.res._id}`)
+      this.$router.push(`/brick/${res.res._id}`)
     },
     async getSome(){
       let res = await request.getSomeBrick()
       this.baseData = res.res
     },
     jumpTo(item){
-      this.$router.push("/brickviewv2/"+item._id)
+      this.$router.push("/brick/"+item._id)
     }
   },
   data() {
@@ -101,8 +101,8 @@ export default {
       labelPosition:"top",
       baseData: [
         {
-          title: "刷机步骤",
-          content: "暂无介绍",
+          title: "站位",
+          description: "暂无介绍",
           like: 10,
           comment: 10,
           share: 10,

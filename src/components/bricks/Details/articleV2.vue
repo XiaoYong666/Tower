@@ -138,7 +138,7 @@ export default {
       like: 0,
       updateTime: "",
       commentData: [],
-      displayState: "displayFalse",
+      displayState: "true",
       articleId: "",
       catalog: {
         levels: [], // 有层级关系的目录结构数组
@@ -175,13 +175,8 @@ setTimeout(function () {
         items[i].style.margin = "auto";
       }
       
-      let article = document.getElementById("articleThere");
-      console.log(article)
-      let { levels, noLevels } = getCatalog(article);
-      _this.catalog = {
-        levels,
-        noLevels,
-      };
+
+      
 },500);
   },
 
@@ -194,7 +189,7 @@ setTimeout(function () {
   },
   methods: {
     backToBrick() {
-      this.$router.push("/brickviewv2/" + this.articleData.topicId);
+      this.$router.push("/brick/" + this.articleData.topicId);
     },
     async fetchData() {
       //获取本页markdown数据
@@ -212,6 +207,15 @@ setTimeout(function () {
         this.commentData = res2.res;
       }
       this.convertHtml = marked(this.content)
+
+      setTimeout(() => {
+        let article = document.getElementById("articleThere");
+        let { levels, noLevels } = getCatalog(article);
+        this.catalog = {
+        levels,
+        noLevels,
+      };
+      }, 500);
     },
     //跳转回主页
     backToMainPage() {},
@@ -230,16 +234,18 @@ setTimeout(function () {
     //mouseDown的行为
     async handleMouseDown(e) {
       e.preventDefault();
-      if(e.type=="mousedown"){
+      
         let res = await request.createComment(
         this.$route.params.id,
         this.addCommentform.type,
         this.addCommentform.content,
         e.pageX,
-        e.pageY
-      );
+        e.pageY)
+      
       this.commentData.push(res);
-      }else{
+
+
+      /* }else{
         let res = await request.createComment(
         this.$route.params.id,
         this.addCommentform.type,
@@ -247,17 +253,17 @@ setTimeout(function () {
         e.touches[0].pageX,
         e.touches[0].pageY)
         this.commentData.push(res);
-      }
+      } */
 
       
       
       document.body.removeEventListener("mousedown", this.handleMouseDown);
-      document.body.removeEventListener("touchstart", this.handleMouseDown);
+      //document.body.removeEventListener("touchstart", this.handleMouseDown);
     },
     //开启评论
     async openComment() {
       document.body.addEventListener("mousedown", this.handleMouseDown);
-      document.body.addEventListener("touchstart", this.handleMouseDown);
+      //document.body.addEventListener("touchstart", this.handleMouseDown);
       this.addCommentVisble = false;
       this.displayState = "true";
     },
@@ -342,7 +348,12 @@ setTimeout(function () {
   right: 10px;
   top: 30vh;
   width: 15%;
-  min-height: 30vh;
+  height: 60vh;
+  overflow: scroll;
+  text-overflow: clip;
+}
+.catalog::-webkit-scrollbar{
+  display: none;
 }
 
 #articleThere {

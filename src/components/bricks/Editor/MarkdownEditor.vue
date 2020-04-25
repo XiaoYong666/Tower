@@ -43,7 +43,7 @@ export default {
   },
   methods:{
     backtohtml(){
-      this.$router.push("/brickviewmainv2/"+this.$route.params.id)
+      this.$router.push("/article/"+this.$route.params.id)
     },
     async save(){
       let res = await request.changePara(this.$route.params.id,this.content)
@@ -54,7 +54,7 @@ export default {
           type: 'success'
         });
         setTimeout(() => {
-          this.$router.push("/brickviewmainv2/"+this.$route.params.id)
+          this.$router.push("/article/"+this.$route.params.id)
         }, 3000);
       }else{
         this.$notify({
@@ -63,7 +63,7 @@ export default {
           type: 'warning'
         });
         setTimeout(() => {
-          this.$router.push("/brickviewmainv2/"+this.$route.params.id)
+          this.$router.push("/article/"+this.$route.params.id)
         }, 3000);
       }
     },

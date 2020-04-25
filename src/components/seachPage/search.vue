@@ -13,6 +13,7 @@
         v-for="item in searchRes"
         :key="item._id"
         class="itemContainer"
+        @click="jumpTo(item)"
       >
       <div class="title">{{item.title}}</div>
       <div class="description">{{item.description}}</div>
@@ -21,7 +22,7 @@
               关注<span class="num">{{ item.watching }}</span>
             </div>
             <div class="comment">
-              模块数<span class="num">{{ item.modules.length }}</span>
+              模块数<span class="num">{{ item.modules==undefined?0:item.modules.length }}</span>
             </div>
             <div class="share">
               观看历史<span class="num">{{ item.seeTimes }}</span>
@@ -42,7 +43,7 @@ export default {
   },
   data() {
     return {
-        query:'',
+      query:'',
       searchRes: [],
     };
   },
@@ -50,7 +51,9 @@ export default {
       async search(){
         let res =await request.search(this.query)
         this.searchRes = res.res
-        console.log(res.res)
+      },
+      jumpTo(item){
+        this.$router.push('/brick/'+item._id)
       }
   }
 };
@@ -132,7 +135,8 @@ export default {
     width: 90%;
     margin:0 auto;
     height: 10rem;
-    position:relative
+    position:relative;
+    cursor: pointer;
 }
 .itemContainer .title{
     position:absolute;
