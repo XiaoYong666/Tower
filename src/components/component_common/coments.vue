@@ -74,18 +74,41 @@ export default {
   mounted(){
       let comment=document.getElementById(this.commentData._id)
         //console.log("comment"+comment.toString())
+        let container = document.getElementById('commentContainer')
+        comment.style.position="absolute"
         if(comment!=null){
-          comment.style.left = this.commentData.positionX+'px'
-          comment.style.top = this.commentData.positionY +'px'
+            comment.style.left = Math.floor(this.commentData.positionX*container.clientWidth)+'px'
+            comment.style.top = Math.floor(this.commentData.positionY*container.clientHeight) +'px'
+            console.log(container.clientHeight)
         }
   }
 };
 </script>
 
 <style scoped>
+
+@keyframes fadeIn {
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 0;
+    display: none;
+  }
+}
+
 .displayFalse{
     display: none;
-    opacity: 0%;
+    opacity: 0;
 }
 
 .circle {
@@ -93,25 +116,30 @@ export default {
   height: 12px;
   border-radius: 6px;
   position: absolute;
-  transition: width height border-radius 1s;
+  transition: all 0.75s;
+  background-color:#ffadd2;
+  box-shadow:1px 1px 3px 0px #fff0f6;
+  cursor: pointer;
+  opacity: 0;
+  animation: fadeIn 1s ease-in 0.5s 1 normal forwards;
 }
 
 .circle:hover {
-    width: 16px;
-    height: 16px;
-    border-radius: 8px;
+  transform:scale(1.5,1.5);
+    border-radius: 10px;
+    
 }
 .red {
   background-color: #f5222d;
-  box-shadow:1px 1px 3px 0px #f5222d73;
+  box-shadow:1px 1px 3px 0px #f5222da2;
 }
 .orange {
   background-color: #fa8c16;
-  box-shadow:1px 1px 3px 0px #fa8c167a;
+  box-shadow:1px 1px 3px 0px #fa8c16a1;
 }
 .blue {
   background-color: #1890ff;
-    background-color: #188fff75;
+    background-color: #188fffa1;
 
 }
 </style>

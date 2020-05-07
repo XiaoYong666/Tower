@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <navbar></navbar>
+    
     <!-- <nav>
       <ul>
         <li><a href="/HomeV2">首页</a></li>
@@ -30,12 +30,8 @@
 </template>
 
 <script>
-import navbar from './component_common/selfnavbar.vue'
 
 export default {
-  components:{
-    navbar
-  }
 };
 </script>
 
@@ -44,6 +40,7 @@ export default {
 
 .main{
     width:50vw;
+    height: 50vh;
 }
 .container{
     display:flex;
@@ -51,12 +48,13 @@ export default {
     flex-direction: row;
     flex-flow: wrap;
     justify-content: center;
+    align-items: center;
     height: 100vh;
-    background-image: url("https://s1.ax1x.com/2020/04/15/JC4kIH.jpg");
+    /* background-image: url("https://s1.ax1x.com/2020/04/15/JC4kIH.jpg"); */
     background-attachment: fixed;
     background-size: 100vw auto;
     background-repeat: no-repeat;
-    width: 100vw;
+    width: 100%;
 
 }
 /* nav {

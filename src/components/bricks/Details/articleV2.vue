@@ -6,8 +6,6 @@
       <el-button class="editButton" icon="el-icon-edit" circle></el-button>
     </div> -->
     <div class="backgroundImage">
-      <navbar></navbar>
-
       <div class="tools">
         <div class="back button" @click="backToBrick">返回</div>
         <div class="edit button" @click="GoToEditMode">编辑</div>
@@ -20,13 +18,15 @@
         </div>
       </div>
 
-      <div class="viewer">
-        <div
-            id="articleThere"
-            v-html="convertHtml"
-            v-highlight
-          ></div
-        >
+      <div class="viewer" id="commentContainer">
+        <div id="articleThere" v-html="convertHtml" v-highlight></div>
+        <commentelement
+          v-for="item in commentData"
+          :key="item._id"
+          :commentData="item"
+          :articleId="articleId"
+          :displayState="displayState"
+        ></commentelement>
       </div>
 
       <div class="divider">- 全文完 -</div>
@@ -49,13 +49,7 @@
       <div class="people">
         <div class="peopleBox"></div>
       </div>
-      <commentelement
-        v-for="item in commentData"
-        :key="item._id"
-        :commentData="item"
-        :articleId="articleId"
-        :displayState="displayState"
-      ></commentelement>
+
       <el-dialog title="添加评论" :visible.sync="addCommentVisble">
         <el-form :model="addCommentform" label-position="top">
           <el-form-item label="评论内容" :label-width="formLabelWidth">
@@ -90,17 +84,14 @@ import "../../../assets/misty-light-windows.css";
 import "highlight.js/styles/atom-one-dark.css";
 import marked from "marked";
 //import "mathjax/es5/tex-svg-full"
-import navbar from "../../component_common/selfnavbar";
+//import navbar from "../../component_common/selfnavbar";
 import request from "../../../request/requestV2";
 import commentelement from "../../component_common/coments";
 import { catalog, getCatalog } from "vue-catalog";
 /* import request from "../../../request/requestV2" */
 
-
-
 export default {
   components: {
-    navbar,
     commentelement,
     catalog,
   },
@@ -138,17 +129,17 @@ export default {
       like: 0,
       updateTime: "",
       commentData: [],
+      commentDataWhile:[],
       displayState: "true",
       articleId: "",
       catalog: {
         levels: [], // 有层级关系的目录结构数组
         noLevels: [], // 没有层级关系的目录结构数组
       },
-      convertHtml:''
     };
   },
   mounted() {
-/*     this.$nextTick().then(()=> {
+    /*     this.$nextTick().then(()=> {
         setTimeout(()=> {
         
         console.log(document.getElementById('articleThere'))
@@ -158,26 +149,14 @@ export default {
       },3000)
     }) */
 
+    //let _this = this;
+    //setTimeout(function() {}, 1000);
 
-let _this = this;
-setTimeout(function () {
-     if(_this.commonsVariable.isMathjaxConfig){//判断是否初始配置，若无则配置。
-            _this.commonsVariable.initMathjaxConfig();
-     }
-     _this.commonsVariable.MathQueue("articleThere");//传入组件id，让组件被MathJax渲染
+    //setTimeout(async () => {}, 500);
 
+    //console.log(res2);
 
-     let count = document.getElementsByClassName("autosize").length;
-      let items = document.getElementsByClassName("autosize");
-      for (let i = 0; i < count; i++) {
-        items[i].width = "80%";
-        items[i].height = items[i].scrollWidth * 0.8 + "px";
-        items[i].style.margin = "auto";
-      }
-      
-
-      
-},500);
+    window.onresize = this.autoresize;
   },
 
   created() {
@@ -186,6 +165,38 @@ setTimeout(function () {
   watch: {
     // 如果路由有变化，会再次执行该方法
     $route: "fetchData",
+    content: function() {
+      let _this = this;
+      
+      this.$nextTick(() => {//渲染后加载
+        let article = document.getElementById("articleThere");
+        let { levels, noLevels } = getCatalog(article);
+        _this.catalog = {
+          levels,
+          noLevels,
+        };
+        if (_this.commonsVariable.isMathjaxConfig) {
+          //判断是否初始配置，若无则配置。
+          _this.commonsVariable.initMathjaxConfig();
+        }
+        _this.commonsVariable.MathQueue("articleThere"); //传入组件id，让组件被MathJax渲染
+        _this.autoresize();
+
+        setTimeout(() => {
+          request.getComment(_this.$route.params.id).then((res) => {
+          if (res.res != []) {
+            _this.commentData = res.res;
+          }
+        });
+        }, 3000);
+        
+      });
+    },
+  },
+  computed: {
+    convertHtml() {
+      return marked(this.content);
+    },
   },
   methods: {
     backToBrick() {
@@ -200,22 +211,6 @@ setTimeout(function () {
       this.like = res.res.like;
       this.updateTime = res.res.updateTime;
       this.articleId = res.res._id;
-
-      let res2 = await request.getComment(this.$route.params.id);
-      //console.log(res2);
-      if (res2.res != []) {
-        this.commentData = res2.res;
-      }
-      this.convertHtml = marked(this.content)
-
-      setTimeout(() => {
-        let article = document.getElementById("articleThere");
-        let { levels, noLevels } = getCatalog(article);
-        this.catalog = {
-        levels,
-        noLevels,
-      };
-      }, 500);
     },
     //跳转回主页
     backToMainPage() {},
@@ -234,16 +229,24 @@ setTimeout(function () {
     //mouseDown的行为
     async handleMouseDown(e) {
       e.preventDefault();
-      
-        let res = await request.createComment(
+      let commentContainer = document.getElementById("commentContainer");
+
+      let xpos =
+        (e.pageX - commentContainer.offsetLeft + 1) /
+        commentContainer.clientWidth;
+      let ypos =
+        (e.pageY - commentContainer.offsetTop - 59) /
+        commentContainer.clientHeight;
+      //console.log(e.pageY-commentContainer.offsetTop-60)
+      let res = await request.createComment(
         this.$route.params.id,
         this.addCommentform.type,
         this.addCommentform.content,
-        e.pageX,
-        e.pageY)
-      
-      this.commentData.push(res);
+        xpos,
+        ypos
+      );
 
+      this.commentData.push(res);
 
       /* }else{
         let res = await request.createComment(
@@ -255,9 +258,9 @@ setTimeout(function () {
         this.commentData.push(res);
       } */
 
-      
-      
-      document.body.removeEventListener("mousedown", this.handleMouseDown);
+      document
+        .getElementById("commentContainer")
+        .removeEventListener("mousedown", this.handleMouseDown);
       //document.body.removeEventListener("touchstart", this.handleMouseDown);
     },
     //开启评论
@@ -279,15 +282,24 @@ setTimeout(function () {
           type: "warning",
         });
       }
-    }
-  
-  }
+    },
+    //调整autosize标签的宽高
+    autoresize() {
+      let count = document.getElementsByClassName("autosize").length;
+      let items = document.getElementsByClassName("autosize");
+      for (let i = 0; i < count; i++) {
+        items[i].width = "80%";
+        items[i].height = items[i].scrollWidth * 0.8 + "px";
+        items[i].style.margin = "auto";
+      }
+    },
+  },
 };
 </script>
 
 <style scoped>
 .backgroundImage {
-  background-image: url("https://s1.ax1x.com/2020/04/15/JCfW1x.jpg");
+  /* background-image: url("https://s1.ax1x.com/2020/04/15/JCfW1x.jpg"); */
   background-attachment: fixed;
   background-size: 100% auto;
   min-height: 100vh;
@@ -346,13 +358,14 @@ setTimeout(function () {
   font-size: 0.7rem;
   border-radius: 5px;
   right: 10px;
-  top: 30vh;
+  top: 198px;
   width: 15%;
   height: 60vh;
   overflow: scroll;
   text-overflow: clip;
+  transition: position 1s ease-in-out;
 }
-.catalog::-webkit-scrollbar{
+.catalog::-webkit-scrollbar {
   display: none;
 }
 
@@ -370,6 +383,7 @@ setTimeout(function () {
   padding: 2rem;
   margin-left: 1rem;
   margin-top: 10px;
+  position: relative;
 }
 .viewer pre {
   border-radius: 5px;
@@ -408,7 +422,7 @@ setTimeout(function () {
 
 @media screen and (max-width: 1024px) {
   .backgroundImage {
-    background-image: url("https://s1.ax1x.com/2020/04/15/JCfW1x.jpg");
+    /* background-image: url("https://s1.ax1x.com/2020/04/15/JCfW1x.jpg"); */
     background-attachment: fixed;
     background-size: auto 100vh;
     background-position: center;
@@ -416,7 +430,9 @@ setTimeout(function () {
   .viewer {
     width: 90%;
     margin: 0 auto;
+    padding: 0.7rem;
   }
+
   /* .container {
     display: flex;
     position: relative;

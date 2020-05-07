@@ -1,6 +1,6 @@
 <template>
   <div class="backgroundImage">
-    <navself></navself>
+
     <div class="searchBar">
       <div class="searchTitle">Search</div>
       <div class="searchContent">
@@ -34,13 +34,10 @@
 </template>
 
 <script>
-import navself from "../component_common/selfnavbar";
+//import navself from "../component_common/selfnavbar";
 import request from '../../request/requestV2';
 
 export default {
-  components: {
-    navself,
-  },
   data() {
     return {
       query:'',
@@ -76,7 +73,7 @@ export default {
   border-bottom: 1px solid rgba(114, 113, 113, 0.123);
 }
 .backgroundImage {
-  background-image: url("https://s1.ax1x.com/2020/04/15/JC4kIH.jpg");
+  /* background-image: url("https://s1.ax1x.com/2020/04/15/JC4kIH.jpg"); */
   background-attachment: fixed;
   background-size: 100% auto;
   background-repeat: no-repeat;

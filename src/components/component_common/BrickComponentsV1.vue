@@ -19,6 +19,13 @@ export default {
       this.$contextmenu({
         items: [
           {
+            label: "创建文章",
+            icon: "el-icon-plus",
+            onClick: () => {
+              this.$emit('func',4)
+            }
+          },
+          {
             label: "重命名",
             icon: "el-icon-edit",
             onClick: () => {
@@ -33,13 +40,13 @@ export default {
             }
             },
           { label: "开启排序",
-          icon: "el-icon-delete",
+          icon: "el-icon-check",
           onClick: () => {
               this.$emit('func',2)
             }
           },
           { label: "关闭排序",
-          icon: "el-icon-delete",
+          icon: "el-icon-close",
           onClick: () => {
               this.$emit('func',3)
             }
@@ -65,22 +72,33 @@ export default {
 <style scoped>
 .container{
   width:70vw;
-  box-shadow: 2px 2px 6px 0px #bfbfbf;
   border-radius: 3px;
-  
+  background-color: white;
   height: 3rem;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   box-sizing: border-box;
   cursor: pointer;
-  margin:0 auto;
   margin-top:1rem;
+  transition: transform 0.5s;
+  box-shadow: 1px 1px 2px 0px rgba(250, 165, 133, 0.541);
+}
+
+.container:hover{
+  transform:translateX(-10px);
 }
 .name{
   margin-left:3rem;
   font-weight: bold;
   font-size: 1.1rem;
+}
+
+@media screen and (max-width:1024px) {
+  .container{
+    margin:0.5rem auto;
+  }
+  
 }
 
 </style>

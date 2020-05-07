@@ -1,6 +1,5 @@
 <template>
   <div>
-    <navbar></navbar>
     <div class="loginPanel">
       <form id="form" class="form">
         <h2>登录</h2>
@@ -22,13 +21,10 @@
 </template>
 
 <script>
-import navbar from "../component_common/selfnavbar";
+//import navbar from "../component_common/selfnavbar";
 import request from '../../request/requestV2';
 
 export default {
-  components: {
-    navbar,
-  },
   data(){
     return{
       email:"",
@@ -89,27 +85,31 @@ export default {
       });
     }
 
-    form.addEventListener("submit", function(e) {
+    form.addEventListener("submit",async function(e) {
       e.preventDefault();
-      let state = false;
       checkRequired([email, password]);
       checkLength(password, 6, 12);
       checkEmail(email);
-      state = request.getToken(email, password);
-      if (state == true) {
-        this.$router.push({ path: "/" });
-      } else {
-        alert("密码错误");
-      }
     });
   },
   methods:{
     async login(){
-      let state = request.getToken(this.email,this.password)
-      if(state){
+      let data =await request.getToken(this.email,this.password)
+      if(data){
+        if (data.code == 1) {
+        alert("登录成功");
         localStorage.setItem('userEmail', this.email);
-        this.$router.push('/')
+        this.$router.go(-1)
+        this.$store.commit('changeLoginState')
+      } else if(data.code == 3){
+        alert("注册成功");
+        localStorage.setItem('userEmail', this.email);
+        this.$router.go(-1)
+        this.$store.commit('changeLoginState')
+      }else{
+        alert("密码错误");
 
+      }
       }
     }
   }
@@ -119,7 +119,9 @@ export default {
 <style scoped>
 .loginPanel {
   width: 50vw;
-  margin: auto;
+  margin:2rem auto;
+  background-color:white;
+  border-radius: 5px;
 }
 
 h2 {
@@ -180,10 +182,10 @@ h2 {
 
 .form button {
   cursor: pointer;
-  background-color: black;
-  border: 2px solid black;
+  background-color: #E7693F;
   border-radius: 4px;
-  color: #fff;
+  border:none;
+  color: white;
   display: block;
   font-size: 16px;
   padding: 10px;

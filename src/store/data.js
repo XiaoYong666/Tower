@@ -244,9 +244,14 @@ const store = {
           "introduce": "数学是通向世界真理的必经之路。"
       }]
       
-  }
+  },
+  loginState:false
   },
   mutations: {
+    changeLoginState(state){
+      state.loginState  = true
+    },
+
     //切换砖石的状态,切换到对应名字的砖石上
     changeBrickState(state, name) {
       let result=0
@@ -553,6 +558,7 @@ const store = {
     
   },
   plugins:[createVuexAlong()]
+  /* plugins:[createVuexAlong()] */
 };
 
 export default store;

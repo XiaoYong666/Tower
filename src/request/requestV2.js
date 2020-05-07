@@ -355,17 +355,14 @@ let getToken = async function(email,password){
     if(data.code == 1){
         localStorage.setItem('token', data.token);
         localStorage.setItem('loseToken',mydate.toLocaleDateString())
-        
-        return true
+        return data
     }else if(data.code==2 || data.code==4){
-        alert(data.message);
-        return false
+        return data
     }else if(data.code==3){
-        alert(data.message);
         localStorage.setItem('token', data.token);
         localStorage.setItem('loseToken',mydate.toLocaleDateString())
         
-        return true
+        return data
     }
 }
 

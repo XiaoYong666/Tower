@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <navbar></navbar>
     <div class="title">数据库</div>
     <div class="subtitle">DataBase</div>
 
@@ -64,14 +63,11 @@
 </template>
 
 <script>
-import navbar from "../component_common/selfnavbar";
+//import navbar from "../component_common/selfnavbar";
 import request from "../../request/requestV2"
 
 
 export default {
-  components: {
-    navbar
-  },
   created(){
     this.getSome()
   },
@@ -156,7 +152,7 @@ export default {
 }
 
 .container{
-  background-image: url("https://s1.ax1x.com/2020/04/15/JC4kIH.jpg");
+  background:transparent;
     background-attachment: fixed;
     background-size: 100% auto;
     background-repeat: no-repeat;
@@ -185,13 +181,11 @@ export default {
   height: 2rem;
   background-color: white;
   line-height: 2rem;
-  
   transition: border 0.5s;
 }
 .select:hover {
   font-weight: 700;
-  font-size: 1.1rem;
-  border:1px solid #5cdbd3;
+  border:2px solid #fa8c16;
 }
 
 .title {
@@ -238,6 +232,7 @@ button {
   margin:3rem auto;
   border-radius: 5px;
   min-height: 90vh;
+  padding:3rem;
 }
 .view::-webkit-scrollbar {
   display: none;
@@ -248,12 +243,13 @@ button {
 .card {
   width: 25%;
   height: 30vh;
+  margin: 0 2rem;
   border-radius: 2px;
-  box-shadow: 2px 2px 6px 0px #f5f5f5;
-  margin: 10px;
+  box-shadow: 2px 2px 6px 0px #bebebe75;
   position: relative;
   background-color: white;
   cursor: pointer;
+  border-radius: 5px;
 }
 
 .card .smallTitle {
@@ -355,7 +351,7 @@ button {
   height: 30vh;
   border-radius: 2px;
   box-shadow: 2px 2px 6px 0px #f5f5f5;
-  margin: 10px;
+  margin:0 auto;
   position: relative;
 }
 

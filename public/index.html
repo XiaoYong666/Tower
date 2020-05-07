@@ -5,13 +5,13 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <link rel="icon" href="<%= BASE_URL %>logo.png" />
+  <link rel="icon" href="/logo2.ico" />
 <!--   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
 <link rel="dns-prefetch" href="//cdn.mathjax.org" /> 
 <script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <script type="text/x-mathjax-config">
-  if(MathJax){
+    if(MathJax){
     MathJax.Hub.Config({
       jax: ["input/TeX","output/HTML-CSS", "output/PreviewHTML"],  //输出格式配置：latex 解析为 DOM结构
       tex2jax: {
@@ -26,7 +26,7 @@
         }
       },
     });
-  }
+  }  
 </script>
   <title>通天塔</title>
 
@@ -44,9 +44,6 @@
 </html>
 <style>
 
-#articleThere p{
-  text-indent: 2rem;
-}
   html {
     margin: 0;
   }
@@ -130,12 +127,7 @@
     float: left;
     cursor: text;
   }
-p img {
-  max-width:70%;
-  height: auto;
-  margin: 0 auto;
 
-}
   a {
   word-break: break-word;
 }
@@ -154,8 +146,14 @@ p img {
 
 
 .catalog-item-cur{
-  color:#73d13d;
+  color:#fa541c;
   font-weight: bold;
+}
+
+p img {
+  max-width:100%;
+  max-height: 500px;
+  
 }
 
 @media screen and (max-width:1024px) {
@@ -166,8 +164,8 @@ p img {
     display: none;
   }
   p img {
-  width:80%;
-  height: auto;
+  max-width:100%;
+  max-height: 400px;
   margin: 0 auto;
 
 }
