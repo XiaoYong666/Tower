@@ -9,6 +9,7 @@ import BrickEditor from "../components/bricks/Editor/MarkdownEditor";
 import article from "../components/bricks/Details/articleV2.vue";
 import HomeV2 from "../components/HomeMainV2.vue";
 import brick from "../components/bricks/brickV2.vue";
+import brickv3 from "../components/bricks/brickV3.vue";
 import dataBase from "../components/dataView/dataViewMain"
 import selfnavbar from "../components/component_common/selfnavbar.vue"
 import login from "../components/login/login.vue"
@@ -18,6 +19,7 @@ const routes = [
   { path: "*", component: HomeV2 },
   { path: "/", component: HomeV2 },
   { path: "/brick/:id", component: brick,props:true },
+  { path: "/brickv3", component: brickv3,props:true },
 //  { path: "/brick/:id", component: brick,props:true },
 //  { path: "/brickDetails", component: bricksDetails },
 //  { path: "/construction", component: construction },

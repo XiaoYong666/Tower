@@ -66,6 +66,7 @@ computed:{
     overflow-x:scroll;
     overflow-y:hidden;
     background-color: white;
+    text-align: center;
 }
 .nav::-webkit-scrollbar{
     display: none;

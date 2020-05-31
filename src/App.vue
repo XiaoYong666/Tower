@@ -33,11 +33,11 @@ export default {
 
 <style>
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  /* font-family: "Avenir", Helvetica, Arial, sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+  /* text-align: center; */
+  /* background-image: linear-gradient(120deg, #f6d365 0%, #fda085 100%); */
   min-height: 100%;
 }
 .beianInfo {

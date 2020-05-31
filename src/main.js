@@ -7,6 +7,7 @@ import Axios from "axios";
 import routes from "./router/router";
 import VueRouter from "vue-router";
 import Vuex from 'vuex'
+import less from 'less'
 //import mavonEditor from "mavon-editor";
 /* import "mavon-editor/dist/css/index.css";
 import "vis-network/dist/vis-network.min.css"; */
@@ -16,8 +17,14 @@ import request from "./request/main"
 import Contextmenu from "vue-contextmenujs"
 import hljs from 'highlight.js'
 import globalVariable from './global';
+import VueNestable from 'vue-nestable'
+//import sass from 'sass'
+
 Vue.prototype.commonsVariable = globalVariable;
 Vue.use(Contextmenu);
+Vue.use(less)
+//Vue.use(sass)
+Vue.use(VueNestable)
 
 
 Vue.directive('highlight',function (el) {

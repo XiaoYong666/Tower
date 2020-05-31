@@ -80,8 +80,8 @@
 </template>
 
 <script>
-import "../../../assets/misty-light-windows.css";
-import "highlight.js/styles/atom-one-dark.css";
+
+//import "highlight.js/styles/atom-one-dark.css";
 import marked from "marked";
 //import "mathjax/es5/tex-svg-full"
 //import navbar from "../../component_common/selfnavbar";
@@ -258,14 +258,13 @@ export default {
         this.commentData.push(res);
       } */
 
-      document
-        .getElementById("commentContainer")
-        .removeEventListener("mousedown", this.handleMouseDown);
+      commentContainer.removeEventListener("mousedown", this.handleMouseDown);
       //document.body.removeEventListener("touchstart", this.handleMouseDown);
     },
     //开启评论
     async openComment() {
-      document.body.addEventListener("mousedown", this.handleMouseDown);
+      let commentContainer =  document.getElementById("commentContainer")
+      commentContainer.addEventListener("mousedown", this.handleMouseDown);
       //document.body.addEventListener("touchstart", this.handleMouseDown);
       this.addCommentVisble = false;
       this.displayState = "true";

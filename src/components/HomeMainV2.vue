@@ -55,7 +55,8 @@ export default {
     background-size: 100vw auto;
     background-repeat: no-repeat;
     width: 100%;
-
+    text-align: center;
+   /*  font-family: sans-serif; */
 }
 /* nav {
   position: absolute;
@@ -100,7 +101,7 @@ nav ul li:hover{
   font-weight: bold;
   animation: twinkling 1s ease-in-out 1;
   animation-fill-mode: backwards;
-  color:white;
+  /* color:white; */
   
 }
 .subtitle {
@@ -109,13 +110,13 @@ nav ul li:hover{
   font-weight: bold;
   animation: twinkling 1s ease-in-out 0.7s 1;
   animation-fill-mode: backwards;
-  color:white;
+  /* color:white; */
 }
 .introduce {
   font-size: 0.8rem;
   animation: twinkling 1s ease-in-out 1s 1;
   animation-fill-mode: backwards;
-  color:white;
+  /* color:white; */
 }
 .introduceEnglish {
   font-size: 0.8rem;
@@ -123,7 +124,7 @@ nav ul li:hover{
   margin:1rem auto;
   animation: twinkling 1s ease-in-out 1s 1;
   animation-fill-mode: backwards;
-  color:white;
+  /* color:white; */
   
 }
 .author{
