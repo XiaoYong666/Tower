@@ -1,9 +1,9 @@
 <template>
-  <div>
+  
     <div class="loginPanel">
       <form id="form" class="form">
         <h2>登录</h2>
-        <small>若无账号则会自动创建账号</small>
+        <h4 style="text-align:center">若无账号则会自动创建账号</h4>
         <div class="form-control">
           <label for="email">邮箱</label>
           <input type="text" id="email" placeholder="请输入邮箱" v-model="email" />
@@ -17,7 +17,6 @@
         <button @click="login">登录/注册</button>
       </form>
     </div>
-  </div>
 </template>
 
 <script>
@@ -95,20 +94,22 @@ export default {
   methods:{
     async login(){
       let data =await request.getToken(this.email,this.password)
+      console.log(data)
       if(data){
         if (data.code == 1) {
         alert("登录成功");
         localStorage.setItem('userEmail', this.email);
+        localStorage.setItem('loginState', true);
         this.$router.go(-1)
-        this.$store.commit('changeLoginState')
+        
       } else if(data.code == 3){
         alert("注册成功");
         localStorage.setItem('userEmail', this.email);
+        localStorage.setItem('loginState', true);
         this.$router.go(-1)
-        this.$store.commit('changeLoginState')
+        
       }else{
         alert("密码错误");
-
       }
       }
     }
@@ -118,7 +119,8 @@ export default {
 
 <style scoped>
 .loginPanel {
-  width: 50vw;
+  width: 40%;
+  height:520px;
   margin:2rem auto;
   background-color:white;
   border-radius: 5px;
@@ -182,7 +184,7 @@ h2 {
 
 .form button {
   cursor: pointer;
-  background-color: #E7693F;
+  background-color: #69c0ff;
   border-radius: 4px;
   border:none;
   color: white;
@@ -190,7 +192,8 @@ h2 {
   font-size: 16px;
   padding: 10px;
   margin-top: 20px;
-  width: 100%;
+  width: 70%;
+  margin:10px auto;
 }
 
 @media screen and (max-width: 1024px) {

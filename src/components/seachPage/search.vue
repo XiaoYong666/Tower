@@ -2,7 +2,6 @@
   <div class="backgroundImage">
 
     <div class="searchBar">
-      <div class="searchTitle">Search</div>
       <div class="searchContent">
         <input type="text" v-model="query" id="search" placeholder="搜索砖石" />
         <button class="searchButton" @click="search">搜索</button>
@@ -73,31 +72,35 @@ export default {
   border-bottom: 1px solid rgba(114, 113, 113, 0.123);
 }
 .backgroundImage {
-  /* background-image: url("https://s1.ax1x.com/2020/04/15/JC4kIH.jpg"); */
+  /* background-image: url("https://s1.ax1x.com/2020/04/15/JC4kIH.jpg"); */ 
   background-attachment: fixed;
-  background-size: 100% auto;
+  background-size:auto 100%;
   background-repeat: no-repeat;
-  height: 100vh;
+  height: 82vh;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .searchBar {
   height: 30vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   width: 100%;
+  flex-direction: column;
 }
 .searchTitle {
   font-family: "Do Hyeon", sans-serif;
-  color: white;
+  color: black;
   font-size: 2rem;
 
 }
 .searchContent{
-    width: 100%;
+    margin-top:50px;
+    width:80%;
     height: 5rem;
-    
+    position: relative;
+    left: 200px;
 }
 
 #search{
@@ -108,6 +111,9 @@ export default {
     font-weight: bold;
     font-size: 1.2rem;
     padding-left:1rem ;
+    border-radius: 5px;
+    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.1);
+
 }
 .searchButton{
     margin-top:0px;
@@ -126,6 +132,7 @@ export default {
     background-color: white;
     min-height: 55vh;
     border-radius: 5px;
+    
 
 }
 .itemContainer{
@@ -134,6 +141,7 @@ export default {
     height: 10rem;
     position:relative;
     cursor: pointer;
+    box-shadow:0 2px 6px 0 rgba(0, 0, 0, 0.1);
 }
 .itemContainer .title{
     position:absolute;
@@ -154,7 +162,7 @@ export default {
     overflow: hidden;
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (max-width: 1024px) {
     .searchContent{
         width: 80%;
     }

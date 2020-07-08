@@ -82,7 +82,7 @@
 <script>
 
 //import "highlight.js/styles/atom-one-dark.css";
-import marked from "marked";
+//import marked from "marked";
 //import "mathjax/es5/tex-svg-full"
 //import navbar from "../../component_common/selfnavbar";
 import request from "../../../request/requestV2";

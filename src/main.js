@@ -15,25 +15,19 @@ import storedata from "./store/data"
 import request from "./request/main"
 /* import lazyload from 'vue-lazyload' */
 import Contextmenu from "vue-contextmenujs"
-import hljs from 'highlight.js'
+//import hljs from 'highlight.js'
 import globalVariable from './global';
-import VueNestable from 'vue-nestable'
+//import VueNestable from 'vue-nestable'
+import VueDragTree from 'vue-drag-tree'
+
+Vue.use(VueDragTree)
 //import sass from 'sass'
 
 Vue.prototype.commonsVariable = globalVariable;
 Vue.use(Contextmenu);
 Vue.use(less)
 //Vue.use(sass)
-Vue.use(VueNestable)
-
-
-Vue.directive('highlight',function (el) {
-  let blocks = el.querySelectorAll('pre code');
-  blocks.forEach((block)=>{
-    hljs.highlightBlock(block)
-  })
-})
-
+//Vue.use(VueNestable)
 
 Vue.config.productionTip = false;
 Vue.use(Element);
