@@ -24,7 +24,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="less">
 
 #app {
   font-family: "SF Pro SC", "SF Pro Text", "SF Pro Icons", "PingFang SC",
@@ -47,4 +47,35 @@ export default {
   transform: translateX(10px);
   opacity: 0;
 }
+.button{
+  cursor: pointer!important;
+  color:#e9e9e9;
+  font-weight: bold;
+  &:hover{
+    color:black
+  }
+}
+
+.bold{
+  font-weight: bold;
+}
+
+.flexColum{
+  display:flex;
+  flex-direction: column;
+}
+
+.flexRow{
+  display:flex;
+  flex-direction: row;
+}
+
+.marginAround{
+  margin:10px;
+}
+
+.num {
+    font-size: 0.5rem;
+}
+
 </style>

@@ -1,6 +1,6 @@
 {
-  "name": "know",
-  "version": "0.1.0",
+  "name": "tower",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

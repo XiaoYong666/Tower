@@ -6,11 +6,21 @@
 
 <script>
 import Vditor from "vditor";
+import reqArticle from "../../../request/reqArticle"
 
 export default {
   data() {
     return {
-      editorConfig: {
+      editorConfig: {},
+      editor:"",
+      content:"",
+      version:""
+    };
+  },
+  async mounted() {
+    await this.getArticle()
+    this.$nextTick(() => {
+      this.editorConfig = {
         toolbar: [
           "headings",
           "bold",
@@ -56,12 +66,13 @@ export default {
         },
         preview: {
           hljs: {
-            lineNumber: true
+            lineNumber: true,
+            style: "abap"
           },
           markdown: {
             chinesePunct: true,
             footnotes: true,
-            paragraphBeginningSpace: true
+            paragraphBeginningSpace: false
           },
           math: {
             inlineDigit: true,
@@ -69,23 +80,50 @@ export default {
           }
         },
         mode: "sv",
-        minHeight: 900,
-        after: () => {
-          //this.editor.setValue("Hello, Vue + Vditor!");
-        }
+        height: 600,
+        counter: {
+          enable: true
+        },
+        after:()=>{
+          //获取服务器的东西并渲染
+          this.editor.setValue(this.content)
+          //this.syncBrick(this.reqContent)
+        },
+        blur:(md)=>{
+          let data = {articleId:this.articleId,md,version:this.version}
+          this.$store.commit('syncArticle',data)
+           }
       }
-    };
-  },
-  mounted(){
       this.editor = new Vditor("vditor", this.editorConfig);
+    });
+  },
+  created() {
+    
+    
+    this.$store.commit("openEditCard");
+  },
+  methods: {
+    async getArticle() {
+       let data = await reqArticle.getArticleTo(this.articleId)
+       this.content = data.res.content
+       this.version = data.res.version
+    }
+     
+       
+    
+  },
+  computed:{
+    articleId(){
+      return this.$route.params.id
+    }
   }
 };
 </script>
 
 <style scoped lang="less">
-.editorPage{
-    position: relative;
-    z-index:3;
-    
+@import "../../../assets/index.css";
+.editorPage {
+  width: 100%;
+  height: 700pxs;
 }
 </style>

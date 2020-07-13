@@ -10,28 +10,30 @@ import BrickEditor from "../components/bricks/Editor/Editor2.vue";
 import HomeV2 from "../components/HomeMainV2.vue";
 //import brick from "../components/bricks/brickV2.vue";
 import brickv3 from "../components/bricks/brickV3.vue";
-import dataBase from "../components/dataView/dataViewMain"
+//import dataBase from "../components/dataView/dataViewMain"
 import selfnavbar from "../components/component_common/selfnavbar.vue"
 import login from "../components/login/login.vue"
-import searchPage from "../components/seachPage/search"
+//import searchPage from "../components/seachPage/search"
 import test from "../components/component_common/test.vue"
+import square from "../components/square/square.vue"
 
 const routes = [
   { path: "*", component: HomeV2 },
   { path: "/", component: HomeV2 },
   //{ path: "/brick/:id", component: brick,props:true },
-  { path: "/brickv3", component: brickv3,props:true },
+  { path: "/brickv3/:id", component: brickv3,props:true },
 //  { path: "/brick/:id", component: brick,props:true },
 //  { path: "/brickDetails", component: bricksDetails },
 //  { path: "/construction", component: construction },
-  { path: "/dataBase", component: dataBase },
+//  { path: "/dataBase", component: dataBase },
 //  { path: "/tower", component: tower },
 //  { path: "/towerDetail", component: towerdetail },
-  { path: "/markdownEditor/:id", component: BrickEditor },
+  { path: "/markdownEditor/:id", component: BrickEditor,name:'markdownEditor' },
   //{ path: "/article/:id", component: article},
   { path: "/navbar", component: selfnavbar },
   { path: "/login",component:login},
-  { path: "/search/",component:searchPage},
+  {path:"/square",component:square},
+//  { path: "/search/",component:searchPage},
   { path:"/test",component:test}
 
   //  { path: "/", component: Main },

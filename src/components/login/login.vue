@@ -21,7 +21,7 @@
 
 <script>
 //import navbar from "../component_common/selfnavbar";
-import request from '../../request/requestV2';
+import reqLogin from '../../request/reqLogin';
 
 export default {
   data(){
@@ -93,26 +93,24 @@ export default {
   },
   methods:{
     async login(){
-      let data =await request.getToken(this.email,this.password)
+      let data =await reqLogin.getToken(this.email,this.password)
       console.log(data)
-      if(data){
-        if (data.code == 1) {
-        alert("登录成功");
+      if(data.token){
+        let loseToken = new Date()
+        alert(data.message);
         localStorage.setItem('userEmail', this.email);
         localStorage.setItem('loginState', true);
-        this.$router.go(-1)
         
-      } else if(data.code == 3){
-        alert("注册成功");
-        localStorage.setItem('userEmail', this.email);
-        localStorage.setItem('loginState', true);
-        this.$router.go(-1)
-        
+        localStorage.setItem('loseToken',loseToken)
+        if(data.token){
+          this.$store.commit('Login')
+          localStorage.setItem('token',data.token);}
+          this.$router.go(-1)
       }else{
-        alert("密码错误");
+        alert(data.message);
       }
       }
-    }
+    
   }
 };
 </script>

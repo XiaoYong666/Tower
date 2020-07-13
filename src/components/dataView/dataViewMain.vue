@@ -64,7 +64,7 @@
 
 <script>
 //import navbar from "../component_common/selfnavbar";
-import request from "../../request/requestV2"
+//import request from "../../request/requestV2"
 
 
 export default {
