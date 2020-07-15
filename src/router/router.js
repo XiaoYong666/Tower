@@ -21,7 +21,7 @@ const routes = [
   { path: "*", component: HomeV2 },
   { path: "/", component: HomeV2 },
   //{ path: "/brick/:id", component: brick,props:true },
-  { path: "/brickv3/:id", component: brickv3,props:true },
+  { path: "/brickv3/:id", component: brickv3,props:true,name:'brickv3' },
 //  { path: "/brick/:id", component: brick,props:true },
 //  { path: "/brickDetails", component: bricksDetails },
 //  { path: "/construction", component: construction },

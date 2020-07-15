@@ -12,10 +12,10 @@ class reqBrick {
         return data
     }
     //新建砖石
-    async createNewBrick(title, email) {
+    async createNewBrick(title) {
 
-        let { data } = await app.post('/brick/createNewBrick', { title, email })
-        return data.url
+        let { data } = await app.post('/needlog/createNewBrick', { title })
+        return data
     }
     //修改砖石的名字
     async changeBrickName(_id, name) {

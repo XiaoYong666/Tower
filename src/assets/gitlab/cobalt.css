@@ -291,7 +291,7 @@ blockquote::before {
     background: #f0b752;
     content: '';
     height: 100%;
-    left: -2rem;
+    left: 0;
     position: absolute;
     width: 0.25rem;
 }

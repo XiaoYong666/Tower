@@ -23,11 +23,11 @@
         <i class="el-icon-plus" ></i>
       </div>
       <div id="searchCard" class="tCard">
-        <input v-model="input" class="searchBar" @focus="searchShow=true" @blur="searchShow=false" />
+        <input v-model="input" class="searchBar" @focus="searchShow=true" @blur="searchItemNoShow()" />
         <i class="el-icon-search"></i>
         <div class="searchItem" v-show="searchShow">
-          <div class="item" v-for="el in searchRes" :key="el.name">
-            <div style="padding:0 5px" :id="el.id">{{el.name}}</div>
+          <div class="item"  v-for="el in searchRes" :key="el.name" @click="pushBrick(el.id)">
+            <div style="padding:0 5px" :id="el.id" >{{el.name}}</div>
           </div>
         </div>
       </div>
@@ -43,6 +43,7 @@
 <script>
 import Avataaars from "vuejs-avataaars";
 import reqInfo from "../../request/reqInformation"
+import reqBrick from '../../request/reqBrick';
 
 export default {
   name: "navBar",
@@ -80,6 +81,16 @@ export default {
     };
   },
   methods: {
+    searchItemNoShow(){
+      if(this.input==""){
+        this.searchShow=false;
+      }
+    },
+    pushBrick(id){
+      //console.log('123')
+      this.$router.push({name:'brickv3',params:{id:id}})
+      this.input = ""
+    },
     urlpush(url) {
       this.$router.push(url);
     },
@@ -95,9 +106,19 @@ export default {
       this.$router.go(-1)
       this.$store.commit('closeEditCard')
     },
-    addBrick(){
+    async addBrick(){
+      if(this.loginState==false){
+        alert('创建砖石需要登录')
+        return
+      }
       let r = prompt('请输入砖石的名字')
-      console.log(`添加了一个砖石:${r}`)
+      if(!r){
+        alert('请输入砖石的名称')
+        return
+      }
+      let data = await reqBrick.createNewBrick(r)
+      alert(data.message)
+      this.$router.push({name:'brickv3',params:{id:data.id}})
     },
     postArticle(){
       this.$store.commit('postArticle')
@@ -214,7 +235,7 @@ export default {
       border-radius: 5px;
       background-color: white;
       border: 1px solid #e9e9e9;
-      z-index: 5;
+      z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -245,5 +266,8 @@ export default {
 }
 
 @media screen and (max-width: 1024px) {
+  #homeCard{
+    width:200px;
+  }
 }
 </style>

@@ -54,10 +54,11 @@
         <!-- <div class="toolbar"></div> -->
         <div class="showContent">
           <div class="contentRender" style="min-height:500px"></div>
-          <div v-if="articleData.history.length!=0">
+          <div v-if="articleData.historyv3!=undefined&&articleData.historyv3.length>0">
             <div class="bold huge">
               <p>修改历史</p>
             </div>
+
             <div class="showHistory" v-for="el in articleData.historyv3" :key="el.version">
               <div class="item">{{el.email}}</div>
               <div class="item">修改了文章</div>
@@ -129,72 +130,7 @@ export default {
       draging: false,
       disableDrag: false,
       selectNodeId: "",
-      editor: "",
-      editorConfig: {
-        toolbar: [
-          "headings",
-          "bold",
-          "italic",
-          "strike",
-          "link",
-          "|",
-          "list",
-          "ordered-list",
-          "check",
-          "outdent",
-          "indent",
-          "|",
-          "quote",
-          "line",
-          "code",
-          "inline-code",
-          "insert-before",
-          "insert-after",
-          "|",
-          "table",
-          "|",
-          "undo",
-          "redo",
-          "|",
-          "fullscreen",
-          "edit-mode",
-          {
-            name: "more",
-            toolbar: [
-              "both",
-              "export",
-              "outline",
-              "preview",
-              "format",
-              "info",
-              "help"
-            ]
-          }
-        ],
-        toolbarConfig: {
-          pin: true
-        },
-        preview: {
-          hljs: {
-            lineNumber: true
-          },
-          markdown: {
-            chinesePunct: true,
-            footnotes: true,
-            paragraphBeginningSpace: true
-          },
-          math: {
-            inlineDigit: true,
-            engine: "KaTeX"
-          }
-        },
-        minHeight: 500,
-        after: () => {
-          //this.editor.setValue("Hello, Vue + Vditor!");
-        }
-      },
-      menuContent: [
-      ],
+      menuContent: [],
       show: 0,
       formLabelWidth: "120px",
       form: {
@@ -210,8 +146,8 @@ export default {
           time: "2020年5月24日"
         }
       ],
-      title: "机械设计",
-      content: "That's a good start",
+      title: "加载中",
+      content: "内容还没出来，不要急",
       contenteditable: true,
       articleData: {
         content: "",
@@ -220,21 +156,12 @@ export default {
         version: "1.0.0",
         versionSay: "lalallal",
         agreement: "TIM",
-        watching: [{ name: 1 }],
-        history: [
-          {
-            email: "735083049@qq.com",
-            name: "String",
-            editTime: new Date().toLocaleString(),
-            version: "未知版本",
-            content: "123333"
-          }
-        ]
+        watching: [{ name: 1 }]
       },
-      brickData:{
-        watchingUser:[]
+      brickData: {
+        watchingUser: []
       },
-      watchingState:false
+      watchingState: false
     };
   },
   computed: {
@@ -262,7 +189,10 @@ export default {
         //console.log(this.content)
         VditorMethod.preview(contentRender, this.content);
       });
-    }
+    },
+    $route(){
+    this.getBrick()
+  }
   },
   methods: {
     getEmail() {
@@ -281,25 +211,24 @@ export default {
         return false;
       }
     },
-    checkWatching(){
-      let email = this.getEmail()
-      for(let i=0;i<this.brickData.watchingUser.length;i++){
-        if(email==this.brickData.watchingUser[i]){
-          return true
+    checkWatching() {
+      let email = this.getEmail();
+      for (let i = 0; i < this.brickData.watchingUser.length; i++) {
+        if (email == this.brickData.watchingUser[i]) {
+          return true;
         }
-        return false
+        return false;
       }
     },
     async getArticleData(id, moduleId) {
       let data = await reqArticle.getArticle(this.brickId, id, moduleId);
       if (id == "") {
-        await this.getBrick(this.$route.params.id);
+        await this.getBrick();
       }
       this.selectNodeId = data.res.id;
-      this.articleData = data.res
+      this.articleData = data.res;
       if (data.res.content == "") {
         this.content = "# 暂时还没有内容";
-        this.history
       } else {
         this.content = data.res.content;
       }
@@ -312,6 +241,7 @@ export default {
     },
     async createComment() {
       let comment = prompt("请输入评论");
+      if (!comment) return;
       let email = this.getEmail();
       this.comments = await reqComment.createComment(
         this.selectNodeId,
@@ -328,14 +258,20 @@ export default {
     async editBlur(e) {
       //console.log(e)
       if (this.checkLog()) {
-        await reqBrick.changeBrickName(
-          this.$route.params.id,
-          e.target.innerText
-        );
+        let name = "";
+        if (!e.target.innerText) {
+          name = "未命名";
+        } else {
+          name = e.target.innerText;
+        }
+        await reqBrick.changeBrickName(this.$route.params.id, name);
       }
     },
     pushToEditor() {
-      this.$router.push({ name: "markdownEditor", params: { id: this.selectNodeId } });
+      this.$router.push({
+        name: "markdownEditor",
+        params: { id: this.selectNodeId }
+      });
     },
     async changeState(id, moduleId) {
       this.selectNodeId = id;
@@ -345,17 +281,18 @@ export default {
       if (!this.checkLog) {
         return;
       }
-      
+
       let i = this.findNode(id);
-      console.log(i)
-      if (i == -1){ return;}
+      console.log(i);
+      if (i == -1) {
+        return;
+      }
       let newName = prompt("请输入新的标题（恶意修改将导致封号）");
-      console.log(newName)
-      if (newName == null)return;
-      
-        this.menuContent[i].name = newName;
-        reqBrick.changeModuleName(this.brickId, id, newName);
-      
+      console.log(newName);
+      if (newName == null) return;
+
+      this.menuContent[i].name = newName;
+      reqBrick.changeModuleName(this.brickId, id, newName);
     },
     removeChild(id) {
       if (!this.checkLog) {
@@ -415,32 +352,45 @@ export default {
       console.log(evt.newIndex);
     },
     async getBrick() {
-      let { res } = await reqBrick.getBrick(this.$route.params.id);
+      let { res } = await reqBrick.getBrick(this.brickId);
       this.title = res.title;
-      this.menuContent = res.modules;
-      //this.content = res.content
-      this.brickData = res
-      this.watchingState = this.checkWatching()
+
+      if (res.modules.length == 0) {
+        await reqBrick.addNewModule(this.brickId, 0, 0);
+        await this.getBrick()
+      }else if(!res.modules[0].name){
+        await reqBrick.changeModuleName(this.brickId, res.modules[0].id, "未命名");
+        this.getBrick()
+      }else{
+        this.menuContent = res.modules;
+        this.selectNodeId = res.modules[0].id;
+        this.getArticleData(this.selectNodeId,res.modules[0]._id)
+        //this.content = res.content
+        this.brickData = res;
+        this.watchingState = this.checkWatching();
+      }
     },
-    async watchAdd(){
-      reqBrick.watchingAdd(this.brickId)
-      let email = this.getEmail()
-      this.brickData.watchingUser.push(email)
-      this.watchingState  = true
+    async watchAdd() {
+      reqBrick.watchingAdd(this.brickId);
+      let email = this.getEmail();
+      this.brickData.watchingUser.push(email);
+      this.watchingState = true;
     },
-    async watchRemove(){
-      reqBrick.watchingRemove(this.brickId)
-      let email = this.getEmail()
-      this.brickData.watchingUser=this.brickData.watchingUser.filter(el=>{
-        if(el==email){return false}
-        return true
-      })
-      this.watchingState = false
+    async watchRemove() {
+      reqBrick.watchingRemove(this.brickId);
+      let email = this.getEmail();
+      this.brickData.watchingUser = this.brickData.watchingUser.filter(el => {
+        if (el == email) {
+          return false;
+        }
+        return true;
+      });
+      this.watchingState = false;
     },
 
-    async likeBrick(){
-      await reqBrick.likeBrick(this.brickId)
-      this.brickData.like++
+    async likeBrick() {
+      await reqBrick.likeBrick(this.brickId);
+      this.brickData.like++;
     },
     onContextmenu(event) {
       //let _model = this.model
@@ -496,9 +446,8 @@ export default {
     }
   },
   async created() {
-    this.$store.commit('closeEditCard')
+    this.$store.commit("closeEditCard");
     await this.getBrick();
-    
   }
 };
 </script>
@@ -555,6 +504,7 @@ export default {
     .content {
       width: 100%;
       min-height: 100%;
+      margin-top: 20px;
       display: flex;
       flex-direction: row;
       .showContent {
@@ -635,10 +585,10 @@ export default {
     width: 80%;
     height: 60px;
     display: flex;
-    top:60px;
-    z-index:20;
+    top: 60px;
+    z-index: 1;
     align-items: center;
-    position:fixed;
+    position: fixed;
     background-color: white;
     .handleArea {
       width: 90%;
@@ -780,8 +730,8 @@ export default {
   }
 }
 
-.huge{
-  margin-top:100px;
+.huge {
+  margin-top: 100px;
   font-size: 20px;
 }
 </style>

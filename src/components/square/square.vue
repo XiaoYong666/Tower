@@ -7,7 +7,7 @@
     <div class="dataContainer">
       <div class="view">
         <div class="card" v-for="(item,index) in baseData" :key="item._id" @click="jumpTo(item)">
-          <div class="bold">{{index+1}}</div>
+          <div class="number bold">{{index+1}}</div>
           <div class="smallTitle">{{ item.title }}</div>
           <div class="info">
             <div class="like">
@@ -38,17 +38,10 @@ export default {
       baseData: [
         {
           _id:"1",
-          title: "测试",
+          title: "加载中",
           watchingUser: [],
           modules: [],
           seeTimes: 10
-        },
-        {
-          _id:"2",
-          title: "测试2",
-          watchingUser: [],
-          modules: [],
-          seeTimes: 33
         }
       ]
     };
@@ -59,6 +52,9 @@ export default {
     },
     async getNew(){
       this.baseData = await reqBrick.getNew()
+    },
+    jumpTo(item){
+      this.$router.push({ name: "brickv3", params: { id: item._id } });
     }
   },
   async created(){
@@ -126,6 +122,12 @@ export default {
       display: flex;
       justify-content: space-around;
       align-items: center;
+      .number{
+        position: absolute;
+        left: 20px;
+        top:18px;
+        font-size: 20px;;
+      }
       .smallTitle {
         font-size: 1.5rem;
         font-weight: 700;
