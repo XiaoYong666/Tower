@@ -15,10 +15,11 @@
             <i class="el-icon-arrow-down el-icon--right" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>订阅{{ this.brickData.watchingUser.length }}</el-dropdown-item>
-            <el-dropdown-item>点赞{{ this.brickData.like }}</el-dropdown-item>
-            <el-dropdown-item>评论</el-dropdown-item>
-            <el-dropdown-item>编辑</el-dropdown-item>
+            <el-dropdown-item v-if="watchingState == true"  @click.native="watchRemove()">取消订阅{{ this.brickData.watchingUser.length }}</el-dropdown-item>
+            <el-dropdown-item v-else @click.native="watchAdd()">订阅{{ this.brickData.watchingUser.length }}</el-dropdown-item>
+            <el-dropdown-item @click.native="likeBrick()">点赞{{ this.brickData.like }}</el-dropdown-item>
+            <el-dropdown-item @click.native="createComment()">评论</el-dropdown-item>
+            <el-dropdown-item @click.native="pushToEditor()">编辑</el-dropdown-item>
             <el-dropdown-item
               v-if="disableDrag == true"
               @click.native="disableDrag = false"
