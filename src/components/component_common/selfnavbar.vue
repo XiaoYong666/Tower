@@ -2,7 +2,12 @@
   <div style="width:100%">
     <div class="nav">
       <ul>
-        <li><a @click="urlpush('/')">首页</a></li>
+        <li>
+          <a
+            class="button"
+            @click="urlpush('/')"
+          >首页</a>
+        </li>
         <li><a @click="urlpush('/dataBase')">数据库</a></li>
         <li><a @click="urlpush('/search')">搜索</a></li>
         <li>
@@ -105,15 +110,14 @@ export default {
       }
     }
   }
-  .loginState{
-      height: 48px;
-      position: absolute;
-      right: 10px;
-      top:13px;
+  .loginState {
+    height: 48px;
+    position: absolute;
+    right: 10px;
+    top: 13px;
   }
 }
 
 @media screen and (max-width: 1024px) {
-
 }
 </style>

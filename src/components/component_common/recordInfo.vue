@@ -17,6 +17,8 @@ export default {
 
 <style lang="less" scoped>
 .recordInfo {
+  position: fixed;
+  bottom: 0px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -25,6 +27,7 @@ export default {
   border-radius: 5px;
   height: 50px;
   width: 100%;
+  background-image: linear-gradient(to top, #ffffff 70%, #ffffff00 100%);
   cursor: default;
   a{
     color:black;

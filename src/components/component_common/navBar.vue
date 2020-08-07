@@ -7,35 +7,43 @@
         class="tCard"
       >
         <div
-          class="selector"
+          class=" button selector"
           @click="urlpush('/')"
         >
           首页
         </div>
         <div
-          class="selector"
+          class="button selector"
           @click="urlpush('/square')"
         >
           广场
         </div>
         <div
-          class="selector"
+          class="button selector"
           @click="urlpush('brickv3/5e9b4d8828490c2f9ebf9064')"
         >
           介绍
         </div>
         <a
-          class="selector"
+          class="button selector"
           href="https://www.wjx.cn/jq/84849634.aspx"
           target="_blank"
         >反馈</a>
+
+        <div
+          v-if="addCard"
+          class="button selector"
+          @click="addBrick()"
+        >
+          <i class="button el-icon-plus" />
+        </div>
       </div>
       <div
         id="managerCard"
         v-if="managerCard"
         class="tCard"
       >
-        <div class="selector">
+        <div class="button selector">
           管理
         </div>
       </div>
@@ -44,30 +52,23 @@
         v-if="userCard"
         class="tCard"
       >
-        <Avataaars style="width:40px;" />
+        <Avataaars style="position:relative;bottom:3px; width:40px;" />
         <div
-          class="selector"
+          class="button selector"
           v-if="!loginState"
           @click="urlpush('/login')"
         >
           登录
         </div>
         <div
-          class="selector"
+          class="button selector"
           v-else
           @click="giveAlert('敬请期待')"
         >
           个人中心
         </div>
       </div>
-      <div
-        id="addCard"
-        v-if="addCard"
-        class="tCard"
-        @click="addBrick()"
-      >
-        <i class="el-icon-plus" />
-      </div>
+
       <div
         id="searchCard"
         class="tCard"
@@ -75,7 +76,6 @@
         <input
           v-model="input"
           class="searchBar"
-          @focus="searchShow=true"
           @blur="searchItemNoShow()"
         >
         <i class="el-icon-search" />
@@ -117,19 +117,18 @@
         </div>
       </div>
     </div>
-    <div style="width:100%;height:80px" />
   </div>
 </template>
 
 <script>
 import Avataaars from "vuejs-avataaars";
-import reqInfo from "../../request/reqInformation"
-import reqBrick from '../../request/reqBrick';
+import reqInfo from "../../request/reqInformation";
+import reqBrick from "../../request/reqBrick";
 
 export default {
   name: "NavBar",
   components: {
-    Avataaars
+    Avataaars,
   },
   async created() {
     //登录过期
@@ -137,13 +136,13 @@ export default {
     let timeInterval = Math.abs(new Date() - new Date(loseToken));
     if (timeInterval / 1000 / 60 / 60 / 24 <= 7) {
       this.userEmail = localStorage.getItem("userEmail");
-      this.$store.commit('Login')
+      this.$store.commit("Login");
     } else {
       this.userEmail = null;
-      this.$store.commit('noLogin')
+      this.$store.commit("noLogin");
     }
 
-    this.searchItem = await reqInfo.getSearchItem()
+    this.searchItem = await reqInfo.getSearchItem();
     //console.log(this.searchItem)
   },
   data() {
@@ -154,23 +153,26 @@ export default {
       searchItem: [
         {
           name: "123",
-          id: "11"
+          id: "11",
         },
         { name: "456", id: "12" },
-        { name: "678", id: "13" }
-      ]
+        { name: "678", id: "13" },
+      ],
     };
   },
   methods: {
-    searchItemNoShow(){
-      if(this.input==""){
-        this.searchShow=false;
+    searchShowMethod(res){
+      if(res.length!=0){
+        this.searchShow =true;
       }
     },
-    pushBrick(id){
+    searchItemNoShow() {
+        this.searchShow = false;
+    },
+    pushBrick(id) {
       //console.log('123')
-      this.$router.push({name:'brickv3',params:{id:id}})
-      this.input = ""
+      this.$router.push({ name: "brickv3", params: { id: id } });
+      this.input = "";
     },
     urlpush(url) {
       this.$router.push(url);
@@ -183,31 +185,30 @@ export default {
       let url = window.location.href;
       return url.includes("brick");
     },
-    urlBack(){
-      this.$router.go(-1)
-      this.$store.commit('closeEditCard')
+    urlBack() {
+      this.$router.go(-1);
+      this.$store.commit("closeEditCard");
     },
-    async addBrick(){
-      if(this.loginState==false){
-        alert('创建砖石需要登录')
-        return
+    async addBrick() {
+      if (this.loginState == false) {
+        alert("创建砖石需要登录");
+        return;
       }
-      let r = prompt('请输入砖石的名字')
-      if(!r){
-        alert('请输入砖石的名称')
-        return
+      let r = prompt("请输入砖石的名字");
+      if (!r) {
+        alert("请输入砖石的名称");
+        return;
       }
-      let data = await reqBrick.createNewBrick(r)
-      alert(data.message)
-      this.$router.push({name:'brickv3',params:{id:data.id}})
+      let data = await reqBrick.createNewBrick(r);
+      alert(data.message);
+      this.$router.push({ name: "brickv3", params: { id: data.id } });
     },
-    postArticle(){
-      this.$store.commit('postArticle')
+    postArticle() {
+      this.$store.commit("postArticle");
     },
-    giveAlert(speak){
-      alert(speak)
-    }
-    
+    giveAlert(speak) {
+      alert(speak);
+    },
   },
   computed: {
     brickState() {
@@ -226,20 +227,24 @@ export default {
       return this.$store.state.addCard;
     },
     searchRes() {
-      if (this.input == ""){return []}
-      let res = this.searchItem.filter(el => {
+      if (this.input == "") {
+        return [];
+      }
+      let res = this.searchItem.filter((el) => {
         let re = new RegExp(this.input, "i");
         return el.name.match(re);
       });
+      console.log(res)
+      this.searchShowMethod(res);
       return res;
     },
-    editCard(){
+    editCard() {
       return this.$store.state.editCard;
     },
-    loginState(){
-      return this.$store.state.loginState
-    }
-  }
+    loginState() {
+      return this.$store.state.loginState;
+    },
+  },
 };
 </script>
 
@@ -248,12 +253,12 @@ export default {
   z-index: 2;
   width: 100%;
   position: fixed;
-  background-color: white;
+  background-image: linear-gradient(to bottom, #ffffff 0%, #ffffff00 100%);
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  height: 60px;
+  height: 40px;
   overflow: auto;
   top: 0px;
   overflow: visible;
@@ -266,22 +271,19 @@ export default {
     align-items: center;
     background-color: white;
     border-radius: 8px;
-    box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.1);
+    //box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.1);
     height: 50px;
     margin-left: 10px;
     margin-right: 10px;
-  }
-  .selector {
-    cursor: pointer;
-    text-decoration: none;
-    color: black;
-    &:hover {
-      font-weight: bold;
+    .selector {
+      cursor: pointer;
+      text-decoration: none;
+      color: black;
     }
   }
 
   #homeCard {
-    width: 15%;
+    width: 20%;
   }
   #brickCard {
     width: 20%;
@@ -301,10 +303,11 @@ export default {
     padding: 0 20px;
     position: relative;
     .searchBar {
+      border:none;
+      border-bottom:1px solid #e9e9e9;
       position: relative;
       width: 100px;
       height: 70%;
-      border: none;
       transition: width ease-in-out 0.5s;
       &:focus {
         width: 200px;
@@ -319,6 +322,7 @@ export default {
       border-radius: 5px;
       background-color: white;
       border: 1px solid #e9e9e9;
+      border-top:none;
       z-index: 10;
       display: flex;
       flex-direction: column;
@@ -341,17 +345,17 @@ export default {
       }
     }
   }
-  #editCard{
-    width:10%;
-    div{
+  #editCard {
+    width: 10%;
+    div {
       cursor: pointer;
     }
   }
 }
 
 @media screen and (max-width: 1024px) {
-  #homeCard{
-    width:200px;
+  #homeCard {
+    width: 200px;
   }
 }
 </style>

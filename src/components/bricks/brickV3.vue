@@ -1,14 +1,38 @@
 <template>
   <div class="container">
     <div class="menu">
-      <div class="title">
-        <div
-          :contenteditable="contenteditable"
-          @blur="editBlur"
-        >
-          {{ title }}
+      <div class="flexRow">
+        <div class="title">
+          <div
+            :contenteditable="contenteditable"
+            @blur="editBlur"
+          >
+            {{ title }}
+          </div>
         </div>
-        <!--<i class="el-icon-plus" @click="addNewNode()"></i>-->
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            <i class="el-icon-arrow-down el-icon--right" />
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>订阅{{ this.brickData.watchingUser.length }}</el-dropdown-item>
+            <el-dropdown-item>点赞{{ this.brickData.like }}</el-dropdown-item>
+            <el-dropdown-item>评论</el-dropdown-item>
+            <el-dropdown-item>编辑</el-dropdown-item>
+            <el-dropdown-item
+              v-if="disableDrag == true"
+              @click.native="disableDrag = false"
+            >
+              开启拖拽
+            </el-dropdown-item>
+            <el-dropdown-item
+              v-else
+              @click.native="disableDrag = true"
+            >
+              关闭拖拽
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
       <draggable
         class="dragArea"
@@ -25,16 +49,16 @@
         >
           <!-- <a v-if="el.tasks.length!=0" class="menuicon el-icon-caret-right"  ></a> -->
           <div
-            :class="['item',selected==el.id?'selected':'']"
-            @click="changeState(el.id,el._id)"
+            :class="['item', selected == el.id ? 'selected' : '']"
+            @click="changeState(el.id, el._id)"
             @contextmenu.prevent="onContextmenu"
             @dblclick="addChild(el.id)"
           >
             <!-- <i class="el-icon-rank"></i> -->
             <!-- 如果没有子内容则隐藏下拉图标 -->
             <div
-              :class="['listTitle',el.level==0?'bold':'']"
-              :style="'position:relative;left:'+el.level*14+'px'"
+              :class="['listTitle', el.level == 0 ? 'bold' : '']"
+              :style="'position:relative;left:' + el.level * 14 + 'px'"
               :id="el.id"
             >
               <i class="no-vue-drag-node-icon" />
@@ -46,16 +70,10 @@
         </div>
       </draggable>
     </div>
-    <div class="info">
+    <!-- <div class="info">
       <div class="handleArea">
-        <a
-          v-if="watchingState==true"
-          @click="watchRemove()"
-        >取消订阅</a>
-        <a
-          v-else
-          @click="watchAdd()"
-        >订阅</a>
+        <a v-if="watchingState == true" @click="watchRemove()">取消订阅</a>
+        <a v-else @click="watchAdd()">订阅</a>
         <a @click="likeBrick()">点赞</a>
         <a @click="createComment()">评论</a>
         <a @click="pushToEditor()">编辑</a>
@@ -64,7 +82,7 @@
         <div>点赞数{{ this.brickData.like }}</div>
         <div>订阅数{{ this.brickData.watchingUser.length }}</div>
       </div>
-    </div>
+    </div> -->
     <div class="contentArea">
       <div class="content">
         <!-- <div class="toolbar"></div> -->
@@ -73,7 +91,12 @@
             class="contentRender"
             style="min-height:500px"
           />
-          <div v-if="articleData.historyv3!=undefined&&articleData.historyv3.length>0">
+          <div
+            v-if="
+              articleData.historyv3 != undefined &&
+                articleData.historyv3.length > 0
+            "
+          >
             <div class="bold huge">
               <p>修改历史</p>
             </div>
@@ -173,17 +196,17 @@
 //import VditorPreview from "vditor/dist/method.min";
 //import { v4 as uuidv4 } from "uuid";
 //import 'vditor/dist/method.min'
-import draggable from "vuedraggable";
-
 //import draggable from "vuedraggable";
 //import vditorMethod from 'vditor/dist/method.min'
+
+import draggable from "vuedraggable";
 import reqBrick from "../../request/reqBrick";
 import reqArticle from "../../request/reqArticle";
 import reqComment from "../../request/reqComment";
 import VditorMethod from "vditor/dist/method.min.js";
 export default {
   components: {
-    draggable
+    draggable,
   },
   data() {
     return {
@@ -191,13 +214,13 @@ export default {
       //allowDrop:true,
       nodeSelected: false,
       draging: false,
-      disableDrag: false,
+      disableDrag: true,
       selectNodeId: "",
       menuContent: [],
       show: 0,
       formLabelWidth: "120px",
       form: {
-        name: ""
+        name: "",
       },
       dialogTitle: "修改模块名称",
       dialogVisible: false,
@@ -206,8 +229,8 @@ export default {
         {
           email: "735083049@qq.com",
           content: "这里是评论区哟",
-          time: "2020年5月24日"
-        }
+          time: "2020年5月24日",
+        },
       ],
       title: "加载中",
       content: "内容还没出来，不要急",
@@ -219,12 +242,12 @@ export default {
         version: "1.0.0",
         versionSay: "lalallal",
         agreement: "TIM",
-        watching: [{ name: 1 }]
+        watching: [{ name: 1 }],
       },
       brickData: {
-        watchingUser: []
+        watchingUser: [],
       },
-      watchingState: false
+      watchingState: false,
     };
   },
   computed: {
@@ -233,7 +256,7 @@ export default {
     },
     brickId() {
       return this.$route.params.id;
-    }
+    },
   },
   mounted() {
     document.body.ondrop = function(event) {
@@ -253,9 +276,9 @@ export default {
         VditorMethod.preview(contentRender, this.content);
       });
     },
-    $route(){
-    this.getBrick()
-  }
+    $route() {
+      this.getBrick();
+    },
   },
   methods: {
     getEmail() {
@@ -333,7 +356,7 @@ export default {
     pushToEditor() {
       this.$router.push({
         name: "markdownEditor",
-        params: { id: this.selectNodeId }
+        params: { id: this.selectNodeId },
       });
     },
     async changeState(id, moduleId) {
@@ -406,7 +429,7 @@ export default {
       this.menuContent.splice(i + 1, 0, {
         name: "新模块",
         id: res,
-        level: this.menuContent[i].level + 1
+        level: this.menuContent[i].level + 1,
       });
     },
     switchIndex(evt) {
@@ -420,14 +443,18 @@ export default {
 
       if (res.modules.length == 0) {
         await reqBrick.addNewModule(this.brickId, 0, 0);
-        await this.getBrick()
-      }else if(!res.modules[0].name){
-        await reqBrick.changeModuleName(this.brickId, res.modules[0].id, "未命名");
-        this.getBrick()
-      }else{
+        await this.getBrick();
+      } else if (!res.modules[0].name) {
+        await reqBrick.changeModuleName(
+          this.brickId,
+          res.modules[0].id,
+          "未命名"
+        );
+        this.getBrick();
+      } else {
         this.menuContent = res.modules;
         this.selectNodeId = res.modules[0].id;
-        this.getArticleData(this.selectNodeId,res.modules[0]._id)
+        this.getArticleData(this.selectNodeId, res.modules[0]._id);
         //this.content = res.content
         this.brickData = res;
         this.watchingState = this.checkWatching();
@@ -442,7 +469,7 @@ export default {
     async watchRemove() {
       reqBrick.watchingRemove(this.brickId);
       let email = this.getEmail();
-      this.brickData.watchingUser = this.brickData.watchingUser.filter(el => {
+      this.brickData.watchingUser = this.brickData.watchingUser.filter((el) => {
         if (el == email) {
           return false;
         }
@@ -464,7 +491,7 @@ export default {
             icon: "el-icon-name",
             onClick: () => {
               this.rename(event.target.id);
-            }
+            },
           },
           {
             label: "删除此模块",
@@ -474,44 +501,44 @@ export default {
               if (r == true) {
                 this.removeChild(event.target.id);
               }
-            }
+            },
           },
           {
             label: "开启拖拽",
             icon: "el-icon-open",
             onClick: () => {
               this.disableDrag = false;
-            }
+            },
           },
           {
             label: "关闭拖拽",
             icon: "el-icon-close",
             onClick: () => {
               this.disableDrag = true;
-            }
+            },
           },
           {
             label: "修改层级",
             icon: "el-icon-edit",
             onClick: () => {
               this.relevel(event.target.id);
-            }
-          }
+            },
+          },
         ],
         event,
         //x: event.clientX,
         //y: event.clientY,
         customClass: "class-a",
         zIndex: 3,
-        minWidth: 230
+        minWidth: 230,
       });
       return false;
-    }
+    },
   },
   async created() {
     this.$store.commit("closeEditCard");
     await this.getBrick();
-  }
+  },
 };
 </script>
 
@@ -519,14 +546,19 @@ export default {
 @import "../../assets/pie.css";
 
 .container {
-  min-height: 100vh;
   width: 100%;
+  position: fixed;
+  top: 50px;
   font-family: "Arial", "Microsoft YaHei", "黑体", "宋体", "sans-serif";
-
+  height: 90%;
+  overflow-x:scroll;
+  &::-webkit-scrollbar{
+    display: none;
+  }
   .menu {
     position: fixed;
     width: 20%;
-    height: 81%;
+    height: 100%;
     background-color: #ffffff;
     border-right: 1px solid #f5f5f5;
     .title {
@@ -544,6 +576,11 @@ export default {
         top: 24px;
       }
     }
+    i {
+      line-height: 50px;
+      width: 50px;
+      cursor: pointer;
+    }
     .is-clicked {
       color: orange;
     }
@@ -559,7 +596,7 @@ export default {
   }
   .contentArea {
     margin-left: 20%;
-    width: 80%;
+    width: 90%;
     height: auto;
     display: flex;
     flex-direction: row;
@@ -567,14 +604,13 @@ export default {
     .content {
       width: 100%;
       min-height: 100%;
-      margin-top: 20px;
       display: flex;
       flex-direction: row;
       .showContent {
         width: 75%;
         height: auto;
         min-height: 900px;
-        padding: 20px 10px 10px 20px;
+        padding: 0px 10px 10px 20px;
         border-right: 2px dotted #e9e9e9;
         .showHistory {
           display: flex;

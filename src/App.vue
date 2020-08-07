@@ -50,9 +50,12 @@ export default {
 .button{
   cursor: pointer!important;
   color:#e9e9e9;
-  font-weight: bold;
+  //font-weight: bold;
+  padding:5px 10px;
+  border-radius: 5px;
+  color:black;
   &:hover{
-    color:black
+    background-color:#fffbe6;
   }
 }
 
@@ -76,6 +79,17 @@ export default {
 
 .num {
     font-size: 0.5rem;
+}
+
+input{
+  outline: none;
+}
+
+.el-dropdown-menu__item{
+  color:black!important;
+  &:hover{
+    background-color:#fff7e6!important ;
+  }
 }
 
 </style>
