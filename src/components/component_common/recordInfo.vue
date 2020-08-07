@@ -1,17 +1,17 @@
 <template>
-      <div class="recordInfo">
-      <div>liuser出品</div>
-      <div>© 2020</div>
-      <div>TongTianTa</div>
-      <a
-        href="http://www.beian.gov.cn/portal/registerSystemInfo?spm=a2c4g.11186623.7y9jhqsfz.113.34257243mu7XSO"
-      >陕ICP备19012321号</a>
-    </div>
+  <div class="recordInfo">
+    <div>liuser出品</div>
+    <div>© 2020</div>
+    <div>TongTianTa</div>
+    <a
+      href="http://www.beian.gov.cn/portal/registerSystemInfo?spm=a2c4g.11186623.7y9jhqsfz.113.34257243mu7XSO"
+    >陕ICP备19012321号</a>
+  </div>
 </template>
 
 <script>
 export default {
-    name:"recordInfo"
+    name:"RecordInfo"
 }
 </script>
 

@@ -1,8 +1,14 @@
 <template>
   <div>
-      <div class="container" @contextmenu.prevent="onContextmenu" @click="toDetial">
-        <div class="name">{{articleData.name}}</div>
+    <div
+      class="container"
+      @contextmenu.prevent="onContextmenu"
+      @click="toDetial"
+    >
+      <div class="name">
+        {{ articleData.name }}
       </div>
+    </div>
   </div>
 </template>
 

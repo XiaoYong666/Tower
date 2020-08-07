@@ -17,10 +17,13 @@ import request from "./request/main"
 import Contextmenu from "vue-contextmenujs"
 //import hljs from 'highlight.js'
 import globalVariable from './global';
-//import VueNestable from 'vue-nestable'
-import VueDragTree from 'vue-drag-tree'
 
-Vue.use(VueDragTree)
+//import VueNestable from 'vue-nestable'
+//import VueDragTree from 'vue-drag-tree'
+
+import './plugins/element.js'
+
+//Vue.use(VueDragTree)
 //import sass from 'sass'
 
 Vue.prototype.commonsVariable = globalVariable;

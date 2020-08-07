@@ -1,36 +1,71 @@
 <template>
   <div class="container">
-    <catalog class="catalog" :list="catalog.levels"></catalog>
+    <catalog
+      class="catalog"
+      :list="catalog.levels"
+    />
     <!-- <div class="tools">
       <el-button class="backButton" icon="el-icon-back" circle></el-button>
       <el-button class="editButton" icon="el-icon-edit" circle></el-button>
     </div> -->
     <div class="backgroundImage">
       <div class="tools">
-        <div class="back button" @click="backToBrick">返回</div>
-        <div class="edit button" @click="GoToEditMode">编辑</div>
-        <div class="comment button" @click="seeComment">切换评论</div>
-        <div class="openComment button" @click="addCommentVisble = true">
+        <div
+          class="back button"
+          @click="backToBrick"
+        >
+          返回
+        </div>
+        <div
+          class="edit button"
+          @click="GoToEditMode"
+        >
+          编辑
+        </div>
+        <div
+          class="comment button"
+          @click="seeComment"
+        >
+          切换评论
+        </div>
+        <div
+          class="openComment button"
+          @click="addCommentVisble = true"
+        >
           评论
         </div>
-        <div class="liked button" @click="likeThisArticle">
+        <div
+          class="liked button"
+          @click="likeThisArticle"
+        >
           喜欢 <small>{{ like }}</small>
         </div>
       </div>
 
-      <div class="viewer" id="commentContainer">
-        <div id="articleThere" v-html="convertHtml" v-highlight></div>
+      <div
+        class="viewer"
+        id="commentContainer"
+      >
+        <div
+          id="articleThere"
+          v-html="convertHtml"
+          v-highlight
+        />
         <commentelement
           v-for="item in commentData"
           :key="item._id"
-          :commentData="item"
-          :articleId="articleId"
-          :displayState="displayState"
-        ></commentelement>
+          :comment-data="item"
+          :article-id="articleId"
+          :display-state="displayState"
+        />
       </div>
 
-      <div class="divider">- 全文完 -</div>
-      <div class="updateTime">最后修改时间：{{ updateTime }}</div>
+      <div class="divider">
+        - 全文完 -
+      </div>
+      <div class="updateTime">
+        最后修改时间：{{ updateTime }}
+      </div>
       <div class="edithistory">
         <!-- 编辑历史--代办
         <div class="editHistory" v-for="item in edithistory" :key="item.id">
@@ -40,37 +75,64 @@
       </div>
       <div class="history">
         <div class="mainVesion">
-          <div class="itemBox"></div>
+          <div class="itemBox" />
         </div>
         <div class="normalHistory">
-          <div class="itemBox"></div>
+          <div class="itemBox" />
         </div>
       </div>
       <div class="people">
-        <div class="peopleBox"></div>
+        <div class="peopleBox" />
       </div>
 
-      <el-dialog title="添加评论" :visible.sync="addCommentVisble">
-        <el-form :model="addCommentform" label-position="top">
-          <el-form-item label="评论内容" :label-width="formLabelWidth">
+      <el-dialog
+        title="添加评论"
+        :visible.sync="addCommentVisble"
+      >
+        <el-form
+          :model="addCommentform"
+          label-position="top"
+        >
+          <el-form-item
+            label="评论内容"
+            :label-width="formLabelWidth"
+          >
             <el-input
               type="textarea"
               v-model="addCommentform.content"
-            ></el-input>
+            />
           </el-form-item>
-          <el-form-item label="选项" prop="type">
+          <el-form-item
+            label="选项"
+            prop="type"
+          >
             <el-radio-group v-model="addCommentform.type">
-              <el-radio-button :label="'red'">错误</el-radio-button>
-              <el-radio-button :label="'orange'">建议</el-radio-button>
-              <el-radio-button :label="'blue'">提问</el-radio-button>
+              <el-radio-button :label="'red'">
+                错误
+              </el-radio-button>
+              <el-radio-button :label="'orange'">
+                建议
+              </el-radio-button>
+              <el-radio-button :label="'blue'">
+                提问
+              </el-radio-button>
             </el-radio-group>
           </el-form-item>
         </el-form>
-        <div slot="footer" class="dialog-footer">
-          <button class="mybutton cancel" @click="addCommentVisble = false">
+        <div
+          slot="footer"
+          class="dialog-footer"
+        >
+          <button
+            class="mybutton cancel"
+            @click="addCommentVisble = false"
+          >
             取 消
           </button>
-          <button class="mybutton confirm" @click="openComment">
+          <button
+            class="mybutton confirm"
+            @click="openComment"
+          >
             确 定
           </button>
         </div>

@@ -1,11 +1,25 @@
 <template>
   <div class="container">
-    <div class="title">数据库</div>
-    <div class="subtitle">DataBase</div>
+    <div class="title">
+      数据库
+    </div>
+    <div class="subtitle">
+      DataBase
+    </div>
 
     <div class="selector">
-      <div class="select" @click="getThreePara()">随便看看</div>
-      <div class="select" @click="addBrickVisble=true">创建一个砖石</div>
+      <div
+        class="select"
+        @click="getThreePara()"
+      >
+        随便看看
+      </div>
+      <div
+        class="select"
+        @click="addBrickVisble=true"
+      >
+        创建一个砖石
+      </div>
     </div>
     <div class="dataContainer">
       <!--             <div class="tools">
@@ -16,9 +30,18 @@
               </ul>
             </div> -->
       <div class="view">
-        <div class="card" v-for="item in baseData" :key="item._id" @click="jumpTo(item)">
-          <div class="smallTitle" >{{ item.title }}</div>
-          <div class="content">{{ item.description }}</div>
+        <div
+          class="card"
+          v-for="item in baseData"
+          :key="item._id"
+          @click="jumpTo(item)"
+        >
+          <div class="smallTitle">
+            {{ item.title }}
+          </div>
+          <div class="content">
+            {{ item.description }}
+          </div>
           <div class="info">
             <div class="like">
               关注<span class="num">{{ item.watching }}</span>
@@ -44,17 +67,35 @@
         <div class="someThing"></div> -->
       </div>
     </div>
-    <el-dialog title="添加砖石" :visible.sync="addBrickVisble">
+    <el-dialog
+      title="添加砖石"
+      :visible.sync="addBrickVisble"
+    >
       <el-form :model="form">
-        <el-form-item label="砖石名称:" :label-position="labelPosition">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
+        <el-form-item
+          label="砖石名称:"
+          :label-position="labelPosition"
+        >
+          <el-input
+            v-model="form.name"
+            autocomplete="off"
+          />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <button class="mybutton cancel" @click="addBrickVisble = false">
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <button
+          class="mybutton cancel"
+          @click="addBrickVisble = false"
+        >
           取 消
         </button>
-        <button class="mybutton confirm" @click="createBrick">
+        <button
+          class="mybutton confirm"
+          @click="createBrick"
+        >
           确 定
         </button>
       </div>

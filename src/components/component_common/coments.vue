@@ -1,14 +1,17 @@
 <template>
-  <div >
+  <div>
     <el-tooltip
       placement="top"
       effect="light"
-      
     >
-      <div slot="content" >{{this.commentData.content}}</div>
-      <div :class="'circle ' + commentData.type+' '+displayState"
-      :id="commentData._id"
-      @contextmenu.prevent="onItemmenu"></div>
+      <div slot="content">
+        {{ this.commentData.content }}
+      </div>
+      <div
+        :class="'circle ' + commentData.type+' '+displayState"
+        :id="commentData._id"
+        @contextmenu.prevent="onItemmenu"
+      />
     </el-tooltip>
   </div>
 </template>

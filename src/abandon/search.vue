@@ -1,13 +1,12 @@
 <template>
   <div class="search">
-    
-      <el-autocomplete
+    <el-autocomplete
       class="inline-input searchbox"
       v-model="state1"
       :fetch-suggestions="querySearch"
       placeholder="搜索"
       @select="handleSelect"
-    ></el-autocomplete>
+    />
     
     <!-- <el-button class="searchbutton"><i class="el-icon-search"></i></el-button> -->
   </div>

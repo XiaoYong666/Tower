@@ -1,6 +1,6 @@
 <template>
   <div class="editorPage">
-    <div id="vditor"></div>
+    <div id="vditor" />
   </div>
 </template>
 

@@ -1,42 +1,123 @@
 <template>
   <div>
     <div id="navBar">
-      <div id="homeCard" v-if="homeCard" class="tCard">
-        <div class="selector" @click="urlpush('/')">首页</div>
-        <div class="selector" @click="urlpush('/square')">广场</div>
-        <div class="selector" @click="urlpush('brickv3/5e9b4d8828490c2f9ebf9064')">介绍</div>
-        <a class="selector" href="https://www.wjx.cn/jq/84849634.aspx" target="_blank" >反馈</a>
+      <div
+        id="homeCard"
+        v-if="homeCard"
+        class="tCard"
+      >
+        <div
+          class="selector"
+          @click="urlpush('/')"
+        >
+          首页
+        </div>
+        <div
+          class="selector"
+          @click="urlpush('/square')"
+        >
+          广场
+        </div>
+        <div
+          class="selector"
+          @click="urlpush('brickv3/5e9b4d8828490c2f9ebf9064')"
+        >
+          介绍
+        </div>
+        <a
+          class="selector"
+          href="https://www.wjx.cn/jq/84849634.aspx"
+          target="_blank"
+        >反馈</a>
       </div>
-      <div id="managerCard" v-if="managerCard" class="tCard">
-        <div class="selector">管理</div>
+      <div
+        id="managerCard"
+        v-if="managerCard"
+        class="tCard"
+      >
+        <div class="selector">
+          管理
+        </div>
       </div>
-      <div id="userCard" v-if="userCard" class="tCard">
-        <Avataaars style="width:40px;"></Avataaars>
+      <div
+        id="userCard"
+        v-if="userCard"
+        class="tCard"
+      >
+        <Avataaars style="width:40px;" />
         <div
           class="selector"
           v-if="!loginState"
           @click="urlpush('/login')"
-        >登录</div>
-        <div class="selector" v-else @click="giveAlert('敬请期待')">个人中心</div>
+        >
+          登录
+        </div>
+        <div
+          class="selector"
+          v-else
+          @click="giveAlert('敬请期待')"
+        >
+          个人中心
+        </div>
       </div>
-      <div id="addCard" v-if="addCard" class="tCard" @click="addBrick()">
-        <i class="el-icon-plus" ></i>
+      <div
+        id="addCard"
+        v-if="addCard"
+        class="tCard"
+        @click="addBrick()"
+      >
+        <i class="el-icon-plus" />
       </div>
-      <div id="searchCard" class="tCard">
-        <input v-model="input" class="searchBar" @focus="searchShow=true" @blur="searchItemNoShow()" />
-        <i class="el-icon-search"></i>
-        <div class="searchItem" v-show="searchShow">
-          <div class="item"  v-for="el in searchRes" :key="el.name" @click="pushBrick(el.id)">
-            <div style="padding:0 5px" :id="el.id" >{{el.name}}</div>
+      <div
+        id="searchCard"
+        class="tCard"
+      >
+        <input
+          v-model="input"
+          class="searchBar"
+          @focus="searchShow=true"
+          @blur="searchItemNoShow()"
+        >
+        <i class="el-icon-search" />
+        <div
+          class="searchItem"
+          v-show="searchShow"
+        >
+          <div
+            class="item"
+            v-for="el in searchRes"
+            :key="el.name"
+            @click="pushBrick(el.id)"
+          >
+            <div
+              style="padding:0 5px"
+              :id="el.id"
+            >
+              {{ el.name }}
+            </div>
           </div>
         </div>
       </div>
-      <div id="editCard" v-if="editCard" class="tCard">
-        <div class="bold" @click="postArticle()">提交</div>
-        <div class="bold" @click="urlBack()">返回</div>
+      <div
+        id="editCard"
+        v-if="editCard"
+        class="tCard"
+      >
+        <div
+          class="bold"
+          @click="postArticle()"
+        >
+          提交
+        </div>
+        <div
+          class="bold"
+          @click="urlBack()"
+        >
+          返回
+        </div>
       </div>
     </div>
-    <div style="width:100%;height:80px"></div>
+    <div style="width:100%;height:80px" />
   </div>
 </template>
 
@@ -46,7 +127,7 @@ import reqInfo from "../../request/reqInformation"
 import reqBrick from '../../request/reqBrick';
 
 export default {
-  name: "navBar",
+  name: "NavBar",
   components: {
     Avataaars
   },
@@ -123,6 +204,9 @@ export default {
     postArticle(){
       this.$store.commit('postArticle')
     },
+    giveAlert(speak){
+      alert(speak)
+    }
     
   },
   computed: {

@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    
     <!-- <nav>
       <ul>
         <li><a href="/HomeV2">首页</a></li>
@@ -14,9 +13,13 @@
       </ul>
     </nav> -->
     <div class="main">
-      <div class="title">通天塔</div>
+      <div class="title">
+        通天塔
+      </div>
       <small>v0.3.0</small>
-      <div class="subtitle">通天塔是一个可供所有人编辑和学习的学习指南。</div>
+      <div class="subtitle">
+        通天塔是一个可供所有人编辑和学习的学习指南。
+      </div>
       <div class="introduce">
         我们在试图汇聚世界上最好的资源，让所有人都有机会站在巨人的肩膀上，创造和实现更多的东西。
       </div>
@@ -25,7 +28,9 @@
         everyone has the opportunity to stand on the shoulders of giants ,so to
         create and achieve more.
       </div>
-      <div class="author">Create By liu</div>
+      <div class="author">
+        Create By liu
+      </div>
     </div>
   </div>
 </template>

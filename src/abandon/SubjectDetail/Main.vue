@@ -1,6 +1,9 @@
 <template>
   <div style="width:1200px;margin:0 auto;">
-    <div class="grid-content bg-purple" style="width:850px;margin:0 auto;">
+    <div
+      class="grid-content bg-purple"
+      style="width:850px;margin:0 auto;"
+    >
       <div
         style="font-size:27px;font-weight:700;margin:20px 0 20px 0;padding-top:20px"
       >
@@ -15,14 +18,22 @@
             label="介绍"
             name="first"
             style="margin-left:10px;font-weight:700"
-            ><subjectDetail></subjectDetail
-          ></el-tab-pane>
-          <el-tab-pane label="教程" name="second">
-            <courseContent></courseContent>
-          </el-tab-pane>
-          <el-tab-pane label="其他相关" name="third" disabled
-            >其他相关</el-tab-pane
           >
+            <subjectDetail />
+          </el-tab-pane>
+          <el-tab-pane
+            label="教程"
+            name="second"
+          >
+            <courseContent />
+          </el-tab-pane>
+          <el-tab-pane
+            label="其他相关"
+            name="third"
+            disabled
+          >
+            其他相关
+          </el-tab-pane>
         </el-tabs>
       </div>
     </div>

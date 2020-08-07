@@ -1,74 +1,120 @@
 <template>
   <div>
     <div class="header">
-      <div class="header-title-1">结构</div>
-      <img src="../../assets/red_of.png" alt="of" class="of" />
-      <div class="header-title-2">{{ selectBrick.name }}</div>
-      <Search></Search>
+      <div class="header-title-1">
+        结构
+      </div>
+      <img
+        src="../../assets/red_of.png"
+        alt="of"
+        class="of"
+      >
+      <div class="header-title-2">
+        {{ selectBrick.name }}
+      </div>
+      <Search />
     </div>
     <div class="main">
       <div class="handle">
         <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
-            <i class="el-icon-more"></i>
+            <i class="el-icon-more" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="addBrick">添加一块砖石</el-dropdown-item>
-            <el-dropdown-item command="changeBrick"
-              >修改一块砖石</el-dropdown-item
+            <el-dropdown-item command="addBrick">
+              添加一块砖石
+            </el-dropdown-item>
+            <el-dropdown-item
+              command="changeBrick"
             >
+              修改一块砖石
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
       <div class="behind">
         <div class="items">
-          <Brick :item="br" v-for="br in BehindItems" :key="br.name"></Brick>
+          <Brick
+            :item="br"
+            v-for="br in BehindItems"
+            :key="br.name"
+          />
         </div>
       </div>
-      <div class="label-1">▲想要学更多嘛！┗|｀O′|┛ 嗷~~</div>
-      <div class="middle">
-        <div class="decorate-1"></div>
-        <Brick :item="selectBrick"></Brick>
-        <div class="decorate-2"></div>
+      <div class="label-1">
+        ▲想要学更多嘛！┗|｀O′|┛ 嗷~~
       </div>
-      <div class="label-2">▼下面的都是很重要的知识哦！( •̀ ω •́ )✧</div>
+      <div class="middle">
+        <div class="decorate-1" />
+        <Brick :item="selectBrick" />
+        <div class="decorate-2" />
+      </div>
+      <div class="label-2">
+        ▼下面的都是很重要的知识哦！( •̀ ω •́ )✧
+      </div>
       <div class="front">
         <div class="items">
-          <Brick :item="br" v-for="br in FrontItems" :key="br.name"></Brick>
+          <Brick
+            :item="br"
+            v-for="br in FrontItems"
+            :key="br.name"
+          />
         </div>
       </div>
     </div>
-    <div class="footer">
-    </div>
+    <div class="footer" />
 
-    <el-dialog title="增加一块砖石" :visible.sync="addFormVisible">
-      <el-form :model="addform" :rules="rules" ref="addform">
-        <el-form-item prop="name" label="名称" :label-width="formLabelWidth">
-          <el-input v-model="addform.name" autocomplete="off"></el-input>
+    <el-dialog
+      title="增加一块砖石"
+      :visible.sync="addFormVisible"
+    >
+      <el-form
+        :model="addform"
+        :rules="rules"
+        ref="addform"
+      >
+        <el-form-item
+          prop="name"
+          label="名称"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="addform.name"
+            autocomplete="off"
+          />
         </el-form-item>
         <el-form-item
           prop="introduce"
           label="砖石简介"
           :label-width="formLabelWidth"
         >
-          <el-input v-model="addform.introduce" autocomplete="off"></el-input>
+          <el-input
+            v-model="addform.introduce"
+            autocomplete="off"
+          />
         </el-form-item>
         <el-form-item
           prop="position"
           label="位置"
           :label-width="formLabelWidth"
         >
-          <el-select v-model="addform.position" placeholder="请选择标签">
+          <el-select
+            v-model="addform.position"
+            placeholder="请选择标签"
+          >
             <el-option
               v-for="i in selectPosition"
               :key="i.name"
               :label="i.title"
               :value="i.name"
-            >
-            </el-option>
+            />
           </el-select>
         </el-form-item>
-        <el-form-item prop="label" label="标签" :label-width="formLabelWidth">
+        <el-form-item
+          prop="label"
+          label="标签"
+          :label-width="formLabelWidth"
+        >
           <el-select
             value-key="title"
             v-model="addform.label"
@@ -79,28 +125,54 @@
               :key="i.title"
               :label="i.title"
               :value="i"
-            >
-            </el-option>
+            />
           </el-select>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="addFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="add('addform')">确 定</el-button>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="addFormVisible = false">
+          取 消
+        </el-button>
+        <el-button
+          type="primary"
+          @click="add('addform')"
+        >
+          确 定
+        </el-button>
       </div>
     </el-dialog>
 
-    <el-dialog title="修改一块砖石" :visible.sync="changeFormVisible">
-      <el-form :model="changeform" :rules="rulesofchange" ref="changeform">
-        <el-form-item prop="name" label="名称" :label-width="formLabelWidth">
-          <el-input v-model="changeform.name" autocomplete="off"></el-input>
+    <el-dialog
+      title="修改一块砖石"
+      :visible.sync="changeFormVisible"
+    >
+      <el-form
+        :model="changeform"
+        :rules="rulesofchange"
+        ref="changeform"
+      >
+        <el-form-item
+          prop="name"
+          label="名称"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="changeform.name"
+            autocomplete="off"
+          />
         </el-form-item>
         <el-form-item
           prop="rename"
           label="修改为"
           :label-width="formLabelWidth"
         >
-          <el-input v-model="changeform.rename" autocomplete="off"></el-input>
+          <el-input
+            v-model="changeform.rename"
+            autocomplete="off"
+          />
         </el-form-item>
         <el-form-item
           prop="introduce"
@@ -110,24 +182,30 @@
           <el-input
             v-model="changeform.introduce"
             autocomplete="off"
-          ></el-input>
+          />
         </el-form-item>
         <el-form-item
           prop="position"
           label="修改到"
           :label-width="formLabelWidth"
         >
-          <el-select v-model="changeform.position" placeholder="请选择标签">
+          <el-select
+            v-model="changeform.position"
+            placeholder="请选择标签"
+          >
             <el-option
               v-for="i in selectPosition"
               :key="i.name"
               :label="i.title"
               :value="i.name"
-            >
-            </el-option>
+            />
           </el-select>
         </el-form-item>
-        <el-form-item prop="label" label="标签" :label-width="formLabelWidth">
+        <el-form-item
+          prop="label"
+          label="标签"
+          :label-width="formLabelWidth"
+        >
           <el-select
             value-key="title"
             v-model="changeform.label"
@@ -138,16 +216,23 @@
               :key="i.title"
               :label="i.title"
               :value="i"
-            >
-            </el-option>
+            />
           </el-select>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="changeFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="change('changeform')"
-          >确 定</el-button
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="changeFormVisible = false">
+          取 消
+        </el-button>
+        <el-button
+          type="primary"
+          @click="change('changeform')"
         >
+          确 定
+        </el-button>
       </div>
     </el-dialog>
   </div>

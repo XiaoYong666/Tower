@@ -1,10 +1,12 @@
 <template>
   <div>
-      <el-divider></el-divider>
-      <div class="title">一些网站和工具(友情推荐)</div>
-      <div class="list">
-          <a href="https://u.tools">Utools</a>
-      </div>
+    <el-divider />
+    <div class="title">
+      一些网站和工具(友情推荐)
+    </div>
+    <div class="list">
+      <a href="https://u.tools">Utools</a>
+    </div>
   </div>
 </template>
 u.tools

@@ -12,22 +12,26 @@
           <a
             class="howToUse"
             @click="urlpush('/article/5e9b55a828490c2f9ebf9066')"
-            >如何使用？</a
-          >
+          >如何使用？</a>
         </li>
-        
       </ul>
       <div class="loginState">
-          <a v-if="loginState == false && this.userEmail == null" @click="urlpush('/login')">未登录</a>
-          <a v-else @click="urlpush('/login')">已登录</a>
-        </div>
+        <a
+          v-if="loginState == false && this.userEmail == null"
+          @click="urlpush('/login')"
+        >未登录</a>
+        <a
+          v-else
+          @click="urlpush('/login')"
+        >已登录</a>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "selfnavbar",
+  name: "Selfnavbar",
   created() {
     let loseToken = localStorage.getItem("loseToken");
     let timeInterval = Math.abs(new Date() - new Date(loseToken));

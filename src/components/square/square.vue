@@ -1,14 +1,33 @@
 <template>
   <div>
     <div class="handler">
-      <div class="item" @click="getHot()">最热</div>
-      <div class="item" @click="getNew()">最新</div>
+      <div
+        class="item"
+        @click="getHot()"
+      >
+        最热
+      </div>
+      <div
+        class="item"
+        @click="getNew()"
+      >
+        最新
+      </div>
     </div>
     <div class="dataContainer">
       <div class="view">
-        <div class="card" v-for="(item,index) in baseData" :key="item._id" @click="jumpTo(item)">
-          <div class="number bold">{{index+1}}</div>
-          <div class="smallTitle">{{ item.title }}</div>
+        <div
+          class="card"
+          v-for="(item,index) in baseData"
+          :key="item._id"
+          @click="jumpTo(item)"
+        >
+          <div class="number bold">
+            {{ index+1 }}
+          </div>
+          <div class="smallTitle">
+            {{ item.title }}
+          </div>
           <div class="info">
             <div class="like">
               订阅

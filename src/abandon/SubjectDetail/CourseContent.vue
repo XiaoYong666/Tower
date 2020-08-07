@@ -6,11 +6,18 @@
         size="mini"
         style="font-weight:700;background-color:#e6f7ff;color:#1890ff;margin-bottom:10px"
         round
-        >添加教程</el-button
       >
+        添加教程
+      </el-button>
     </div>
-    <div id="courseContent" style="width:100%;overflow:auto">
-      <el-collapse v-model="activeNameInCourses" accordion>
+    <div
+      id="courseContent"
+      style="width:100%;overflow:auto"
+    >
+      <el-collapse
+        v-model="activeNameInCourses"
+        accordion
+      >
         <el-collapse-item
           :title="item.title"
           :name="item.title"
@@ -22,23 +29,41 @@
             class="myitem"
           >
             <div>
-              <font style="font-weight:700">描述:</font>
-              <div style="padding-bottom:20px">{{ item.description }}</div>
+              <font style="font-weight:700">
+                描述:
+              </font>
+              <div style="padding-bottom:20px">
+                {{ item.description }}
+              </div>
             </div>
 
             <div>
-              <font style="font-weight:700;padding-right:20px">链接:</font
-              ><a :href="item.url">{{ item.url }}</a>
+              <font style="font-weight:700;padding-right:20px">
+                链接:
+              </font><a :href="item.url">{{ item.url }}</a>
             </div>
 
             <div>
-              <font style="font-weight:700;padding-right:20px">评分:</font
-              >{{ item.score }}
+              <font style="font-weight:700;padding-right:20px">
+                评分:
+              </font>{{ item.score }}
             </div>
-            <div style="float:right;" class="mybutton">
-              <el-button type="text" class="zan">赞</el-button>
-              <el-button type="text">评分</el-button>
-              <el-button type="text">修改</el-button>
+            <div
+              style="float:right;"
+              class="mybutton"
+            >
+              <el-button
+                type="text"
+                class="zan"
+              >
+                赞
+              </el-button>
+              <el-button type="text">
+                评分
+              </el-button>
+              <el-button type="text">
+                修改
+              </el-button>
             </div>
           </div>
         </el-collapse-item>

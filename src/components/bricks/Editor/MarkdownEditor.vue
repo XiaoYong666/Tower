@@ -1,13 +1,32 @@
 <template>
   <div>
-    <div class="title">Markdown编辑模式</div>
-    <textarea class="editor" contenteditable="true" spellcheck="true" v-model="content">
-    </textarea>
-    <div class="handle">
-      <div class="confirmMk" @click="save()">确认保存</div>
-    <div class="cancelMk" @click="backtohtml">取消编辑</div>
+    <div class="title">
+      Markdown编辑模式
     </div>
-    <div id="content" v-html="convertHtml"></div>
+    <textarea
+      class="editor"
+      contenteditable="true"
+      spellcheck="true"
+      v-model="content"
+    />
+    <div class="handle">
+      <div
+        class="confirmMk"
+        @click="save()"
+      >
+        确认保存
+      </div>
+      <div
+        class="cancelMk"
+        @click="backtohtml"
+      >
+        取消编辑
+      </div>
+    </div>
+    <div
+      id="content"
+      v-html="convertHtml"
+    />
   </div>
 </template>
 

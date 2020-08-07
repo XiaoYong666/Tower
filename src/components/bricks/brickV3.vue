@@ -2,7 +2,12 @@
   <div class="container">
     <div class="menu">
       <div class="title">
-        <div :contenteditable="contenteditable" @blur="editBlur">{{title}}</div>
+        <div
+          :contenteditable="contenteditable"
+          @blur="editBlur"
+        >
+          {{ title }}
+        </div>
         <!--<i class="el-icon-plus" @click="addNewNode()"></i>-->
       </div>
       <draggable
@@ -14,7 +19,10 @@
         :disabled="disableDrag"
         @end="switchIndex"
       >
-        <div v-for="el in menuContent" :key="el.id">
+        <div
+          v-for="el in menuContent"
+          :key="el.id"
+        >
           <!-- <a v-if="el.tasks.length!=0" class="menuicon el-icon-caret-right"  ></a> -->
           <div
             :class="['item',selected==el.id?'selected':'']"
@@ -29,8 +37,10 @@
               :style="'position:relative;left:'+el.level*14+'px'"
               :id="el.id"
             >
-              <i class="no-vue-drag-node-icon"></i>
-              <div class="Text">{{ el.name }}</div>
+              <i class="no-vue-drag-node-icon" />
+              <div class="Text">
+                {{ el.name }}
+              </div>
             </div>
           </div>
         </div>
@@ -38,42 +48,76 @@
     </div>
     <div class="info">
       <div class="handleArea">
-        <a v-if="watchingState==true" @click="watchRemove()">取消订阅</a>
-        <a v-else @click="watchAdd()">订阅</a>
+        <a
+          v-if="watchingState==true"
+          @click="watchRemove()"
+        >取消订阅</a>
+        <a
+          v-else
+          @click="watchAdd()"
+        >订阅</a>
         <a @click="likeBrick()">点赞</a>
         <a @click="createComment()">评论</a>
         <a @click="pushToEditor()">编辑</a>
-        <div>版本{{this.brickData.version}}</div>
-        <div>协议{{this.brickData.agreement}}</div>
-        <div>点赞数{{this.brickData.like}}</div>
-        <div>订阅数{{this.brickData.watchingUser.length}}</div>
+        <div>版本{{ this.brickData.version }}</div>
+        <div>协议{{ this.brickData.agreement }}</div>
+        <div>点赞数{{ this.brickData.like }}</div>
+        <div>订阅数{{ this.brickData.watchingUser.length }}</div>
       </div>
     </div>
     <div class="contentArea">
       <div class="content">
         <!-- <div class="toolbar"></div> -->
         <div class="showContent">
-          <div class="contentRender" style="min-height:500px"></div>
+          <div
+            class="contentRender"
+            style="min-height:500px"
+          />
           <div v-if="articleData.historyv3!=undefined&&articleData.historyv3.length>0">
             <div class="bold huge">
               <p>修改历史</p>
             </div>
 
-            <div class="showHistory" v-for="el in articleData.historyv3" :key="el.version">
-              <div class="item">{{el.email}}</div>
-              <div class="item">修改了文章</div>
-              <div class="item">{{el.version}}</div>
-              <div class="item">{{el.editTime}}</div>
+            <div
+              class="showHistory"
+              v-for="el in articleData.historyv3"
+              :key="el.version"
+            >
+              <div class="item">
+                {{ el.email }}
+              </div>
+              <div class="item">
+                修改了文章
+              </div>
+              <div class="item">
+                {{ el.version }}
+              </div>
+              <div class="item">
+                {{ el.editTime }}
+              </div>
               <!-- <div class="item button">查看</div> -->
             </div>
           </div>
         </div>
         <div class="comments">
-          <div class="item" v-for="el in comments" :key="el.time">
-            <div class="content">{{el.content}}</div>
+          <div
+            class="item"
+            v-for="el in comments"
+            :key="el.time"
+          >
+            <div class="content">
+              {{ el.content }}
+            </div>
             <div>
-              <div class="time">{{el.time}}</div>
-              <div class="del" @click="deleteComment(el._id)">删除此评论</div>
+              <div class="time">
+                {{ el.time }}
+              </div>
+              <div
+                class="del"
+                @click="deleteComment(el._id)"
+              >
+                删除此评论
+              </div>
             </div>
           </div>
         </div>
@@ -91,15 +135,34 @@
       </div>
     </div>-->
 
-    <el-dialog :title="dialogTitle" :visible.sync="dialogVisible">
+    <el-dialog
+      :title="dialogTitle"
+      :visible.sync="dialogVisible"
+    >
       <el-form :model="form">
-        <el-form-item :label="dialogWant" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off"></el-input>
+        <el-form-item
+          :label="dialogWant"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="form.name"
+            autocomplete="off"
+          />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="dialogVisible = false">
+          取 消
+        </el-button>
+        <el-button
+          type="primary"
+          @click="dialogVisible = false"
+        >
+          确 定
+        </el-button>
       </div>
     </el-dialog>
   </div>

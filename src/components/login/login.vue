@@ -1,22 +1,38 @@
 <template>
-  
-    <div class="loginPanel">
-      <form id="form" class="form">
-        <h2>登录</h2>
-        <h4 style="text-align:center">若无账号则会自动创建账号</h4>
-        <div class="form-control">
-          <label for="email">邮箱</label>
-          <input type="text" id="email" placeholder="请输入邮箱" v-model="email" />
-          <small>错误提示</small>
-        </div>
-        <div class="form-control">
-          <label for="password">密码</label>
-          <input type="password" id="password" placeholder="请输入密码" v-model="password" />
-          <small>错误提示</small>
-        </div>
-        <button @click="login">登录/注册</button>
-      </form>
-    </div>
+  <div class="loginPanel">
+    <form
+      id="form"
+      class="form"
+    >
+      <h2>登录</h2>
+      <h4 style="text-align:center">
+        若无账号则会自动创建账号
+      </h4>
+      <div class="form-control">
+        <label for="email">邮箱</label>
+        <input
+          type="text"
+          id="email"
+          placeholder="请输入邮箱"
+          v-model="email"
+        >
+        <small>错误提示</small>
+      </div>
+      <div class="form-control">
+        <label for="password">密码</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="请输入密码"
+          v-model="password"
+        >
+        <small>错误提示</small>
+      </div>
+      <button @click="login">
+        登录/注册
+      </button>
+    </form>
+  </div>
 </template>
 
 <script>

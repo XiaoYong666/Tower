@@ -1,23 +1,38 @@
 <template>
   <div>
     <div class="header">
-      <div class="titleoftower">{{ selectTower.name }}</div>
+      <div class="titleoftower">
+        {{ selectTower.name }}
+      </div>
       <div class="attention">
-        <el-button type="danger" @click="openRule">规则</el-button>
+        <el-button
+          type="danger"
+          @click="openRule"
+        >
+          规则
+        </el-button>
         <div class="more">
           <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
-              <i class="el-icon-more"></i>
+              <i class="el-icon-more" />
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="addBrick"
-                >添加一块砖石</el-dropdown-item
+              <el-dropdown-item
+                command="addBrick"
               >
-              <el-dropdown-item command="changeBrick"
-                >修改一块砖石</el-dropdown-item
+                添加一块砖石
+              </el-dropdown-item>
+              <el-dropdown-item
+                command="changeBrick"
               >
-              <el-dropdown-item command="addFloor">添加一层</el-dropdown-item>
-              <el-dropdown-item command="changeFloor">修改层介绍</el-dropdown-item>
+                修改一块砖石
+              </el-dropdown-item>
+              <el-dropdown-item command="addFloor">
+                添加一层
+              </el-dropdown-item>
+              <el-dropdown-item command="changeFloor">
+                修改层介绍
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -29,47 +44,80 @@
         v-for="(ceng, index) in selectTower.brickList"
         :key="index"
       >
-        <div class="decorate"></div>
-        <div class="grade">第{{ index + 1 }}层</div>
-        <div class="label"><i class="el-icon-warning-outline"></i></div>
-        <div class="reminder">{{ ceng.introduce }}</div>
+        <div class="decorate" />
+        <div class="grade">
+          第{{ index + 1 }}层
+        </div>
+        <div class="label">
+          <i class="el-icon-warning-outline" />
+        </div>
+        <div class="reminder">
+          {{ ceng.introduce }}
+        </div>
 
-        <el-divider></el-divider>
+        <el-divider />
         <div class="zhuanshibox">
           <Brick
             v-for="data in brickData[index].ceng"
             :key="data.name"
             :item="data"
-          ></Brick>
+          />
         </div>
       </div>
     </div>
-    <div class="footer"></div>
+    <div class="footer" />
 
-    <el-dialog title="增加一块砖石" :visible.sync="addFormVisible">
-      <el-form :model="addform" :rules="rules" ref="addform">
-        <el-form-item prop="name" label="名称" :label-width="formLabelWidth">
-          <el-input v-model="addform.name" autocomplete="off"></el-input>
+    <el-dialog
+      title="增加一块砖石"
+      :visible.sync="addFormVisible"
+    >
+      <el-form
+        :model="addform"
+        :rules="rules"
+        ref="addform"
+      >
+        <el-form-item
+          prop="name"
+          label="名称"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="addform.name"
+            autocomplete="off"
+          />
         </el-form-item>
         <el-form-item
           prop="introduce"
           label="砖石简介"
           :label-width="formLabelWidth"
         >
-          <el-input v-model="addform.introduce" autocomplete="off"></el-input>
+          <el-input
+            v-model="addform.introduce"
+            autocomplete="off"
+          />
         </el-form-item>
-        <el-form-item prop="index" label="层数" :label-width="formLabelWidth">
-          <el-select v-model="addform.index" placeholder="请选择层数">
+        <el-form-item
+          prop="index"
+          label="层数"
+          :label-width="formLabelWidth"
+        >
+          <el-select
+            v-model="addform.index"
+            placeholder="请选择层数"
+          >
             <el-option
               v-for="i in selectTower.brickList.length"
               :key="i"
               :label="i"
               :value="i"
-            >
-            </el-option>
+            />
           </el-select>
         </el-form-item>
-        <el-form-item prop="label" label="标签" :label-width="formLabelWidth">
+        <el-form-item
+          prop="label"
+          label="标签"
+          :label-width="formLabelWidth"
+        >
           <el-select
             value-key="title"
             v-model="addform.label"
@@ -80,27 +128,53 @@
               :key="i.title"
               :label="i.title"
               :value="i"
-            >
-            </el-option>
+            />
           </el-select>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="addFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addBrick('addform')">确 定</el-button>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="addFormVisible = false">
+          取 消
+        </el-button>
+        <el-button
+          type="primary"
+          @click="addBrick('addform')"
+        >
+          确 定
+        </el-button>
       </div>
     </el-dialog>
-    <el-dialog title="修改一块砖石" :visible.sync="changeFormVisible">
-      <el-form :model="changeForm" :rules="rules" ref="changeForm">
-        <el-form-item prop="name" label="原名称" :label-width="formLabelWidth">
-          <el-input v-model="changeForm.name" autocomplete="off"></el-input>
+    <el-dialog
+      title="修改一块砖石"
+      :visible.sync="changeFormVisible"
+    >
+      <el-form
+        :model="changeForm"
+        :rules="rules"
+        ref="changeForm"
+      >
+        <el-form-item
+          prop="name"
+          label="原名称"
+          :label-width="formLabelWidth"
+        >
+          <el-input
+            v-model="changeForm.name"
+            autocomplete="off"
+          />
         </el-form-item>
         <el-form-item
           prop="rename"
           label="修改到"
           :label-width="formLabelWidth"
         >
-          <el-input v-model="changeForm.rename" autocomplete="off"></el-input>
+          <el-input
+            v-model="changeForm.rename"
+            autocomplete="off"
+          />
         </el-form-item>
         <el-form-item
           prop="introduce"
@@ -110,20 +184,30 @@
           <el-input
             v-model="changeForm.introduce"
             autocomplete="off"
-          ></el-input>
+          />
         </el-form-item>
-        <el-form-item prop="index" label="层数" :label-width="formLabelWidth">
-          <el-select v-model="changeForm.index" placeholder="请选择层数">
+        <el-form-item
+          prop="index"
+          label="层数"
+          :label-width="formLabelWidth"
+        >
+          <el-select
+            v-model="changeForm.index"
+            placeholder="请选择层数"
+          >
             <el-option
               v-for="i in selectTower.brickList.length"
               :key="i"
               :label="i"
               :value="i"
-            >
-            </el-option>
+            />
           </el-select>
         </el-form-item>
-        <el-form-item prop="label" label="标签" :label-width="formLabelWidth">
+        <el-form-item
+          prop="label"
+          label="标签"
+          :label-width="formLabelWidth"
+        >
           <el-select
             value-key="title"
             v-model="changeForm.label"
@@ -134,21 +218,34 @@
               :key="i.title"
               :label="i.title"
               :value="i"
-            >
-            </el-option>
+            />
           </el-select>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="changeFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="changeBrick('changeForm')"
-          >确 定</el-button
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="changeFormVisible = false">
+          取 消
+        </el-button>
+        <el-button
+          type="primary"
+          @click="changeBrick('changeForm')"
         >
+          确 定
+        </el-button>
       </div>
     </el-dialog>
-    <el-dialog title="修改层的介绍" :visible.sync="changeFloorVisible">
-      <el-form :model="changeFloor" :rules="floorRules" ref="changeFloor">
-        
+    <el-dialog
+      title="修改层的介绍"
+      :visible.sync="changeFloorVisible"
+    >
+      <el-form
+        :model="changeFloor"
+        :rules="floorRules"
+        ref="changeFloor"
+      >
         <el-form-item
           prop="introduce"
           label="层简介"
@@ -157,25 +254,39 @@
           <el-input
             v-model="changeFloor.introduce"
             autocomplete="off"
-          ></el-input>
+          />
         </el-form-item>
-        <el-form-item prop="index" label="层数" :label-width="formLabelWidth">
-          <el-select v-model="changeFloor.index" placeholder="请选择层数">
+        <el-form-item
+          prop="index"
+          label="层数"
+          :label-width="formLabelWidth"
+        >
+          <el-select
+            v-model="changeFloor.index"
+            placeholder="请选择层数"
+          >
             <el-option
               v-for="i in selectTower.brickList.length"
               :key="i"
               :label="i"
               :value="i"
-            >
-            </el-option>
+            />
           </el-select>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="changeFloorVisible = false">取 消</el-button>
-        <el-button type="primary" @click="changeFloormethod('changeFloor')"
-          >确 定</el-button
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="changeFloorVisible = false">
+          取 消
+        </el-button>
+        <el-button
+          type="primary"
+          @click="changeFloormethod('changeFloor')"
         >
+          确 定
+        </el-button>
       </div>
     </el-dialog>
   </div>

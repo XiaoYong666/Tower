@@ -1,10 +1,10 @@
 import Axios from 'axios';
-
+import TowerConfig from '../../towerConfig'
 
 
 let app = new Axios.create({
-    baseURL: 'https://backside.liuzhengdong.top:7865',
-    //baseURL: 'http://localhost:7865',
+    //baseURL: 'https://backside.liuzhengdong.top:7865',
+    baseURL: TowerConfig.baseURL,
     timeout: 7000,
     headers: {
         "Content-Type": "application/json",

@@ -1,53 +1,87 @@
 <template>
   <div>
     <div class="header">
-      <div class="tower">塔</div>
+      <div class="tower">
+        塔
+      </div>
       <div class="more">
         <el-dropdown @command="handleCommand">
           <span class="el-dropdown-link">
-            <i class="el-icon-more"></i>
+            <i class="el-icon-more" />
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="addTower">添加一个塔</el-dropdown-item>
+            <el-dropdown-item command="addTower">
+              添加一个塔
+            </el-dropdown-item>
             <!--             <el-dropdown-item command="changeBrick"
               >修改一块砖石</el-dropdown-item
             > -->
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-      <Search :state="'towers'"></Search>
-      <el-button class="feedback">问题反馈</el-button>
-      <el-button class="rule" @click="openRule">规则</el-button>
+      <Search :state="'towers'" />
+      <el-button class="feedback">
+        问题反馈
+      </el-button>
+      <el-button
+        class="rule"
+        @click="openRule"
+      >
+        规则
+      </el-button>
     </div>
-    <el-divider></el-divider>
+    <el-divider />
     <div class="towerbox">
       <TowerItem
         v-for="tower in towers"
         :key="tower.name"
-        :towerItem="tower"
+        :tower-item="tower"
         @click.native="routerToTowerDetails(tower.name)"
-      ></TowerItem>
+      />
     </div>
-    <el-dialog title="增加一块塔" :visible.sync="addFormVisible">
-      <el-form :model="addform" :rules="rules" ref="addform">
+    <el-dialog
+      title="增加一块塔"
+      :visible.sync="addFormVisible"
+    >
+      <el-form
+        :model="addform"
+        :rules="rules"
+        ref="addform"
+      >
         <el-form-item
           prop="name"
           label="塔的名称"
           :label-width="formLabelWidth"
         >
-          <el-input v-model="addform.name" autocomplete="off"></el-input>
+          <el-input
+            v-model="addform.name"
+            autocomplete="off"
+          />
         </el-form-item>
         <el-form-item
           prop="introduce"
           label="塔的简介"
           :label-width="formLabelWidth"
         >
-          <el-input v-model="addform.introduce" autocomplete="off"></el-input>
+          <el-input
+            v-model="addform.introduce"
+            autocomplete="off"
+          />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="addFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addTower('addform')">确 定</el-button>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button @click="addFormVisible = false">
+          取 消
+        </el-button>
+        <el-button
+          type="primary"
+          @click="addTower('addform')"
+        >
+          确 定
+        </el-button>
       </div>
     </el-dialog>
   </div>

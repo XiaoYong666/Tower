@@ -2,7 +2,7 @@
   <div
     id="dataCanvas"
     style="height:100%;width:100%;background-color:white;border:1px solid;border-color:white;border-radius:7px;"
-  ></div>
+  />
 </template>
 
 <script>

@@ -1,8 +1,13 @@
 <template>
   <div class="welcome">
-    <h1 style="color:red;letter-spacing: 5px;">欢迎来到通天塔</h1>
+    <h1 style="color:red;letter-spacing: 5px;">
+      欢迎来到通天塔
+    </h1>
 
-    <p style="position:relative;left:200px" class="question">
+    <p
+      style="position:relative;left:200px"
+      class="question"
+    >
       那么这里有什么呢？
     </p>
   </div>

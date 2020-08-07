@@ -1,8 +1,16 @@
 <template>
-  <div style="width:90%;margin:0 auto" class="myitem">
+  <div
+    style="width:90%;margin:0 auto"
+    class="myitem"
+  >
     <div>介绍</div>
-    <div class="change" style="float:right">
-      <el-button type="text">修改</el-button>
+    <div
+      class="change"
+      style="float:right"
+    >
+      <el-button type="text">
+        修改
+      </el-button>
     </div>
   </div>
 </template>

@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <navBar></navBar>
+    <navBar />
     <transition name="slide-fade">
-      <router-view></router-view>
+      <router-view />
     </transition>
-    <recordInfo></recordInfo>
+    <recordInfo />
   </div>
 </template>
 
@@ -16,7 +16,7 @@
 import navBar from "./components/component_common/navBar";
 import recordInfo from "./components/component_common/recordInfo";
 export default {
-  name: "app",
+  name: "App",
   components: {
     navBar,
     recordInfo
